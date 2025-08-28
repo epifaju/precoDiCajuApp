@@ -1,0 +1,266 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "prices": "Prix",
+    "submit": "Soumettre",
+    "profile": "Profil",
+    "login": "Se connecter",
+    "register": "S'inscrire",
+    "logout": "Se déconnecter",
+    "menu": "Menu"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "submit": "Soumettre",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "reset": "Réinitialiser",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "all": "Tous",
+    "none": "Aucun",
+    "required": "Obligatoire",
+    "optional": "Optionnel",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "home": {
+    "title": "Prix du Cajou",
+    "subtitle": "Suivez les prix du cajou en Guinée-Bissau",
+    "description": "Plateforme collaborative pour consulter et partager les prix du cajou en temps réel",
+    "features": {
+      "realtime": "Prix en temps réel",
+      "collaborative": "Données collaboratives",
+      "offline": "Fonctionne hors ligne",
+      "mobile": "Optimisé mobile"
+    },
+    "stats": {
+      "totalPrices": "Prix enregistrés",
+      "activeUsers": "Utilisateurs actifs",
+      "regions": "Régions couvertes",
+      "lastUpdate": "Dernière mise à jour"
+    },
+    "cta": {
+      "viewPrices": "Voir les Prix",
+      "submitPrice": "Soumettre un Prix"
+    }
+  },
+  "prices": {
+    "title": "Prix du Cajou",
+    "subtitle": "Consultez les prix les plus récents",
+    "noData": "Aucun prix trouvé",
+    "loadMore": "Charger plus",
+    "region": "Région",
+    "quality": "Qualité",
+    "price": "Prix",
+    "unit": "Unité",
+    "date": "Date",
+    "source": "Source",
+    "verified": "Vérifié",
+    "unverified": "Non vérifié",
+    "filterBy": "Filtrer par",
+    "showAll": "Afficher tous",
+    "sortBy": "Trier par",
+    "newest": "Plus récent",
+    "oldest": "Plus ancien",
+    "highest": "Prix le plus élevé",
+    "lowest": "Prix le plus bas",
+    "filters": {
+      "region": "Sélectionner une région",
+      "quality": "Sélectionner une qualité",
+      "dateFrom": "Date de",
+      "dateTo": "Date à",
+      "verified": "Uniquement vérifiés",
+      "apply": "Appliquer les filtres",
+      "clear": "Effacer les filtres"
+    },
+    "card": {
+      "postedBy": "Publié par",
+      "postedOn": "Publié le",
+      "location": "Localisation",
+      "notes": "Notes",
+      "viewDetails": "Voir les détails"
+    }
+  },
+  "submit": {
+    "title": "Soumettre un Prix",
+    "subtitle": "Partagez des informations sur les prix du cajou",
+    "form": {
+      "region": "Région",
+      "regionPlaceholder": "Sélectionnez la région",
+      "quality": "Qualité",
+      "qualityPlaceholder": "Sélectionnez la qualité",
+      "price": "Prix (FCFA/kg)",
+      "pricePlaceholder": "Ex: 2500",
+      "source": "Source",
+      "sourcePlaceholder": "Ex: Marché Central",
+      "sourceType": "Type de source",
+      "sourceTypes": {
+        "market": "Marché",
+        "cooperative": "Coopérative",
+        "producer": "Producteur",
+        "trader": "Commerçant",
+        "other": "Autre"
+      },
+      "notes": "Observations",
+      "notesPlaceholder": "Informations supplémentaires (optionnel)",
+      "photo": "Photo",
+      "photoHint": "Ajoutez une photo comme preuve (max. 5MB)",
+      "location": "Localisation GPS",
+      "locationHint": "Autoriser la localisation pour une meilleure précision",
+      "enableLocation": "Activer la localisation",
+      "submit": "Soumettre le Prix",
+      "submitting": "Soumission..."
+    },
+    "validation": {
+      "regionRequired": "La région est obligatoire",
+      "qualityRequired": "La qualité est obligatoire",
+      "priceRequired": "Le prix est obligatoire",
+      "priceInvalid": "Le prix doit être supérieur à 0",
+      "priceMax": "Le prix doit être inférieur à 10 000 FCFA",
+      "sourceRequired": "La source est obligatoire",
+      "photoSize": "La photo doit faire moins de 5MB",
+      "photoFormat": "Format de photo invalide (uniquement JPG, PNG)"
+    },
+    "success": "Prix soumis avec succès !",
+    "successOffline": "Prix sauvegardé hors ligne. Sera synchronisé quand vous serez en ligne.",
+    "error": "Erreur lors de la soumission du prix. Veuillez réessayer."
+  },
+  "auth": {
+    "login": {
+      "title": "Se connecter",
+      "subtitle": "Accédez à votre compte",
+      "email": "Email",
+      "emailPlaceholder": "votre@email.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Votre mot de passe",
+      "remember": "Se souvenir de moi",
+      "forgot": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "noAccount": "Pas de compte ?",
+      "signUp": "S'inscrire"
+    },
+    "register": {
+      "title": "S'inscrire",
+      "subtitle": "Créez un nouveau compte",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "Votre nom complet",
+      "email": "Email",
+      "emailPlaceholder": "votre@email.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Mot de passe sécurisé",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Confirmez le mot de passe",
+      "phone": "Téléphone",
+      "phonePlaceholder": "+245 123 456 789",
+      "terms": "J'accepte les termes et conditions",
+      "submit": "S'inscrire",
+      "hasAccount": "Déjà un compte ?",
+      "signIn": "Se connecter"
+    },
+    "validation": {
+      "emailRequired": "L'email est obligatoire",
+      "emailInvalid": "Email invalide",
+      "passwordRequired": "Le mot de passe est obligatoire",
+      "passwordMin": "Le mot de passe doit avoir au moins 6 caractères",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "nameRequired": "Le nom est obligatoire",
+      "termsRequired": "Vous devez accepter les termes et conditions"
+    },
+    "errors": {
+      "invalidCredentials": "Email ou mot de passe incorrect",
+      "emailExists": "Cet email est déjà enregistré",
+      "networkError": "Erreur de connexion. Vérifiez votre internet.",
+      "serverError": "Erreur du serveur. Réessayez plus tard."
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "subtitle": "Gérer les informations du compte",
+    "info": {
+      "fullName": "Nom complet",
+      "email": "Email",
+      "phone": "Téléphone",
+      "role": "Rôle",
+      "reputation": "Réputation",
+      "joinDate": "Membre depuis",
+      "lastActive": "Dernier accès"
+    },
+    "stats": {
+      "pricesSubmitted": "Prix soumis",
+      "verified": "Vérifiés",
+      "pending": "En attente"
+    },
+    "preferences": {
+      "title": "Préférences",
+      "language": "Langue",
+      "notifications": "Notifications",
+      "regions": "Régions d'intérêt",
+      "theme": "Thème",
+      "themes": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système"
+      }
+    },
+    "actions": {
+      "edit": "Modifier le profil",
+      "changePassword": "Changer le mot de passe",
+      "logout": "Se déconnecter"
+    }
+  },
+  "regions": {
+    "BF": "Bafatá",
+    "BB": "Biombo",
+    "BL": "Bolama",
+    "CA": "Cacheu",
+    "GA": "Gabú",
+    "OI": "Oio",
+    "QU": "Quinará",
+    "TO": "Tombali",
+    "BS": "Bissau"
+  },
+  "qualities": {
+    "W180": "Blanc 180",
+    "W210": "Blanc 210",
+    "W240": "Blanc 240",
+    "W320": "Blanc 320",
+    "LP": "Gros Morceaux",
+    "SP": "Petits Morceaux",
+    "RAW": "Noix Brute"
+  },
+  "errors": {
+    "pageNotFound": "Page non trouvée",
+    "pageNotFoundDesc": "La page que vous cherchez n'existe pas.",
+    "goHome": "Retour à l'accueil",
+    "networkError": "Erreur de connexion",
+    "serverError": "Erreur du serveur",
+    "unknownError": "Erreur inconnue",
+    "tryAgain": "Réessayer"
+  },
+  "offline": {
+    "indicator": "Vous êtes hors ligne",
+    "message": "Pas de connexion internet",
+    "dataStale": "Les données peuvent être obsolètes",
+    "syncPending": "Synchronisation en attente"
+  },
+  "pwa": {
+    "install": "Installer l'application",
+    "installDesc": "Installez l'application sur votre appareil pour un accès plus rapide",
+    "installButton": "Installer",
+    "installLater": "Plus tard",
+    "updateAvailable": "Mise à jour disponible",
+    "updateDesc": "Une nouvelle version est disponible",
+    "updateButton": "Mettre à jour",
+    "updateLater": "Plus tard"
+  }
+}

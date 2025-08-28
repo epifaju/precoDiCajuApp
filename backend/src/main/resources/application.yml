@@ -1,0 +1,100 @@
+spring:
+  application:
+    name: precaju-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/precaju
+    username: ${DB_USERNAME:precaju}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    defer-datasource-initialization: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    timeout: 2000ms
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    gw.precaju: INFO
+    org.springframework.security: DEBUG
+    org.flywaydb: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:precaju-super-secret-key-for-development-only-2024}
+  access-token-expiration: 900000 # 15 minutes
+  refresh-token-expiration: 604800000 # 7 days
+
+# File Upload Configuration
+file:
+  upload:
+    dir: ${UPLOAD_DIR:./uploads}
+    max-size: 5242880 # 5MB
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:5173}
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://postgres:5432/precaju_db
+    username: precaju_user
+    password: precaju_pass
+  redis:
+    host: redis
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    show-sql: false
+  logging:
+    level:
+      org.springframework.security: WARN
+      gw.precaju: WARN

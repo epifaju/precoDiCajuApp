@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+  }
+  
+  * {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500;
+  }
+  
+  .btn-outline {
+    @apply btn border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus:ring-gray-500;
+  }
+  
+  .btn-ghost {
+    @apply btn text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:ring-gray-500;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-card border border-gray-200 dark:border-gray-700;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-card-hover transition-shadow duration-200;
+  }
+  
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+  
+  .label {
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
+  }
+  
+  .error-text {
+    @apply text-sm text-red-600 dark:text-red-400 mt-1;
+  }
+  
+  .loading-spinner {
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary-600;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .badge-success {
+    @apply badge bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300;
+  }
+  
+  .badge-warning {
+    @apply badge bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300;
+  }
+  
+  .badge-error {
+    @apply badge bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300;
+  }
+  
+  .badge-info {
+    @apply badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-8 sm:py-12 lg:py-16;
+  }
+  
+  .gradient-primary {
+    background: linear-gradient(135deg, theme('colors.primary.600'), theme('colors.primary.700'));
+  }
+  
+  .gradient-secondary {
+    background: linear-gradient(135deg, theme('colors.secondary.500'), theme('colors.secondary.600'));
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Form focus styles */
+.form-input:focus {
+  @apply ring-2 ring-primary-500 border-transparent;
+}
+
+/* Animation for mobile menu */
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mobile-menu-enter {
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+/* PWA install prompt styles */
+.install-prompt {
+  @apply fixed bottom-4 left-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-50;
+}
+
+/* Offline indicator */
+.offline-indicator {
+  @apply fixed top-0 left-0 right-0 bg-yellow-500 text-white text-center py-2 z-50;
+}
+
+/* Loading states */
+.skeleton {
+  @apply bg-gray-200 dark:bg-gray-700 animate-pulse rounded;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, 
+    theme('colors.gray.200') 25%, 
+    theme('colors.gray.300') 50%, 
+    theme('colors.gray.200') 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .shimmer {
+  background: linear-gradient(90deg, 
+    theme('colors.gray.700') 25%, 
+    theme('colors.gray.600') 50%, 
+    theme('colors.gray.700') 75%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

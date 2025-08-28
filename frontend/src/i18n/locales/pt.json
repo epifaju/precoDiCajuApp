@@ -1,0 +1,175 @@
+{
+  "nav": {
+    "home": "Início",
+    "dashboard": "Painel",
+    "prices": "Preços",
+    "submit": "Submeter Preço",
+    "login": "Entrar",
+    "register": "Registrar",
+    "menu": "Menu"
+  },
+  "dashboard": {
+    "goodMorning": "Bom dia",
+    "goodAfternoon": "Boa tarde", 
+    "goodEvening": "Boa noite",
+    "welcome": "Aqui está o que está acontecendo com os preços de caju hoje.",
+    "period": "Período",
+    "days": "dias",
+    "totalPrices": "Total de Preços",
+    "averagePrice": "Preço Médio",
+    "priceRange": "Faixa de Preços",
+    "verifiedPrices": "Preços Verificados",
+    "inLast": "nos últimos",
+    "acrossAllRegions": "em todas as regiões",
+    "minMaxPrices": "preços mínimo e máximo",
+    "verified": "verificado",
+    "priceTrends": "Tendências de Preços",
+    "recentPriceMovements": "Movimentos recentes de preços em diferentes períodos",
+    "regionalDistribution": "Distribuição Regional",
+    "pricesByRegion": "Preços médios por região",
+    "qualityComparison": "Comparação de Qualidade",
+    "pricesByQuality": "Preços médios por grau de qualidade",
+    "recentActivity": "Atividade Recente",
+    "latestPriceUpdates": "Atualizações de preços mais recentes da comunidade",
+    "by": "por",
+    "vs30Days": "vs últimos 30 dias",
+    "noData": "Nenhum dado disponível",
+    "noPricesYet": "Ainda não há dados de preços disponíveis",
+    "date": "data",
+    "region": "região",
+    "quality": "qualidade",
+    "price": "Preço"
+  },
+  "auth": {
+    "email": "Endereço de Email",
+    "password": "Senha",
+    "fullName": "Nome Completo",
+    "phone": "Número de Telefone (Opcional)",
+    "phoneHelp": "Inclua o código do país (ex: +245 para Guiné-Bissau)",
+    "confirmPassword": "Confirmar Senha",
+    "rememberMe": "Lembrar-me",
+    "forgotPassword": "Esqueceu a senha?",
+    "acceptTerms": "Eu concordo com os",
+    "termsOfService": "Termos de Serviço",
+    "privacyPolicy": "Política de Privacidade",
+    "login": {
+      "title": "Entrar",
+      "subtitle": "Bem-vindo de volta ao Preço di Caju",
+      "submit": "Entrar",
+      "noAccount": "Não tem uma conta?"
+    },
+    "register": {
+      "title": "Criar Conta",
+      "subtitle": "Junte-se à comunidade de rastreamento de preços de caju",
+      "submit": "Criar Conta",
+      "hasAccount": "Já tem uma conta?",
+      "benefits": {
+        "title": "Junte-se à Nossa Comunidade",
+        "tracking": "Rastreie preços de caju em tempo real",
+        "reputation": "Construa sua reputação no mercado",
+        "mobile": "Acesse de qualquer dispositivo, mesmo offline",
+        "community": "Conecte-se com produtores e comerciantes"
+      }
+    }
+  },
+  "app": {
+    "tagline": "Rastreamento de Preços de Caju para Guiné-Bissau"
+  },
+  "login": {
+    "demo": {
+      "title": "Contas Demo"
+    }
+  },
+  "prices": {
+    "title": "Preços de Caju",
+    "submit": "Submeter Novo Preço",
+    "description": "Navegue e pesquise preços atuais de caju de toda a Guiné-Bissau",
+    "allRegions": "Todas as Regiões",
+    "allQualities": "Todas as Qualidades",
+    "allPrices": "Todos os Preços",
+    "verifiedOnly": "Apenas Verificados",
+    "unverifiedOnly": "Apenas Não Verificados",
+    "filters": "Filtros",
+    "clearFilters": "Limpar Todos",
+    "searchPlaceholder": "Pesquisar por nome da fonte...",
+    "selectRegion": "Selecionar região",
+    "selectQuality": "Selecionar qualidade",
+    "dateFrom": "Da data",
+    "dateTo": "Até a data",
+    "sortBy": {
+      "date": "Data Registrada",
+      "price": "Preço",
+      "submitted": "Data Submetida"
+    },
+    "sortDir": {
+      "desc": "Mais Recentes Primeiro",
+      "asc": "Mais Antigos Primeiro"
+    },
+    "showing": "Mostrando",
+    "of": "de",
+    "results": "resultados",
+    "verified": "Verificado",
+    "recordedOn": "Registrado em",
+    "by": "por",
+    "noPrices": "Nenhum preço encontrado",
+    "noPricesDescription": "Tente ajustar seus filtros ou submeta o primeiro preço.",
+    "errorLoading": "Falha ao carregar preços. Tente novamente.",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "page": "Página"
+  },
+  "submission": {
+    "title": "Submeter Preço",
+    "description": "Compartilhe informações de preços de caju com a comunidade",
+    "submittingAs": "Submetendo como",
+    "reputation": "Reputação",
+    "points": "pontos",
+    "tips": {
+      "title": "Dicas para Relatórios de Preços Precisos",
+      "current": "Relate preços atuais que você observou recentemente",
+      "accurate": "Seja o mais preciso possível com quantidades e qualidade",
+      "location": "Inclua informações específicas de localização quando possível",
+      "photo": "Fotos ajudam a verificar informações de preços",
+      "notes": "Adicione notas sobre condições do mercado ou observações de qualidade",
+      "verification": "Preços verificados ganham mais pontos de reputação"
+    }
+  },
+  "forms": {
+    "region": "Região",
+    "selectRegion": "Selecione uma região",
+    "qualityGrade": "Grau de Qualidade",
+    "selectQuality": "Selecione o grau de qualidade",
+    "price": "Preço (FCFA)",
+    "priceHelp": "Preço por quilograma em francos CFA da África Ocidental",
+    "recordedDate": "Data Registrada",
+    "dateHelp": "Quando este preço foi observado?",
+    "sourceName": "Nome da Fonte (Opcional)",
+    "sourceNamePlaceholder": "ex: Mercado Central Bissau",
+    "sourceNameHelp": "Nome do mercado, cooperativa ou localização",
+    "sourceType": {
+      "label": "Tipo de Fonte",
+      "market": "Mercado",
+      "cooperative": "Cooperativa",
+      "producer": "Produtor",
+      "trader": "Comerciante",
+      "other": "Outro"
+    },
+    "location": "Informações de Localização",
+    "getCurrentLocation": "Obter Localização Atual",
+    "latitude": "Latitude (Opcional)",
+    "latitudeHelp": "Coordenada GPS de latitude",
+    "longitude": "Longitude (Opcional)",
+    "longitudeHelp": "Coordenada GPS de longitude",
+    "photo": "Foto (Opcional)",
+    "photoHelp": "Carregue uma foto dos cajus ou exibição de preços (máx 5MB)",
+    "notes": "Notas Adicionais (Opcional)",
+    "notesPlaceholder": "Qualquer informação adicional sobre este preço...",
+    "notesHelp": "Condições do mercado, observações de qualidade, etc.",
+    "cancel": "Cancelar",
+    "submitPrice": "Submeter Preço",
+    "submitPrice": {
+      "title": "Submeter Preço de Caju",
+      "description": "Compartilhe preços atuais de caju com a comunidade para ajudar todos a se manterem informados sobre as condições do mercado."
+    }
+  }
+}

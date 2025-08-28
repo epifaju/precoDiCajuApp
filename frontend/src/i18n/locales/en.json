@@ -1,0 +1,266 @@
+{
+  "nav": {
+    "home": "Home",
+    "prices": "Prices",
+    "submit": "Submit",
+    "profile": "Profile",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "menu": "Menu"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "submit": "Submit",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "all": "All",
+    "none": "None",
+    "required": "Required",
+    "optional": "Optional",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "home": {
+    "title": "Cashew Prices",
+    "subtitle": "Track cashew prices in Guinea-Bissau",
+    "description": "Collaborative platform to consult and share cashew prices in real time",
+    "features": {
+      "realtime": "Real-time prices",
+      "collaborative": "Collaborative data",
+      "offline": "Works offline",
+      "mobile": "Mobile optimized"
+    },
+    "stats": {
+      "totalPrices": "Recorded prices",
+      "activeUsers": "Active users",
+      "regions": "Covered regions",
+      "lastUpdate": "Last update"
+    },
+    "cta": {
+      "viewPrices": "View Prices",
+      "submitPrice": "Submit Price"
+    }
+  },
+  "prices": {
+    "title": "Cashew Prices",
+    "subtitle": "View the latest prices",
+    "noData": "No prices found",
+    "loadMore": "Load more",
+    "region": "Region",
+    "quality": "Quality",
+    "price": "Price",
+    "unit": "Unit",
+    "date": "Date",
+    "source": "Source",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "filterBy": "Filter by",
+    "showAll": "Show all",
+    "sortBy": "Sort by",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "highest": "Highest price",
+    "lowest": "Lowest price",
+    "filters": {
+      "region": "Select region",
+      "quality": "Select quality",
+      "dateFrom": "Date from",
+      "dateTo": "Date to",
+      "verified": "Verified only",
+      "apply": "Apply filters",
+      "clear": "Clear filters"
+    },
+    "card": {
+      "postedBy": "Posted by",
+      "postedOn": "Posted on",
+      "location": "Location",
+      "notes": "Notes",
+      "viewDetails": "View details"
+    }
+  },
+  "submit": {
+    "title": "Submit Price",
+    "subtitle": "Share cashew price information",
+    "form": {
+      "region": "Region",
+      "regionPlaceholder": "Select region",
+      "quality": "Quality",
+      "qualityPlaceholder": "Select quality",
+      "price": "Price (FCFA/kg)",
+      "pricePlaceholder": "e.g. 2500",
+      "source": "Source",
+      "sourcePlaceholder": "e.g. Central Market",
+      "sourceType": "Source type",
+      "sourceTypes": {
+        "market": "Market",
+        "cooperative": "Cooperative",
+        "producer": "Producer",
+        "trader": "Trader",
+        "other": "Other"
+      },
+      "notes": "Notes",
+      "notesPlaceholder": "Additional information (optional)",
+      "photo": "Photo",
+      "photoHint": "Add a photo as evidence (max. 5MB)",
+      "location": "GPS Location",
+      "locationHint": "Allow location for better accuracy",
+      "enableLocation": "Enable location",
+      "submit": "Submit Price",
+      "submitting": "Submitting..."
+    },
+    "validation": {
+      "regionRequired": "Region is required",
+      "qualityRequired": "Quality is required",
+      "priceRequired": "Price is required",
+      "priceInvalid": "Price must be greater than 0",
+      "priceMax": "Price must be less than 10,000 FCFA",
+      "sourceRequired": "Source is required",
+      "photoSize": "Photo must be less than 5MB",
+      "photoFormat": "Invalid photo format (JPG, PNG only)"
+    },
+    "success": "Price submitted successfully!",
+    "successOffline": "Price saved offline. Will sync when online.",
+    "error": "Error submitting price. Please try again."
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Access your account",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "password": "Password",
+      "passwordPlaceholder": "Your password",
+      "remember": "Remember me",
+      "forgot": "Forgot password?",
+      "submit": "Login",
+      "noAccount": "No account?",
+      "signUp": "Sign up"
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create a new account",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Your full name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "password": "Password",
+      "passwordPlaceholder": "Secure password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "phone": "Phone",
+      "phonePlaceholder": "+245 123 456 789",
+      "terms": "I accept the terms and conditions",
+      "submit": "Register",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords don't match",
+      "nameRequired": "Name is required",
+      "termsRequired": "You must accept the terms and conditions"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password",
+      "emailExists": "This email is already registered",
+      "networkError": "Connection error. Check your internet.",
+      "serverError": "Server error. Try again later."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage account information",
+    "info": {
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role",
+      "reputation": "Reputation",
+      "joinDate": "Member since",
+      "lastActive": "Last active"
+    },
+    "stats": {
+      "pricesSubmitted": "Prices submitted",
+      "verified": "Verified",
+      "pending": "Pending"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "language": "Language",
+      "notifications": "Notifications",
+      "regions": "Regions of interest",
+      "theme": "Theme",
+      "themes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
+    },
+    "actions": {
+      "edit": "Edit profile",
+      "changePassword": "Change password",
+      "logout": "Logout"
+    }
+  },
+  "regions": {
+    "BF": "Bafata",
+    "BB": "Biombo",
+    "BL": "Bolama",
+    "CA": "Cacheu",
+    "GA": "Gabu",
+    "OI": "Oio",
+    "QU": "Quinara",
+    "TO": "Tombali",
+    "BS": "Bissau"
+  },
+  "qualities": {
+    "W180": "White 180",
+    "W210": "White 210",
+    "W240": "White 240",
+    "W320": "White 320",
+    "LP": "Large Pieces",
+    "SP": "Small Pieces",
+    "RAW": "Raw Cashew"
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "pageNotFoundDesc": "The page you're looking for doesn't exist.",
+    "goHome": "Go home",
+    "networkError": "Connection error",
+    "serverError": "Server error",
+    "unknownError": "Unknown error",
+    "tryAgain": "Try again"
+  },
+  "offline": {
+    "indicator": "You are offline",
+    "message": "No internet connection",
+    "dataStale": "Data may be outdated",
+    "syncPending": "Sync pending"
+  },
+  "pwa": {
+    "install": "Install app",
+    "installDesc": "Install the app on your device for faster access",
+    "installButton": "Install",
+    "installLater": "Later",
+    "updateAvailable": "Update available",
+    "updateDesc": "A new version is available",
+    "updateButton": "Update",
+    "updateLater": "Later"
+  }
+}
