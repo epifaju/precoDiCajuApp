@@ -20,3 +20,4 @@ public interface RegionRepository extends JpaRepository<Region, String> {
 
     boolean existsByCode(String code);
 }
+

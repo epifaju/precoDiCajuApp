@@ -108,3 +108,4 @@ else
     echo "   3. Redémarrez les services: docker-compose restart"
     exit 1
 fi
+

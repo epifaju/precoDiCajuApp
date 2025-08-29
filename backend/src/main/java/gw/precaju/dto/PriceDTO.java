@@ -192,3 +192,4 @@ public class PriceDTO {
         this.createdAt = createdAt;
     }
 }
+

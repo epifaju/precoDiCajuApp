@@ -102,3 +102,4 @@ CREATE TRIGGER update_regions_updated_at BEFORE UPDATE ON regions FOR EACH ROW E
 CREATE TRIGGER update_quality_grades_updated_at BEFORE UPDATE ON quality_grades FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_prices_updated_at BEFORE UPDATE ON prices FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+

@@ -36,3 +36,4 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID
             "(SELECT rt2.id FROM RefreshToken rt2 WHERE rt2.user = :user ORDER BY rt2.createdAt DESC LIMIT :limit)")
     void deleteOldestTokensForUser(@Param("user") User user, @Param("limit") int limit);
 }
+

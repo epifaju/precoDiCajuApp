@@ -59,3 +59,4 @@ Write-Host "   🌍 Language switching (PT/FR/EN)" -ForegroundColor White
 Write-Host ""
 Write-Host "🎯 Demo accounts (if you prefer not to register):" -ForegroundColor Yellow
 Write-Host "   Email: admin@precaju.gw | Password: admin123" -ForegroundColor White
+

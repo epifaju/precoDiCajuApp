@@ -207,3 +207,4 @@ Write-Host "   Email: user@precaju.gw | Password: user123" -ForegroundColor Whit
 
 Write-Host ""
 Write-Host "🚀 Application testing complete! Open $FRONTEND_URL in your browser." -ForegroundColor Green
+

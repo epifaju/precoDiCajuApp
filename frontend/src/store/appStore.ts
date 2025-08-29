@@ -262,3 +262,4 @@ const initializeApp = () => {
 if (typeof window !== 'undefined') {
   initializeApp();
 }
+

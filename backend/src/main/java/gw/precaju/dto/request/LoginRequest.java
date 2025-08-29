@@ -1,23 +1,28 @@
 package gw.precaju.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class LoginRequest {
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email should be valid")
+    @NotBlank(message = "L'email est requis")
+    @Email(message = "L'email doit être valide")
+    @JsonProperty("email")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @NotBlank(message = "Le mot de passe est requis")
+    @Size(min = 6, message = "Le mot de passe doit contenir au moins 6 caractères")
+    @JsonProperty("password")
     private String password;
 
-    private Boolean rememberMe = false;
+    @JsonProperty("rememberMe")
+    private boolean rememberMe = false;
 
     // Constructors
-    public LoginRequest() {}
+    public LoginRequest() {
+    }
 
     public LoginRequest(String email, String password) {
         this.email = email;
@@ -41,11 +46,11 @@ public class LoginRequest {
         this.password = password;
     }
 
-    public Boolean getRememberMe() {
+    public boolean isRememberMe() {
         return rememberMe;
     }
 
-    public void setRememberMe(Boolean rememberMe) {
+    public void setRememberMe(boolean rememberMe) {
         this.rememberMe = rememberMe;
     }
 }

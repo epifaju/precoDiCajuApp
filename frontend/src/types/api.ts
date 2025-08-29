@@ -179,3 +179,4 @@ export interface GpsCoordinates {
   accuracy?: number;
   timestamp?: number;
 }
+

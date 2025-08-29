@@ -133,3 +133,4 @@ class PriceServiceTest {
         assertTrue(exception.getMessage().contains("Invalid quality grade"));
     }
 }
+

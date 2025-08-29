@@ -128,3 +128,4 @@ public class CreatePriceRequest {
         this.photoFile = photoFile;
     }
 }
+

@@ -83,3 +83,4 @@ queryClient.setMutationDefaults(['*'], {
 queryClient.setQueryDefaults(['*'], {
   onError: queryErrorHandler,
 });
+

@@ -124,3 +124,4 @@ public class UserDTO {
         this.lastLoginAt = lastLoginAt;
     }
 }
+

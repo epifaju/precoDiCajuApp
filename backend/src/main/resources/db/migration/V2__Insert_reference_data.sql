@@ -31,3 +31,4 @@ INSERT INTO users (email, password_hash, full_name, role, preferred_regions, ema
 ('comerciante@test.gw', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM.lE4fFJaExzANgGQf.', 'Maria Comerciante', 'contributor', '["BS", "CA"]', true, true),
 ('cooperativa@test.gw', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM.lE4fFJaExzANgGQf.', 'Cooperativa Gabú', 'moderator', '["GA", "BF"]', true, true);
 -- Mot de passe pour tous: test123
+

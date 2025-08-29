@@ -95,3 +95,4 @@ elif command -v xdg-open &> /dev/null; then
 fi
 
 echo "✨ Bon développement!"
+

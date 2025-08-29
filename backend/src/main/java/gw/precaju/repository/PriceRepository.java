@@ -85,3 +85,4 @@ public interface PriceRepository extends JpaRepository<Price, UUID> {
             "AND p.recordedDate >= :fromDate GROUP BY p.qualityGrade.code")
     List<Object[]> countPricesByQuality(@Param("fromDate") LocalDate fromDate);
 }
+

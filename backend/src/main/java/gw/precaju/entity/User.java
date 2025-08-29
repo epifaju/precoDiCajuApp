@@ -35,17 +35,16 @@ public class User implements UserDetails {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private UserRole role = UserRole.CONTRIBUTOR;
 
     @Column(name = "reputation_score")
     private Integer reputationScore = 0;
 
-    @Column(name = "preferred_regions", columnDefinition = "jsonb")
+    @Column(name = "preferred_regions", columnDefinition = "TEXT")
     private String preferredRegions = "[]";
 
-    @Column(name = "notification_preferences", columnDefinition = "jsonb")
+    @Column(name = "notification_preferences", columnDefinition = "TEXT")
     private String notificationPreferences = "{}";
 
     @Column(name = "email_verified")
@@ -289,3 +288,4 @@ public class User implements UserDetails {
                 '}';
     }
 }
+

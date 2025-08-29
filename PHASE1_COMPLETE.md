@@ -234,3 +234,4 @@ Cela permettra d'avoir une **MVP utilisable** rapidement.
 **Documentation** : ✅ COMPLETE
 
 **🚀 L'environnement est prêt pour le développement intensif !**
+

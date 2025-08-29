@@ -24,3 +24,4 @@ public enum UserRole {
         throw new IllegalArgumentException("No constant with text " + text + " found");
     }
 }
+

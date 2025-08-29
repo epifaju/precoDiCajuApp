@@ -53,18 +53,18 @@ public class PriceController {
 
         try {
             // Validate and limit page size
-            if (size > 100) size = 100;
-            if (page < 0) page = 0;
+            if (size > 100)
+                size = 100;
+            if (page < 0)
+                page = 0;
 
             // Create sort
-            Sort sort = sortDir.equalsIgnoreCase("asc") ? 
-                Sort.by(sortBy).ascending() : 
-                Sort.by(sortBy).descending();
+            Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
             Pageable pageable = PageRequest.of(page, size, sort);
 
             Page<PriceDTO> prices = priceService.getAllPrices(
-                region, quality, from, to, pageable, language);
+                    region, quality, from, to, pageable, language);
 
             return ResponseEntity.ok(PageResponse.of(prices));
 
@@ -82,7 +82,7 @@ public class PriceController {
         try {
             Optional<PriceDTO> price = priceService.getPriceById(id, language);
             return price.map(ResponseEntity::ok)
-                       .orElse(ResponseEntity.notFound().build());
+                    .orElse(ResponseEntity.notFound().build());
 
         } catch (Exception e) {
             logger.error("Error retrieving price with ID: {}", id, e);
@@ -209,16 +209,37 @@ public class PriceController {
             @RequestParam(defaultValue = "30") int days,
             @RequestHeader(name = "Accept-Language", defaultValue = "pt") String language) {
 
+        logger.info("Received request for price statistics - region: {}, quality: {}, days: {}, language: {}",
+                region, quality, days, language);
+
         try {
             // Validate days parameter
-            if (days < 1) days = 1;
-            if (days > 365) days = 365;
+            if (days < 1) {
+                logger.warn("Invalid days parameter: {}, setting to 1", days);
+                days = 1;
+            }
+            if (days > 365) {
+                logger.warn("Days parameter too large: {}, limiting to 365", days);
+                days = 365;
+            }
 
+            logger.debug("Calling priceService.getPriceStatistics with validated parameters");
             PriceStatsDTO stats = priceService.getPriceStatistics(region, quality, days, language);
+
+            logger.info("Successfully retrieved price statistics - total prices: {}", stats.getTotalPrices());
             return ResponseEntity.ok(stats);
 
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid argument in price statistics request - region: {}, quality: {}, days: {}",
+                    region, quality, days, e);
+            return ResponseEntity.badRequest().build();
+        } catch (RuntimeException e) {
+            logger.error("Runtime error in price statistics request - region: {}, quality: {}, days: {}",
+                    region, quality, days, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } catch (Exception e) {
-            logger.error("Error retrieving price statistics", e);
+            logger.error("Unexpected error in price statistics request - region: {}, quality: {}, days: {}",
+                    region, quality, days, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -242,11 +263,13 @@ public class PriceController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
 
-            if (size > 100) size = 100;
-            if (page < 0) page = 0;
+            if (size > 100)
+                size = 100;
+            if (page < 0)
+                page = 0;
 
-            Pageable pageable = PageRequest.of(page, size, 
-                Sort.by("createdAt").descending());
+            Pageable pageable = PageRequest.of(page, size,
+                    Sort.by("createdAt").descending());
 
             Page<PriceDTO> prices = priceService.getUserPrices(userId, pageable, language);
             return ResponseEntity.ok(PageResponse.of(prices));
@@ -265,8 +288,10 @@ public class PriceController {
             @RequestHeader(name = "Accept-Language", defaultValue = "pt") String language) {
 
         try {
-            if (size > 100) size = 100;
-            if (page < 0) page = 0;
+            if (size > 100)
+                size = 100;
+            if (page < 0)
+                page = 0;
 
             Pageable pageable = PageRequest.of(page, size);
             Page<PriceDTO> prices = priceService.getUnverifiedPrices(pageable, language);

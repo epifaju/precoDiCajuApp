@@ -350,3 +350,4 @@ curl http://localhost:8080/api/v1/prices
 - ✅ **Architecture** robuste et évolutive
 
 **🎯 L'API est prête pour la production et l'intégration frontend !**
+

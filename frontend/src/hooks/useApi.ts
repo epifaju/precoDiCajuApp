@@ -353,3 +353,4 @@ export const useFileInfo = () => {
     staleTime: 60 * 60 * 1000, // 1 hour (file info doesn't change)
   });
 };
+

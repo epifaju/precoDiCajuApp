@@ -133,3 +133,4 @@ public class PriceStatsDTO {
         this.periodDays = periodDays;
     }
 }
+
