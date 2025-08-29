@@ -4,6 +4,7 @@
     "dashboard": "Painel",
     "prices": "Preços",
     "submit": "Submeter Preço",
+    "admin": "Administração",
     "login": "Entrar",
     "register": "Registrar",
     "menu": "Menu"
@@ -39,7 +40,31 @@
   },
   "common": {
     "understand": "Entendi",
-    "reconnect": "Reconectar"
+    "reconnect": "Reconectar",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "submit": "Submeter",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "reset": "Redefinir",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "all": "Todos",
+    "none": "Nenhum",
+    "required": "Obrigatório",
+    "optional": "Opcional",
+    "yes": "Sim",
+    "no": "Não",
+    "page": "Página",
+    "of": "de"
   },
   "dashboard": {
     "goodMorning": "Bom dia",
@@ -361,5 +386,77 @@
     "notesPlaceholder": "Qualquer informação adicional sobre este preço...",
     "notesHelp": "Condições de mercado, observações de qualidade, etc.",
     "cancel": "Cancelar"
+  },
+  "admin": {
+    "title": "Administração de Usuários",
+    "description": "Gerencie os usuários da plataforma",
+    "stats": {
+      "total": "Total",
+      "active": "Ativos",
+      "admins": "Administradores",
+      "moderators": "Moderadores",
+      "contributors": "Contribuidores"
+    },
+    "filters": {
+      "search": "Pesquisar",
+      "searchPlaceholder": "Email ou nome...",
+      "role": "Função",
+      "allRoles": "Todas as funções",
+      "status": "Status",
+      "allStatus": "Todos",
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "moderator": "Moderador",
+      "contributor": "Contribuidor"
+    },
+    "users": {
+      "title": "Usuários",
+      "name": "Nome",
+      "email": "Email",
+      "role": "Função",
+      "status": "Status",
+      "reputation": "Reputação",
+      "verified": "Verificado",
+      "notVerified": "Não verificado",
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "actions": "Ações"
+    },
+    "actions": {
+      "create": "Criar usuário",
+      "edit": "Editar",
+      "password": "Senha",
+      "deactivate": "Desativar",
+      "activate": "Ativar"
+    },
+    "create": {
+      "title": "Criar usuário",
+      "email": "Email",
+      "password": "Senha",
+      "fullName": "Nome completo",
+      "phone": "Telefone",
+      "role": "Função",
+      "emailVerified": "Email verificado",
+      "active": "Ativo",
+      "submit": "Criar"
+    },
+    "edit": {
+      "title": "Editar",
+      "fullName": "Nome completo",
+      "phone": "Telefone",
+      "role": "Função",
+      "reputationScore": "Pontuação de reputação",
+      "emailVerified": "Email verificado",
+      "active": "Ativo",
+      "submit": "Atualizar"
+    },
+    "password": {
+      "title": "Alterar senha para",
+      "newPassword": "Nova senha",
+      "submit": "Alterar"
+    }
   }
 }

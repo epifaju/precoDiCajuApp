@@ -9,13 +9,78 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 // Utility function to handle API responses
 const handleApiResponse = async (response: Response) => {
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
+    let errorData = {};
+    try {
+      errorData = await response.json();
+    } catch (e) {
+      // Si la réponse n'est pas du JSON, créer un message d'erreur basique
+      errorData = { 
+        message: `Erreur HTTP ${response.status}: ${response.statusText}`,
+        status: response.status,
+        statusText: response.statusText
+      };
+    }
+    
     const error = new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
     (error as any).status = response.status;
     (error as any).data = errorData;
+    (error as any).statusText = response.statusText;
+    
+    // Log détaillé de l'erreur pour le débogage
+    console.error('API Error Response:', {
+      status: response.status,
+      statusText: response.statusText,
+      url: response.url,
+      errorData: errorData
+    });
+    
     throw error;
   }
   return response.json();
+};
+
+// Generic API hook for admin operations
+export const useApi = () => {
+  const authFetch = useAuthInterceptor();
+  
+  return {
+    get: async <T>(url: string): Promise<T> => {
+      const response = await authFetch(`${API_BASE_URL}${url}`);
+      return handleApiResponse(response);
+    },
+    
+    post: async <T>(url: string, data?: any): Promise<T> => {
+      const response = await authFetch(`${API_BASE_URL}${url}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: data ? JSON.stringify(data) : undefined,
+      });
+      return handleApiResponse(response);
+    },
+    
+    put: async <T>(url: string, data?: any): Promise<T> => {
+      const response = await authFetch(`${API_BASE_URL}${url}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: data ? JSON.stringify(data) : undefined,
+      });
+      return handleApiResponse(response);
+    },
+    
+    delete: async (url: string): Promise<void> => {
+      const response = await authFetch(`${API_BASE_URL}${url}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to delete: ${response.status}`);
+      }
+    },
+  };
 };
 
 // Regions API

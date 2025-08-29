@@ -4,6 +4,7 @@
     "prices": "Prix",
     "submit": "Soumettre",
     "profile": "Profil",
+    "admin": "Administration",
     "login": "Se connecter",
     "register": "S'inscrire",
     "logout": "Se déconnecter",
@@ -31,7 +32,9 @@
     "required": "Obligatoire",
     "optional": "Optionnel",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "page": "Page",
+    "of": "sur"
   },
   "submission": {
     "title": "Soumettre un Prix de Cajou",
@@ -323,6 +326,89 @@
     "notesPlaceholder": "Toute information supplémentaire sur ce prix...",
     "notesHelp": "Conditions de marché, observations de qualité, etc.",
     "cancel": "Annuler"
+  },
+  "admin": {
+    "title": "Administration des Utilisateurs",
+    "description": "Gérez les utilisateurs de la plateforme",
+    "accessDenied": "Accès refusé",
+    "redirecting": "Redirection en cours...",
+    "stats": {
+      "total": "Total",
+      "active": "Actifs",
+      "admins": "Admins",
+      "moderators": "Modérateurs",
+      "contributors": "Contributeurs"
+    },
+    "filters": {
+      "search": "Recherche",
+      "searchPlaceholder": "Email ou nom...",
+      "role": "Rôle",
+      "allRoles": "Tous les rôles",
+      "status": "Statut",
+      "allStatus": "Tous",
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "roles": {
+      "admin": "Admin",
+      "moderator": "Modérateur",
+      "contributor": "Contributeur"
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "status": "Statut",
+      "reputation": "Réputation",
+      "verified": "Vérifié",
+      "notVerified": "Non vérifié",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "actions": "Actions"
+    },
+    "actions": {
+      "create": "Créer un utilisateur",
+      "edit": "Modifier",
+      "password": "Mot de passe",
+      "deactivate": "Désactiver",
+      "activate": "Activer"
+    },
+    "create": {
+      "title": "Créer un utilisateur",
+      "email": "Email",
+      "password": "Mot de passe",
+      "fullName": "Nom complet",
+      "phone": "Téléphone",
+      "role": "Rôle",
+      "emailVerified": "Email vérifié",
+      "active": "Actif",
+      "submit": "Créer"
+    },
+    "edit": {
+      "title": "Modifier",
+      "fullName": "Nom complet",
+      "phone": "Téléphone",
+      "role": "Rôle",
+      "reputationScore": "Score de réputation",
+      "emailVerified": "Email vérifié",
+      "active": "Actif",
+      "submit": "Mettre à jour"
+    },
+    "password": {
+      "title": "Changer le mot de passe pour",
+      "newPassword": "Nouveau mot de passe",
+      "submit": "Changer"
+    },
+    "messages": {
+      "userCreated": "Utilisateur créé avec succès",
+      "userUpdated": "Utilisateur mis à jour avec succès",
+      "passwordChanged": "Mot de passe changé avec succès",
+      "userActivated": "Utilisateur activé avec succès",
+      "userDeactivated": "Utilisateur désactivé avec succès",
+      "accessDenied": "Accès non autorisé. Redirection...",
+      "redirecting": "Redirection en cours..."
+    }
   }
 }
 

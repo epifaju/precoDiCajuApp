@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/regions")
-@CrossOrigin(origins = "*")
 public class RegionController {
 
     private static final Logger logger = LoggerFactory.getLogger(RegionController.class);
@@ -39,11 +38,10 @@ public class RegionController {
         try {
             Optional<Region> region = regionRepository.findByCodeAndActiveTrue(code);
             return region.map(ResponseEntity::ok)
-                        .orElse(ResponseEntity.notFound().build());
+                    .orElse(ResponseEntity.notFound().build());
         } catch (Exception e) {
             logger.error("Error retrieving region with code: {}", code, e);
             return ResponseEntity.internalServerError().build();
         }
     }
 }
-

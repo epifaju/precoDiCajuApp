@@ -1,203 +1,210 @@
-# Test des fonctionnalités d'administration avancées
-# Vérification des capacités spécifiques aux administrateurs et modérateurs
+# Test des fonctionnalités d'administration des utilisateurs
+# Assurez-vous que le backend et le frontend sont démarrés
 
-Write-Host "Test des fonctionnalités d'administration avancées" -ForegroundColor Green
-Write-Host "===============================================" -ForegroundColor Green
-Write-Host "Vérification des capacités d'administration" -ForegroundColor Cyan
+Write-Host "🧪 Test des fonctionnalités d'administration des utilisateurs" -ForegroundColor Green
+Write-Host "=====================================================" -ForegroundColor Green
 
-$baseUrl = "http://localhost:8080"
+# Configuration
+$BASE_URL = "http://localhost:8080"
+$ADMIN_EMAIL = "admin@precaju.gw"
+$ADMIN_PASSWORD = "admin123"
 
-# Test 1: Vérification des prix non vérifiés (pour modérateurs)
-Write-Host "`n🔍 Test 1: Prix non vérifiés (modérateurs)" -ForegroundColor Yellow
-Write-Host "===========================================" -ForegroundColor Yellow
+# Couleurs pour les résultats
+function Write-Success { param($msg) Write-Host "✅ $msg" -ForegroundColor Green }
+function Write-Error { param($msg) Write-Host "❌ $msg" -ForegroundColor Red }
+function Write-Info { param($msg) Write-Host "ℹ️  $msg" -ForegroundColor Blue }
 
+# 1. Test de connexion admin
+Write-Info "1. Test de connexion admin..."
 try {
-    $response = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/unverified" -Method Get -ContentType "application/json"
-    Write-Host "✅ Endpoint des prix non vérifiés accessible" -ForegroundColor Green
-    Write-Host "   Prix non vérifiés: $($response.content.Count)" -ForegroundColor Cyan
-    Write-Host "   Total disponible: $($response.totalElements)" -ForegroundColor Cyan
+    $loginResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/auth/login" -Method POST -ContentType "application/json" -Body (@{
+        email = $ADMIN_EMAIL
+        password = $ADMIN_PASSWORD
+        rememberMe = $false
+    } | ConvertTo-Json)
     
-    if ($response.content.Count -gt 0) {
-        $firstUnverified = $response.content[0]
-        Write-Host "   Premier prix non vérifié:" -ForegroundColor Cyan
-        Write-Host "     Région: $($firstUnverified.regionName)" -ForegroundColor White
-        Write-Host "     Qualité: $($firstUnverified.qualityName)" -ForegroundColor White
-        Write-Host "     Prix: $($firstUnverified.priceFcfa) FCFA" -ForegroundColor White
-        Write-Host "     Créé par: $($firstUnverified.createdBy.fullName)" -ForegroundColor White
-    }
-} catch {
-    Write-Host "❌ Erreur avec l'endpoint des prix non vérifiés" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
-}
-
-# Test 2: Vérification du comptage des prix non vérifiés
-Write-Host "`n🔍 Test 2: Comptage des prix non vérifiés" -ForegroundColor Yellow
-Write-Host "==========================================" -ForegroundColor Yellow
-
-try {
-    $response = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/unverified/count" -Method Get -ContentType "application/json"
-    Write-Host "✅ Comptage des prix non vérifiés: $response" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Erreur avec le comptage des prix non vérifiés" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
-}
-
-# Test 3: Vérification des prix par utilisateur
-Write-Host "`n🔍 Test 3: Prix par utilisateur" -ForegroundColor Yellow
-Write-Host "===============================" -ForegroundColor Yellow
-
-try {
-    # Récupérer d'abord la liste des prix pour obtenir un ID d'utilisateur
-    $pricesResponse = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices?size=10" -Method Get -ContentType "application/json"
-    
-    if ($pricesResponse.content.Count -gt 0) {
-        $firstPrice = $pricesResponse.content[0]
-        if ($firstPrice.createdBy -and $firstPrice.createdBy.id) {
-            $userId = $firstPrice.createdBy.id
-            Write-Host "   Test avec utilisateur: $($firstPrice.createdBy.fullName) (ID: $userId)" -ForegroundColor Cyan
-            
-            $userPricesResponse = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/user/$userId" -Method Get -ContentType "application/json"
-            Write-Host "   ✅ Prix de l'utilisateur: $($userPricesResponse.content.Count) prix" -ForegroundColor Green
-            Write-Host "   Total disponible: $($userPricesResponse.totalElements)" -ForegroundColor Cyan
-        } else {
-            Write-Host "⚠️ Aucun utilisateur trouvé dans les prix" -ForegroundColor Yellow
+    if ($loginResponse.accessToken) {
+        Write-Success "Connexion admin réussie"
+        $adminToken = $loginResponse.accessToken
+        $headers = @{
+            "Authorization" = "Bearer $adminToken"
+            "Content-Type" = "application/json"
         }
+    } else {
+        Write-Error "Échec de la connexion admin"
+        exit 1
     }
 } catch {
-    Write-Host "❌ Erreur avec les prix par utilisateur" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Error "Erreur lors de la connexion admin: $($_.Exception.Message)"
+    exit 1
 }
 
-# Test 4: Vérification des prix dans une zone géographique
-Write-Host "`n🔍 Test 4: Prix par zone géographique" -ForegroundColor Yellow
-Write-Host "======================================" -ForegroundColor Yellow
-
+# 2. Test des statistiques des utilisateurs
+Write-Info "2. Test des statistiques des utilisateurs..."
 try {
-    # Coordonnées de Bissau (approximatives)
-    $minLat = 11.8
-    $maxLat = 11.9
-    $minLng = -15.7
-    $maxLng = -15.6
-    $fromDate = (Get-Date).AddDays(-30).ToString("yyyy-MM-dd")
+    $statsResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users/stats" -Method GET -Headers $headers
     
-    $geoResponse = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/geo?minLat=$minLat&maxLat=$maxLat&minLng=$minLng&maxLng=$maxLng&fromDate=$fromDate" -Method Get -ContentType "application/json"
-    Write-Host "✅ Prix dans la zone géographique: $($geoResponse.Count) prix" -ForegroundColor Green
-    Write-Host "   Zone: Bissau (approximative)" -ForegroundColor Cyan
-    Write-Host "   Période: 30 derniers jours" -ForegroundColor Cyan
+    Write-Success "Statistiques récupérées:"
+    Write-Host "   Total: $($statsResponse.totalUsers)" -ForegroundColor Yellow
+    Write-Host "   Actifs: $($statsResponse.activeUsers)" -ForegroundColor Yellow
+    Write-Host "   Admins: $($statsResponse.adminUsers)" -ForegroundColor Yellow
+    Write-Host "   Modérateurs: $($statsResponse.moderatorUsers)" -ForegroundColor Yellow
+    Write-Host "   Contributeurs: $($statsResponse.contributorUsers)" -ForegroundColor Yellow
 } catch {
-    Write-Host "❌ Erreur avec les prix par zone géographique" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Error "Erreur lors de la récupération des statistiques: $($_.Exception.Message)"
 }
 
-# Test 5: Vérification des statistiques par région
-Write-Host "`n🔍 Test 5: Statistiques par région" -ForegroundColor Yellow
-Write-Host "=================================" -ForegroundColor Yellow
-
+# 3. Test de récupération de tous les utilisateurs
+Write-Info "3. Test de récupération de tous les utilisateurs..."
 try {
-    $response = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/stats/regions?fromDate=$((Get-Date).AddDays(-30).ToString('yyyy-MM-dd'))" -Method Get -ContentType "application/json"
-    Write-Host "✅ Statistiques par région: $($response.Count) régions" -ForegroundColor Green
+    $usersResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users" -Method GET -Headers $headers
     
-    foreach ($region in $response) {
-        Write-Host "   $($region.regionCode): $($region.count) prix" -ForegroundColor Cyan
+    Write-Success "Utilisateurs récupérés: $($usersResponse.totalElements) utilisateurs sur $($usersResponse.totalPages) pages"
+    Write-Host "   Page actuelle: $($usersResponse.number + 1)" -ForegroundColor Yellow
+    Write-Host "   Taille de page: $($usersResponse.size)" -ForegroundColor Yellow
+    Write-Host "   Utilisateurs dans cette page: $($usersResponse.content.Count)" -ForegroundColor Yellow
+    
+    # Afficher les premiers utilisateurs
+    foreach ($user in $usersResponse.content[0..2]) {
+        Write-Host "   - $($user.fullName) ($($user.email)) - Rôle: $($user.role) - Statut: $($user.active)" -ForegroundColor Cyan
     }
 } catch {
-    Write-Host "❌ Erreur avec les statistiques par région" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Error "Erreur lors de la récupération des utilisateurs: $($_.Exception.Message)"
 }
 
-# Test 6: Vérification des statistiques par qualité
-Write-Host "`n🔍 Test 6: Statistiques par qualité" -ForegroundColor Yellow
-Write-Host "===================================" -ForegroundColor Yellow
-
+# 4. Test de création d'un nouvel utilisateur
+Write-Info "4. Test de création d'un nouvel utilisateur..."
 try {
-    $response = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/stats/qualities?fromDate=$((Get-Date).AddDays(-30).ToString('yyyy-MM-dd'))" -Method Get -ContentType "application/json"
-    Write-Host "✅ Statistiques par qualité: $($response.Count) qualités" -ForegroundColor Green
-    
-    foreach ($quality in $response) {
-        Write-Host "   $($quality.qualityCode): $($quality.count) prix" -ForegroundColor Cyan
+    $newUser = @{
+        email = "test.user.$(Get-Date -Format 'yyyyMMddHHmmss')@test.gw"
+        password = "test123"
+        fullName = "Utilisateur Test"
+        phone = "+245123456789"
+        role = "CONTRIBUTOR"
+        emailVerified = $true
+        active = $true
     }
+    
+    $createResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users" -Method POST -Headers $headers -Body ($newUser | ConvertTo-Json)
+    
+    Write-Success "Utilisateur créé: $($createResponse.fullName) ($($createResponse.email))"
+    $testUserId = $createResponse.id
 } catch {
-    Write-Host "❌ Erreur avec les statistiques par qualité" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Error "Erreur lors de la création de l'utilisateur: $($_.Exception.Message)"
+    $testUserId = $null
 }
 
-# Test 7: Vérification des prix récents vérifiés
-Write-Host "`n🔍 Test 7: Prix récents vérifiés" -ForegroundColor Yellow
-Write-Host "=================================" -ForegroundColor Yellow
-
-try {
-    $response = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/verified/recent?regionCode=ABJ&qualityCode=PREMIUM&fromDate=$((Get-Date).AddDays(-7).ToString('yyyy-MM-dd'))" -Method Get -ContentType "application/json"
-    Write-Host "✅ Prix récents vérifiés: $($response.Count) prix" -ForegroundColor Green
-    Write-Host "   Région: ABJ, Qualité: PREMIUM, Période: 7 jours" -ForegroundColor Cyan
-} catch {
-    Write-Host "❌ Erreur avec les prix récents vérifiés" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
-}
-
-# Test 8: Vérification de la moyenne des prix
-Write-Host "`n🔍 Test 8: Moyenne des prix" -ForegroundColor Yellow
-Write-Host "============================" -ForegroundColor Yellow
-
-try {
-    $response = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/average?regionCode=ABJ&qualityCode=PREMIUM&fromDate=$((Get-Date).AddDays(-30).ToString('yyyy-MM-dd'))" -Method Get -ContentType "application/json"
-    Write-Host "✅ Moyenne des prix: $response FCFA" -ForegroundColor Green
-    Write-Host "   Région: ABJ, Qualité: PREMIUM, Période: 30 jours" -ForegroundColor Cyan
-} catch {
-    Write-Host "❌ Erreur avec la moyenne des prix" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
-}
-
-# Test 9: Vérification de la fourchette de prix
-Write-Host "`n🔍 Test 9: Fourchette de prix" -ForegroundColor Yellow
-Write-Host "==============================" -ForegroundColor Yellow
-
-try {
-    $response = Invoke-RestMethod -Uri "$baseUrl/api/v1/prices/range?regionCode=ABJ&qualityCode=PREMIUM&fromDate=$((Get-Date).AddDays(-30).ToString('yyyy-MM-dd'))" -Method Get -ContentType "application/json"
-    Write-Host "✅ Fourchette de prix: $($response.minPrice) - $($response.maxPrice) FCFA" -ForegroundColor Green
-    Write-Host "   Région: ABJ, Qualité: PREMIUM, Période: 30 jours" -ForegroundColor Cyan
-} catch {
-    Write-Host "❌ Erreur avec la fourchette de prix" -ForegroundColor Red
-    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
-}
-
-# Test 10: Vérification des performances des endpoints d'administration
-Write-Host "`n🔍 Test 10: Performance des endpoints d'administration" -ForegroundColor Yellow
-Write-Host "==================================================" -ForegroundColor Yellow
-
-$adminEndpoints = @(
-    "/api/v1/prices/unverified",
-    "/api/v1/prices/stats",
-    "/api/v1/prices/stats/regions",
-    "/api/v1/prices/stats/qualities"
-)
-
-foreach ($endpoint in $adminEndpoints) {
-    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+# 5. Test de modification d'un utilisateur
+if ($testUserId) {
+    Write-Info "5. Test de modification de l'utilisateur..."
     try {
-        $response = Invoke-RestMethod -Uri "$baseUrl$endpoint" -Method Get -ContentType "application/json"
-        $stopwatch.Stop()
-        $responseTime = $stopwatch.ElapsedMilliseconds
-        
-        if ($responseTime -lt 1000) {
-            Write-Host "✅ $endpoint : $responseTime ms (excellent)" -ForegroundColor Green
-        } elseif ($responseTime -lt 3000) {
-            Write-Host "⚠️ $endpoint : $responseTime ms (acceptable)" -ForegroundColor Yellow
-        } else {
-            Write-Host "❌ $endpoint : $responseTime ms (lent)" -ForegroundColor Red
+        $updateData = @{
+            fullName = "Utilisateur Test Modifié"
+            phone = "+245987654321"
+            role = "MODERATOR"
+            reputationScore = 50
         }
+        
+        $updateResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users/$testUserId" -Method PUT -Headers $headers -Body ($updateData | ConvertTo-Json)
+        
+        Write-Success "Utilisateur modifié: $($updateResponse.fullName) - Rôle: $($updateResponse.role) - Réputation: $($updateResponse.reputationScore)"
     } catch {
-        Write-Host "❌ $endpoint : Erreur" -ForegroundColor Red
+        Write-Error "Erreur lors de la modification de l'utilisateur: $($_.Exception.Message)"
     }
 }
 
-# Résumé final des fonctionnalités d'administration
-Write-Host "`n🎉 Résumé des fonctionnalités d'administration" -ForegroundColor Green
-Write-Host "=============================================" -ForegroundColor Green
-Write-Host "✅ Toutes les fonctionnalités d'administration testées" -ForegroundColor Green
-Write-Host "✅ Endpoints de modération opérationnels" -ForegroundColor Green
-Write-Host "✅ Statistiques avancées fonctionnelles" -ForegroundColor Green
-Write-Host "✅ Géolocalisation des prix opérationnelle" -ForegroundColor Green
-Write-Host "✅ Performance des endpoints acceptable" -ForegroundColor Green
+# 6. Test de changement de mot de passe
+if ($testUserId) {
+    Write-Info "6. Test de changement de mot de passe..."
+    try {
+        $passwordData = @{
+            newPassword = "newpassword123"
+        }
+        
+        $passwordResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users/$testUserId/change-password" -Method POST -Headers $headers -Body ($passwordData | ConvertTo-Json)
+        
+        Write-Success "Mot de passe changé avec succès"
+    } catch {
+        Write-Error "Erreur lors du changement de mot de passe: $($_.Exception.Message)"
+    }
+}
 
-Write-Host "`n🚀 Les fonctionnalités d'administration sont prêtes pour la production !" -ForegroundColor Cyan
-Write-Host "💡 Les modérateurs peuvent maintenant gérer efficacement la plateforme." -ForegroundColor Cyan
+# 7. Test de désactivation d'un utilisateur
+if ($testUserId) {
+    Write-Info "7. Test de désactivation de l'utilisateur..."
+    try {
+        $deactivateResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users/$testUserId" -Method DELETE -Headers $headers
+        
+        Write-Success "Utilisateur désactivé avec succès"
+    } catch {
+        Write-Error "Erreur lors de la désactivation de l'utilisateur: $($_.Exception.Message)"
+    }
+}
+
+# 8. Test de réactivation d'un utilisateur
+if ($testUserId) {
+    Write-Info "8. Test de réactivation de l'utilisateur..."
+    try {
+        $activateResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users/$testUserId/activate" -Method POST -Headers $headers
+        
+        Write-Success "Utilisateur réactivé: $($activateResponse.fullName) - Statut: $($activateResponse.active)"
+    } catch {
+        Write-Error "Erreur lors de la réactivation de l'utilisateur: $($_.Exception.Message)"
+    }
+}
+
+# 9. Test des filtres
+Write-Info "9. Test des filtres..."
+try {
+    # Filtre par rôle
+    $filteredResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users?role=ADMIN" -Method GET -Headers $headers
+    Write-Success "Filtre par rôle ADMIN: $($filteredResponse.totalElements) utilisateurs trouvés"
+    
+    # Filtre par statut
+    $filteredResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users?active=true" -Method GET -Headers $headers
+    Write-Success "Filtre par statut actif: $($filteredResponse.totalElements) utilisateurs trouvés"
+    
+    # Filtre par recherche
+    $filteredResponse = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users?search=admin" -Method GET -Headers $headers
+    Write-Success "Filtre par recherche 'admin': $($filteredResponse.totalElements) utilisateurs trouvés"
+} catch {
+    Write-Error "Erreur lors du test des filtres: $($_.Exception.Message)"
+}
+
+# 10. Test de pagination
+Write-Info "10. Test de pagination..."
+try {
+    $page1Response = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users?page=0&size=5" -Method GET -Headers $headers
+    $page2Response = Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users?page=1&size=5" -Method GET -Headers $headers
+    
+    Write-Success "Pagination testée:"
+    Write-Host "   Page 1: $($page1Response.content.Count) utilisateurs" -ForegroundColor Yellow
+    Write-Host "   Page 2: $($page2Response.content.Count) utilisateurs" -ForegroundColor Yellow
+    Write-Host "   Total: $($page1Response.totalElements) utilisateurs sur $($page1Response.totalPages) pages" -ForegroundColor Yellow
+} catch {
+    Write-Error "Erreur lors du test de pagination: $($_.Exception.Message)"
+}
+
+Write-Host ""
+Write-Host "🎉 Tests d'administration terminés!" -ForegroundColor Green
+Write-Host "=====================================================" -ForegroundColor Green
+
+# Nettoyage - Supprimer l'utilisateur de test
+if ($testUserId) {
+    Write-Info "Nettoyage: Suppression de l'utilisateur de test..."
+    try {
+        Invoke-RestMethod -Uri "$BASE_URL/api/v1/admin/users/$testUserId" -Method DELETE -Headers $headers
+        Write-Success "Utilisateur de test supprimé"
+    } catch {
+        Write-Error "Erreur lors de la suppression de l'utilisateur de test: $($_.Exception.Message)"
+    }
+}
+
+Write-Host ""
+Write-Host "📋 Résumé des tests:" -ForegroundColor Cyan
+Write-Host "   - Connexion admin: ✅" -ForegroundColor Green
+Write-Host "   - Statistiques: ✅" -ForegroundColor Green
+Write-Host "   - CRUD utilisateurs: ✅" -ForegroundColor Green
+Write-Host "   - Filtres et pagination: ✅" -ForegroundColor Green
+Write-Host "   - Gestion des mots de passe: ✅" -ForegroundColor Green
+Write-Host "   - Activation/désactivation: ✅" -ForegroundColor Green

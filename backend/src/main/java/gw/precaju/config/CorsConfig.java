@@ -25,6 +25,9 @@ public class CorsConfig {
     @Value("${cors.allow-credentials}")
     private boolean allowCredentials;
 
+    @Value("${cors.max-age:3600}")
+    private long maxAge;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -53,9 +56,14 @@ public class CorsConfig {
         configuration.addExposedHeader("X-Total-Count");
         configuration.addExposedHeader("X-Page-Number");
         configuration.addExposedHeader("X-Page-Size");
+        configuration.addExposedHeader("Access-Control-Allow-Origin");
+        configuration.addExposedHeader("Access-Control-Allow-Credentials");
 
         // Max age for preflight requests
-        configuration.setMaxAge(3600L);
+        configuration.setMaxAge(maxAge);
+
+        // Handle preflight requests properly
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -63,4 +71,3 @@ public class CorsConfig {
         return source;
     }
 }
-

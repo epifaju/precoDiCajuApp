@@ -6,11 +6,16 @@ WORKDIR /app
 # Copier les fichiers de dépendances
 COPY package*.json ./
 
-# Installer les dépendances
-RUN npm ci --only=production
+# Installer toutes les dépendances (pas seulement production pour le build)
+RUN npm ci
 
 # Copier le code source
 COPY . .
+
+# Nettoyer le cache npm et réinstaller pour éviter les problèmes de dépendances natives
+RUN npm cache clean --force
+RUN rm -rf node_modules package-lock.json
+RUN npm install
 
 # Build de l'application
 RUN npm run build

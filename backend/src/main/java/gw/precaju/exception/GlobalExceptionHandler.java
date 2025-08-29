@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
+
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,17 +56,6 @@ public class GlobalExceptionHandler {
         response.put("timestamp", Instant.now());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.FORBIDDEN.value());
-        response.put("error", "Access Denied");
-        response.put("message", "You don't have permission to access this resource");
-        response.put("timestamp", Instant.now());
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
@@ -158,11 +147,19 @@ public class GlobalExceptionHandler {
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Invalid Argument");
-        response.put("message", "Argument invalide: " + ex.getMessage());
+        
+        // Vérifier si c'est une erreur de pagination
+        if (ex.getMessage() != null && ex.getMessage().contains("Page")) {
+            response.put("error", "Invalid Pagination");
+            response.put("message", "Invalid pagination parameters provided");
+            response.put("errorCode", "PAGINATION_ERROR");
+        } else {
+            response.put("error", "Invalid Argument");
+            response.put("message", "Argument invalide: " + ex.getMessage());
+            response.put("errorCode", "INVALID_ARGUMENT");
+        }
+        
         response.put("timestamp", Instant.now());
-        response.put("errorCode", "INVALID_ARGUMENT");
-
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -175,6 +172,38 @@ public class GlobalExceptionHandler {
         response.put("error", "Internal Server Error");
         response.put("message", "An unexpected error occurred");
         response.put("timestamp", Instant.now());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    // Gestionnaire spécifique pour les erreurs d'administration (remplace l'ancien)
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(
+            org.springframework.security.access.AccessDeniedException ex) {
+        logger.error("Access denied exception occurred", ex);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.FORBIDDEN.value());
+        response.put("error", "Access Denied");
+        response.put("message", "You don't have permission to access this resource");
+        response.put("timestamp", Instant.now());
+        response.put("errorCode", "ACCESS_DENIED");
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    // Gestionnaire pour les erreurs de base de données
+    @ExceptionHandler(org.springframework.dao.DataAccessException.class)
+    public ResponseEntity<Map<String, Object>> handleDataAccessException(
+            org.springframework.dao.DataAccessException ex) {
+        logger.error("Data access exception occurred", ex);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.put("error", "Database Error");
+        response.put("message", "An error occurred while accessing the database");
+        response.put("timestamp", Instant.now());
+        response.put("errorCode", "DATABASE_ERROR");
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }

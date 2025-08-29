@@ -60,8 +60,13 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: true
-      }
+        enabled: false, // Disable in development to avoid conflicts
+        type: 'module'
+      },
+      injectRegister: 'auto', // Let the plugin handle registration automatically
+      strategies: 'injectManifest', // Use injectManifest strategy for better control
+      srcDir: 'src',
+      filename: 'sw.js'
     })
   ],
   resolve: {

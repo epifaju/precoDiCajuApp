@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Frontend Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .log { background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Test Frontend Admin - Authentification et API</h1>
+    
+    <div class="test-section info">
+        <h3>État de l'Authentification</h3>
+        <div id="auth-status">Non vérifié</div>
+        <button onclick="checkAuthStatus()">Vérifier l'état</button>
+        <button onclick="checkLocalStorage()">Vérifier LocalStorage</button>
+    </div>
+
+    <div class="test-section">
+        <h3>Test de Connexion</h3>
+        <button onclick="testLogin()">Tester la connexion admin</button>
+        <button onclick="testLogout()">Tester la déconnexion</button>
+        <div id="login-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test des Endpoints Admin</h3>
+        <button onclick="testAdminUsers()">Test Endpoint Utilisateurs</button>
+        <button onclick="testAdminStats()">Test Endpoint Statistiques</button>
+        <div id="admin-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Logs</h3>
+        <div id="logs" class="log"></div>
+        <button onclick="clearLogs()">Effacer les logs</button>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+        let currentToken = null;
+
+        function log(message, type = 'info') {
+            const logsDiv = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logEntry.style.color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        function checkLocalStorage() {
+            log('=== Vérification LocalStorage ===');
+            try {
+                const authStorage = localStorage.getItem('precaju-auth-storage');
+                if (authStorage) {
+                    const parsed = JSON.parse(authStorage);
+                    log(`Token présent: ${parsed.accessToken ? 'Oui' : 'Non'}`);
+                    log(`Utilisateur: ${parsed.user ? parsed.user.email : 'Aucun'}`);
+                    log(`Rôle: ${parsed.user ? parsed.user.role : 'Aucun'}`);
+                    log(`Authentifié: ${parsed.isAuthenticated}`);
+                    
+                    if (parsed.accessToken) {
+                        currentToken = parsed.accessToken;
+                        log('Token récupéré du localStorage', 'success');
+                    }
+                } else {
+                    log('Aucun stockage d\'authentification trouvé', 'error');
+                }
+            } catch (error) {
+                log(`Erreur lors de la vérification du localStorage: ${error.message}`, 'error');
+            }
+        }
+
+        function checkAuthStatus() {
+            log('=== Vérification de l\'état d\'authentification ===');
+            const authStorage = localStorage.getItem('precaju-auth-storage');
+            if (authStorage) {
+                try {
+                    const parsed = JSON.parse(authStorage);
+                    const statusDiv = document.getElementById('auth-status');
+                    
+                    if (parsed.isAuthenticated && parsed.accessToken && parsed.user) {
+                        statusDiv.innerHTML = `
+                            <strong style="color: green;">✅ Authentifié</strong><br>
+                            Email: ${parsed.user.email}<br>
+                            Rôle: ${parsed.user.role}<br>
+                            Token: ${parsed.accessToken.substring(0, 20)}...
+                        `;
+                        currentToken = parsed.accessToken;
+                        log('Utilisateur authentifié', 'success');
+                    } else {
+                        statusDiv.innerHTML = '<strong style="color: red;">❌ Non authentifié</strong>';
+                        log('Utilisateur non authentifié', 'error');
+                    }
+                } catch (error) {
+                    log(`Erreur lors de la vérification: ${error.message}`, 'error');
+                }
+            } else {
+                document.getElementById('auth-status').innerHTML = '<strong style="color: red;">❌ Aucun stockage d\'authentification</strong>';
+                log('Aucun stockage d\'authentification', 'error');
+            }
+        }
+
+        async function testLogin() {
+            log('=== Test de connexion ===');
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@precaju.gw',
+                        password: 'admin123',
+                        rememberMe: false
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentToken = data.access_token;
+                    
+                    // Simuler le stockage dans localStorage
+                    const authData = {
+                        user: data.user,
+                        accessToken: data.access_token,
+                        refreshToken: data.refresh_token,
+                        isAuthenticated: true
+                    };
+                    localStorage.setItem('precaju-auth-storage', JSON.stringify(authData));
+                    
+                    document.getElementById('login-result').innerHTML = `
+                        <div class="success">
+                            ✅ Connexion réussie!<br>
+                            Utilisateur: ${data.user.email}<br>
+                            Rôle: ${data.user.role}
+                        </div>
+                    `;
+                    log('Connexion réussie', 'success');
+                    
+                    // Vérifier l'état après connexion
+                    checkAuthStatus();
+                } else {
+                    const errorData = await response.json();
+                    document.getElementById('login-result').innerHTML = `
+                        <div class="error">
+                            ❌ Échec de la connexion: ${errorData.message || response.status}
+                        </div>
+                    `;
+                    log(`Échec de la connexion: ${errorData.message || response.status}`, 'error');
+                }
+            } catch (error) {
+                document.getElementById('login-result').innerHTML = `
+                    <div class="error">
+                        ❌ Erreur: ${error.message}
+                    </div>
+                `;
+                log(`Erreur lors de la connexion: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLogout() {
+            log('=== Test de déconnexion ===');
+            try {
+                if (currentToken) {
+                    const response = await fetch(`${API_BASE}/api/v1/auth/logout`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${currentToken}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        log('Déconnexion réussie', 'success');
+                    } else {
+                        log(`Erreur lors de la déconnexion: ${response.status}`, 'error');
+                    }
+                }
+                
+                // Nettoyer le localStorage
+                localStorage.removeItem('precaju-auth-storage');
+                currentToken = null;
+                
+                document.getElementById('login-result').innerHTML = '<div class="info">Déconnecté</div>';
+                checkAuthStatus();
+                
+            } catch (error) {
+                log(`Erreur lors de la déconnexion: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAdminUsers() {
+            log('=== Test endpoint utilisateurs admin ===');
+            if (!currentToken) {
+                log('Aucun token disponible', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/admin/users?page=0&size=20`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('admin-result').innerHTML = `
+                        <div class="success">
+                            ✅ Endpoint utilisateurs fonctionne!<br>
+                            Total: ${data.totalElements}<br>
+                            Page: ${data.content.length} utilisateurs
+                        </div>
+                    `;
+                    log('Endpoint utilisateurs fonctionne', 'success');
+                } else {
+                    const errorData = await response.json();
+                    document.getElementById('admin-result').innerHTML = `
+                        <div class="error">
+                            ❌ Erreur endpoint utilisateurs: ${errorData.message || response.status}
+                        </div>
+                    `;
+                    log(`Erreur endpoint utilisateurs: ${errorData.message || response.status}`, 'error');
+                }
+            } catch (error) {
+                document.getElementById('admin-result').innerHTML = `
+                    <div class="error">
+                        ❌ Erreur: ${error.message}
+                    </div>
+                `;
+                log(`Erreur lors du test: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAdminStats() {
+            log('=== Test endpoint statistiques admin ===');
+            if (!currentToken) {
+                log('Aucun token disponible', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/admin/users/stats`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${currentToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('admin-result').innerHTML = `
+                        <div class="success">
+                            ✅ Endpoint statistiques fonctionne!<br>
+                            Total: ${data.totalUsers}<br>
+                            Actifs: ${data.activeUsers}<br>
+                            Admins: ${data.adminUsers}
+                        </div>
+                    `;
+                    log('Endpoint statistiques fonctionne', 'success');
+                } else {
+                    const errorData = await response.json();
+                    document.getElementById('admin-result').innerHTML = `
+                        <div class="error">
+                            ❌ Erreur endpoint statistiques: ${errorData.message || response.status}
+                        </div>
+                    `;
+                    log(`Erreur endpoint statistiques: ${errorData.message || response.status}`, 'error');
+                }
+            } catch (error) {
+                document.getElementById('admin-result').innerHTML = `
+                    <div class="error">
+                        ❌ Erreur: ${error.message}
+                    </div>
+                `;
+                log(`Erreur lors du test: ${error.message}`, 'error');
+            }
+        }
+
+        // Vérifier l'état au chargement de la page
+        window.onload = function() {
+            log('Page chargée - Vérification de l\'état d\'authentification');
+            checkAuthStatus();
+        };
+    </script>
+</body>
+</html>

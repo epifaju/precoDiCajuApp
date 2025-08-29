@@ -20,7 +20,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/files")
-@CrossOrigin(origins = "*")
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
@@ -37,15 +36,15 @@ public class FileController {
         try {
             String fileName = fileStorageService.storeFile(file);
             String fileUrl = fileStorageService.getFileUrl(fileName);
-            
+
             Map<String, String> response = new HashMap<>();
             response.put("fileName", fileName);
             response.put("fileUrl", fileUrl);
             response.put("fileSize", String.valueOf(file.getSize()));
             response.put("contentType", file.getContentType());
-            
+
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             logger.error("Error uploading file", e);
             Map<String, String> errorResponse = new HashMap<>();
@@ -108,15 +107,15 @@ public class FileController {
         Map<String, Object> info = new HashMap<>();
         info.put("maxFileSize", fileStorageService.getMaxFileSize());
         info.put("maxFileSizeMB", fileStorageService.getMaxFileSize() / 1024 / 1024);
-        info.put("allowedTypes", new String[]{"image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"});
-        info.put("allowedExtensions", new String[]{".jpg", ".jpeg", ".png", ".gif", ".webp"});
-        
+        info.put("allowedTypes", new String[] { "image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp" });
+        info.put("allowedExtensions", new String[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" });
+
         return ResponseEntity.ok(info);
     }
 
     private String determineContentType(String fileName) {
         String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-        
+
         return switch (extension) {
             case "jpg", "jpeg" -> "image/jpeg";
             case "png" -> "image/png";
@@ -126,4 +125,3 @@ public class FileController {
         };
     }
 }
-

@@ -11,7 +11,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useAppStore();
   const { t, i18n } = useTranslation();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const location = useLocation();
 
   const navigation = [
@@ -19,6 +19,8 @@ export default function Header() {
     { name: t('nav.dashboard'), href: '/dashboard', current: location.pathname === '/dashboard' },
     { name: t('nav.prices'), href: '/prices', current: location.pathname === '/prices' },
     { name: t('nav.submit'), href: '/submit', current: location.pathname === '/submit' },
+    // Lien d'administration pour les admins
+    ...(user?.role === 'ADMIN' ? [{ name: t('nav.admin', 'Administration'), href: '/admin', current: location.pathname === '/admin' }] : []),
   ];
 
   const toggleTheme = () => {

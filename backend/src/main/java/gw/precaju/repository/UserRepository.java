@@ -16,25 +16,63 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    Optional<User> findByEmail(String email);
+        Optional<User> findByEmail(String email);
 
-    Optional<User> findByEmailAndActiveTrue(String email);
+        Optional<User> findByEmailAndActiveTrue(String email);
 
-    boolean existsByEmail(String email);
+        boolean existsByEmail(String email);
 
-    Page<User> findByActiveTrue(Pageable pageable);
+        Page<User> findByActiveTrue(Pageable pageable);
 
-    @Query("SELECT u FROM User u WHERE u.active = true ORDER BY u.createdAt DESC")
-    Page<User> findAllActiveUsers(Pageable pageable);
+        @Query("SELECT u FROM User u WHERE u.active = true ORDER BY u.createdAt DESC")
+        Page<User> findAllActiveUsers(Pageable pageable);
 
-    List<User> findByRole(UserRole role);
+        List<User> findByRole(UserRole role);
 
-    @Query("SELECT u FROM User u WHERE u.active = true AND u.emailVerified = true")
-    List<User> findAllActiveAndVerified();
+        @Query("SELECT u FROM User u WHERE u.active = true AND u.emailVerified = true")
+        List<User> findAllActiveAndVerified();
 
-    @Query("SELECT u FROM User u WHERE u.reputationScore >= :minScore ORDER BY u.reputationScore DESC")
-    List<User> findByReputationScoreGreaterThanEqualOrderByReputationScoreDesc(@Param("minScore") Integer minScore);
+        @Query("SELECT u FROM User u WHERE u.reputationScore >= :minScore ORDER BY u.reputationScore DESC")
+        List<User> findByReputationScoreGreaterThanEqualOrderByReputationScoreDesc(@Param("minScore") Integer minScore);
 
-    @Query("SELECT COUNT(u) FROM User u WHERE u.role = :role AND u.active = true")
-    long countByRoleAndActiveTrue(@Param("role") UserRole role);
+        @Query("SELECT COUNT(u) FROM User u WHERE u.role = :role AND u.active = true")
+        long countByRoleAndActiveTrue(@Param("role") UserRole role);
+
+        // Méthodes d'administration
+        @Query("SELECT COUNT(u) FROM User u WHERE u.active = true")
+        long countByActiveTrue();
+
+        @Query("SELECT u FROM User u WHERE " +
+                        "(:role IS NULL OR u.role = :role) AND " +
+                        "(:active IS NULL OR u.active = :active) AND " +
+                        "(:emailVerified IS NULL OR u.emailVerified = :emailVerified) AND " +
+                        "(:search IS NULL OR (LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+                        "LOWER(u.fullName) LIKE LOWER(CONCAT('%', :search, '%')))) " +
+                        "ORDER BY u.createdAt DESC")
+        Page<User> findAllUsersWithFilters(
+                        @Param("role") UserRole role,
+                        @Param("active") Boolean active,
+                        @Param("emailVerified") Boolean emailVerified,
+                        @Param("search") String search,
+                        Pageable pageable);
+
+        // Méthode alternative avec SQL natif pour éviter les problèmes de type
+        @Query(value = "SELECT * FROM users u WHERE " +
+                        "(:role IS NULL OR u.role = :role) AND " +
+                        "(:active IS NULL OR u.active = :active) AND " +
+                        "(:emailVerified IS NULL OR u.email_verified = :emailVerified) AND " +
+                        "(:search IS NULL OR (LOWER(u.email) LIKE LOWER('%' || :search || '%') OR " +
+                        "LOWER(u.full_name) LIKE LOWER('%' || :search || '%'))) " +
+                        "ORDER BY u.created_at DESC", countQuery = "SELECT COUNT(*) FROM users u WHERE " +
+                                        "(:role IS NULL OR u.role = :role) AND " +
+                                        "(:active IS NULL OR u.active = :active) AND " +
+                                        "(:emailVerified IS NULL OR u.email_verified = :emailVerified) AND " +
+                                        "(:search IS NULL OR (LOWER(u.email) LIKE LOWER('%' || :search || '%') OR " +
+                                        "LOWER(u.full_name) LIKE LOWER('%' || :search || '%')))", nativeQuery = true)
+        Page<User> findAllUsersWithFiltersNative(
+                        @Param("role") String role,
+                        @Param("active") Boolean active,
+                        @Param("emailVerified") Boolean emailVerified,
+                        @Param("search") String search,
+                        Pageable pageable);
 }

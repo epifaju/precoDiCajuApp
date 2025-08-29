@@ -23,7 +23,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@CrossOrigin(origins = "*")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -75,7 +74,7 @@ public class UserController {
             if (request.getPreferredRegions() != null) {
                 // Convert list to JSON and update
                 userMapper.updateEntityFromDTO(
-                    createUserDTOFromRequest(request), currentUser);
+                        createUserDTOFromRequest(request), currentUser);
             }
 
             User updatedUser = userService.save(currentUser);
@@ -115,16 +114,16 @@ public class UserController {
             @RequestParam(defaultValue = "desc") String sortDir) {
 
         try {
-            if (size > 100) size = 100;
-            if (page < 0) page = 0;
+            if (size > 100)
+                size = 100;
+            if (page < 0)
+                page = 0;
 
-            Sort sort = sortDir.equalsIgnoreCase("asc") ? 
-                Sort.by(sortBy).ascending() : 
-                Sort.by(sortBy).descending();
+            Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
             Pageable pageable = PageRequest.of(page, size, sort);
             Page<User> users = userService.findAllActive(pageable);
-            
+
             Page<UserDTO> userDTOs = users.map(userMapper::toDTO);
             return ResponseEntity.ok(PageResponse.of(userDTOs));
 
@@ -140,7 +139,7 @@ public class UserController {
         try {
             User user = userService.findById(id);
             user.setActive(true);
-            
+
             User updatedUser = userService.save(user);
             UserDTO userDTO = userMapper.toDTO(updatedUser);
 
@@ -169,7 +168,7 @@ public class UserController {
             }
 
             targetUser.setActive(false);
-            
+
             User updatedUser = userService.save(targetUser);
             UserDTO userDTO = userMapper.toDTO(updatedUser);
 
@@ -221,4 +220,3 @@ public class UserController {
         return dto;
     }
 }
-
