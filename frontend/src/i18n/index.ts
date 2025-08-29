@@ -21,6 +21,7 @@ i18n
     fallbackLng: 'pt',
     lng: 'pt', // Default language for Guinea-Bissau
     debug: import.meta.env.DEV,
+    returnObjects: true, // Enable accessing nested objects
 
     interpolation: {
       escapeValue: false, // React already does escaping

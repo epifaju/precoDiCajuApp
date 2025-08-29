@@ -22,15 +22,18 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  logoutReason: string | null;
 }
 
 interface AuthActions {
   login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   register: (email: string, password: string, fullName: string, phone?: string) => Promise<void>;
-  logout: () => void;
+  logout: (reason?: string) => Promise<void>;
   refreshAuth: () => Promise<void>;
   clearError: () => void;
   updateUser: (userData: Partial<User>) => void;
+  clearLogoutReason: () => void;
+  forceLogout: (reason: string) => void;
 }
 
 type AuthStore = AuthState & AuthActions;
@@ -47,10 +50,11 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      logoutReason: null,
 
       // Actions
       login: async (email: string, password: string, rememberMe = false) => {
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null, logoutReason: null });
         
         try {
           const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
@@ -75,7 +79,18 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: true,
             isLoading: false,
             error: null,
+            logoutReason: null,
           });
+
+          // Update last login time
+          if (data.user) {
+            set({
+              user: {
+                ...data.user,
+                lastLoginAt: new Date().toISOString(),
+              },
+            });
+          }
         } catch (error) {
           set({
             isLoading: false,
@@ -86,7 +101,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       register: async (email: string, password: string, fullName: string, phone?: string) => {
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, error: null, logoutReason: null });
         
         try {
           const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
@@ -111,6 +126,7 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: true,
             isLoading: false,
             error: null,
+            logoutReason: null,
           });
         } catch (error) {
           set({
@@ -121,27 +137,66 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      logout: () => {
+      logout: async (reason?: string) => {
         const { refreshToken } = get();
         
-        // Call logout endpoint
-        if (refreshToken) {
-          fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ refreshToken }),
-          }).catch(console.error);
+        set({ isLoading: true });
+        
+        try {
+          // Call logout endpoint to invalidate tokens on server
+          if (refreshToken) {
+            await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ refreshToken }),
+            });
+          }
+        } catch (error) {
+          console.error('Logout API call failed:', error);
+          // Continue with local logout even if API call fails
         }
 
+        // Clear all auth data
         set({
           user: null,
           accessToken: null,
           refreshToken: null,
           isAuthenticated: false,
+          isLoading: false,
           error: null,
+          logoutReason: reason || 'user_logout',
         });
+
+        // Clear any stored data
+        localStorage.removeItem('precaju-auth-storage');
+        sessionStorage.clear();
+
+        // Clear any cached data
+        if (window.location.hostname === 'localhost') {
+          // Clear React Query cache in development
+          const queryCache = (window as any).__REACT_QUERY_CACHE__;
+          if (queryCache) {
+            queryCache.clear();
+          }
+        }
+      },
+
+      forceLogout: (reason: string) => {
+        // Immediate logout without API call (for security reasons)
+        set({
+          user: null,
+          accessToken: null,
+          refreshToken: null,
+          isAuthenticated: false,
+          isLoading: false,
+          error: null,
+          logoutReason: reason,
+        });
+
+        localStorage.removeItem('precaju-auth-storage');
+        sessionStorage.clear();
       },
 
       refreshAuth: async () => {
@@ -171,15 +226,18 @@ export const useAuthStore = create<AuthStore>()(
             refreshToken: data.refresh_token,
             user: data.user,
             isAuthenticated: true,
+            error: null,
           });
         } catch (error) {
-          // If refresh fails, logout user
-          get().logout();
+          // If refresh fails, force logout user
+          get().forceLogout('token_expired');
           throw error;
         }
       },
 
       clearError: () => set({ error: null }),
+
+      clearLogoutReason: () => set({ logoutReason: null }),
 
       updateUser: (userData: Partial<User>) => {
         const { user } = get();
@@ -202,7 +260,7 @@ export const useAuthStore = create<AuthStore>()(
 
 // Auth interceptor hook for API calls
 export const useAuthInterceptor = () => {
-  const { accessToken, refreshAuth, logout } = useAuthStore();
+  const { accessToken, refreshAuth, forceLogout } = useAuthStore();
 
   const authFetch = async (url: string, options: RequestInit = {}) => {
     const headers = {
@@ -227,14 +285,60 @@ export const useAuthInterceptor = () => {
           response = await fetch(url, { ...options, headers });
         }
       } catch (error) {
-        logout();
+        // If refresh fails, force logout
+        forceLogout('session_expired');
         throw new Error('Session expired. Please login again.');
       }
+    }
+
+    // If still unauthorized after refresh, logout
+    if (response.status === 401) {
+      forceLogout('unauthorized');
+      throw new Error('Access denied. Please login again.');
     }
 
     return response;
   };
 
   return authFetch;
+};
+
+// Auto-logout on tab/window close (optional security feature)
+export const setupAutoLogout = () => {
+  const handleBeforeUnload = () => {
+    const { accessToken } = useAuthStore.getState();
+    if (accessToken) {
+      // Store a flag to indicate the user left without proper logout
+      sessionStorage.setItem('precaju-session-ended', 'true');
+    }
+  };
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === 'hidden') {
+      const { accessToken } = useAuthStore.getState();
+      if (accessToken) {
+        sessionStorage.setItem('precaju-session-ended', 'true');
+      }
+    }
+  };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  // Check if session was ended abruptly
+  const sessionEnded = sessionStorage.getItem('precaju-session-ended');
+  if (sessionEnded) {
+    sessionStorage.removeItem('precaju-session-ended');
+    const { isAuthenticated } = useAuthStore.getState();
+    if (isAuthenticated) {
+      // Optionally show a message about session security
+      console.log('Session security: Previous session ended abruptly');
+    }
+  }
+
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+  };
 };
 

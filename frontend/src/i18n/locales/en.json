@@ -33,6 +33,22 @@
     "yes": "Yes",
     "no": "No"
   },
+  "submission": {
+    "title": "Submit Cashew Price",
+    "description": "Share current cashew prices to help the community stay informed about market conditions.",
+    "submittingAs": "Submitting as",
+    "reputation": "Reputation",
+    "points": "points",
+    "tips": {
+      "title": "Tips for Accurate Price Reporting",
+      "current": "Report current prices you've recently observed",
+      "accurate": "Be as accurate as possible with quantities and quality",
+      "location": "Include specific location information when possible",
+      "photo": "Photos help verify price information",
+      "notes": "Add notes about market conditions or quality observations",
+      "verification": "Verified prices earn more reputation points"
+    }
+  },
   "home": {
     "title": "Cashew Prices",
     "subtitle": "Track cashew prices in Guinea-Bissau",
@@ -262,6 +278,51 @@
     "updateDesc": "A new version is available",
     "updateButton": "Update",
     "updateLater": "Later"
+  },
+  "register": {
+    "benefits": {
+      "title": "Join Our Community",
+      "tracking": "Track real-time cashew prices",
+      "reputation": "Build your market reputation",
+      "mobile": "Access from any device, even offline",
+      "community": "Connect with producers and traders"
+    }
+  },
+  "forms": {
+    "sourceType": {
+      "label": "Source Type",
+      "market": "Market",
+      "cooperative": "Cooperative",
+      "producer": "Producer",
+      "trader": "Trader",
+      "other": "Other"
+    },
+    "submitPrice": "Submit Price",
+    "submitPriceTitle": "Submit Cashew Price",
+    "submitPriceDescription": "Share current cashew prices with the community to help everyone stay informed about market conditions.",
+    "region": "Region",
+    "selectRegion": "Select a region",
+    "qualityGrade": "Quality Grade",
+    "selectQuality": "Select quality grade",
+    "price": "Price (FCFA)",
+    "priceHelp": "Price per kilogram in West African CFA francs",
+    "recordedDate": "Recorded Date",
+    "dateHelp": "When was this price observed?",
+    "sourceName": "Source Name (Optional)",
+    "sourceNamePlaceholder": "e.g., Central Market Bissau",
+    "sourceNameHelp": "Name of the market, cooperative, or location",
+    "location": "Location Information",
+    "getCurrentLocation": "Get Current Location",
+    "latitude": "Latitude (Optional)",
+    "latitudeHelp": "GPS latitude coordinate",
+    "longitude": "Longitude (Optional)",
+    "longitudeHelp": "GPS longitude coordinate",
+    "photo": "Photo (Optional)",
+    "photoHelp": "Upload a photo of the cashews or price display (max 5MB)",
+    "notes": "Additional Notes (Optional)",
+    "notesPlaceholder": "Any additional information about this price...",
+    "notesHelp": "Market conditions, quality observations, etc.",
+    "cancel": "Cancel"
   }
 }
 

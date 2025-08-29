@@ -167,9 +167,9 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
     <div className={className}>
       <Card>
         <CardHeader>
-          <CardTitle>{t('forms.submitPrice.title', 'Submit Cashew Price')}</CardTitle>
+          <CardTitle>{t('forms.submitPriceTitle', 'Submit Cashew Price')}</CardTitle>
           <CardDescription>
-            {t('forms.submitPrice.description', 'Share current cashew prices with the community to help everyone stay informed about market conditions.')}
+            {t('forms.submitPriceDescription', 'Share current cashew prices with the community to help everyone stay informed about market conditions.')}
           </CardDescription>
         </CardHeader>
 

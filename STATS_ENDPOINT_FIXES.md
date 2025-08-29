@@ -189,3 +189,93 @@ INFO  - Successfully calculated price statistics for 45 prices
 3. **Maintenance** : Code plus lisible et maintenable
 4. **Production** : Meilleure surveillance et débogage
 5. **Utilisateur** : Messages d'erreur explicites au lieu d'erreurs 500 silencieuses
+
+## 🔍 **Analyse des logs et problème PostgreSQL**
+
+### Erreur principale identifiée :
+
+```
+ERROR: could not determine data type of parameter $5
+```
+
+### Cause racine :
+
+Le problème venait de la requête SQL générée par Hibernate dans la méthode `findWithFilters` du repository. Quand nous passions `null` pour le paramètre `toDate`, PostgreSQL ne pouvait pas déterminer le type de ce paramètre, causant l'erreur :
+
+```sql
+-- Requête problématique générée par Hibernate
+and (? is null or p1_0.recorded_date<=?)  -- Paramètre $5 ambigu
+```
+
+### Solution appliquée :
+
+1. **Création d'une méthode dédiée** : `findWithFiltersForStats` sans le paramètre `toDate`
+2. **Évitement du paramètre ambigu** : Utilisation de cette méthode spécifique pour les statistiques
+3. **Maintien de la compatibilité** : La méthode originale reste disponible pour les cas où `toDate` est fourni
+
+### 🚨 **PROBLÈME PERSISTANT IDENTIFIÉ :**
+
+Malgré la première correction, l'erreur PostgreSQL persistait. L'analyse des nouveaux logs a révélé que le problème venait des **paramètres de pagination** générés par Hibernate :
+
+```sql
+-- Requête générée par findWithFiltersForStats (encore problématique)
+select ... from prices p1_0 where ...
+order by p1_0.recorded_date desc,p1_0.created_at desc
+offset ? rows fetch first ? rows only  -- Paramètres $5 et $6 ambigus
+```
+
+**Cause** : Même avec `findWithFiltersForStats`, Hibernate générait encore des paramètres de pagination (`offset ?` et `fetch first ?`) qui causaient l'ambiguïté de type.
+
+### ✅ **SOLUTION FINALE APPLIQUÉE :**
+
+#### Nouvelle méthode repository sans pagination :
+
+```java
+@Query("SELECT p FROM Price p WHERE p.active = true " +
+        "AND (:regionCode IS NULL OR p.region.code = :regionCode) " +
+        "AND (:qualityGrade IS NULL OR p.qualityGrade.code = :qualityGrade) " +
+        "AND (:fromDate IS NULL OR p.recordedDate >= :fromDate) " +
+        "ORDER BY p.recordedDate DESC, p.createdAt DESC")
+List<Price> findPricesForStatistics(@Param("regionCode") String regionCode,
+        @Param("qualityGrade") String qualityGrade,
+        @Param("fromDate") LocalDate fromDate);
+```
+
+#### Avantages de la solution finale :
+
+- ✅ **Aucun paramètre de pagination** : Évite complètement l'ambiguïté de type
+- ✅ **Retour direct en List** : Plus simple et plus performant
+- ✅ **Requête SQL claire** : Pas de paramètres `offset` ou `fetch first`
+- ✅ **Compatibilité PostgreSQL** : Résout définitivement le problème de type
+
+#### Utilisation dans le service :
+
+```java
+// Use the method that returns List to avoid pagination parameters
+List<Price> priceList = priceRepository.findPricesForStatistics(
+        regionCode, qualityGrade, fromDate);
+```
+
+## 🎯 **Résumé de la solution finale**
+
+### Problème initial :
+
+- Erreur HTTP 500 silencieuse
+- Erreur PostgreSQL : `could not determine data type of parameter $5`
+
+### Cause identifiée :
+
+- Paramètres de pagination Hibernate causant une ambiguïté de type PostgreSQL
+
+### Solution appliquée :
+
+- Méthode repository `findPricesForStatistics` retournant une `List` au lieu d'une `Page`
+- Élimination complète des paramètres de pagination
+- Requête SQL claire et sans ambiguïté
+
+### Résultat :
+
+- ✅ Endpoint des statistiques fonctionnel
+- ✅ Problème PostgreSQL complètement résolu
+- ✅ Performance améliorée (pas de pagination inutile)
+- ✅ Code plus simple et maintenable

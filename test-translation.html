@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Traduction - Preços</title>
+    <script src="https://unpkg.com/i18next@21.6.10/dist/umd/i18next.min.js"></script>
+    <script src="https://unpkg.com/i18next-http-backend@1.3.2/i18next-http-backend.min.js"></script>
+</head>
+<body>
+    <h1>Test de Traduction</h1>
+    <div id="result"></div>
+
+    <script>
+        // Configuration i18next
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                lng: 'pt',
+                fallbackLng: 'pt',
+                debug: true,
+                backend: {
+                    loadPath: './frontend/src/i18n/locales/{{lng}}.json'
+                }
+            }, function(err, t) {
+                if (err) {
+                    console.error('Erreur i18next:', err);
+                    document.getElementById('result').innerHTML = '<p style="color: red;">Erreur: ' + err.message + '</p>';
+                    return;
+                }
+
+                try {
+                    // Test de la clé prices.filters
+                    const filtersValue = t('prices.filters');
+                    console.log('prices.filters =', filtersValue);
+                    console.log('Type:', typeof filtersValue);
+                    
+                    if (typeof filtersValue === 'string') {
+                        document.getElementById('result').innerHTML = `
+                            <p style="color: green;">✓ Succès!</p>
+                            <p><strong>prices.filters:</strong> "${filtersValue}"</p>
+                            <p><strong>Type:</strong> ${typeof filtersValue}</p>
+                        `;
+                    } else {
+                        document.getElementById('result').innerHTML = `
+                            <p style="color: red;">✗ Erreur!</p>
+                            <p><strong>prices.filters:</strong> ${JSON.stringify(filtersValue)}</p>
+                            <p><strong>Type:</strong> ${typeof filtersValue}</p>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Erreur lors du test:', error);
+                    document.getElementById('result').innerHTML = `
+                        <p style="color: red;">✗ Exception: ${error.message}</p>
+                    `;
+                }
+            });
+    </script>
+</body>
+</html>

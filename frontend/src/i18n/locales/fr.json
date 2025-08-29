@@ -33,6 +33,22 @@
     "yes": "Oui",
     "no": "Non"
   },
+  "submission": {
+    "title": "Soumettre un Prix de Cajou",
+    "description": "Partagez les prix actuels du cajou pour aider la communauté à rester informée des conditions du marché.",
+    "submittingAs": "Soumission en tant que",
+    "reputation": "Réputation",
+    "points": "points",
+    "tips": {
+      "title": "Conseils pour des Rapports de Prix Précis",
+      "current": "Rapportez les prix actuels que vous avez récemment observés",
+      "accurate": "Soyez aussi précis que possible avec les quantités et la qualité",
+      "location": "Incluez des informations de localisation spécifiques quand c'est possible",
+      "photo": "Les photos aident à vérifier les informations de prix",
+      "notes": "Ajoutez des notes sur les conditions du marché ou observations de qualité",
+      "verification": "Les prix vérifiés gagnent plus de points de réputation"
+    }
+  },
   "home": {
     "title": "Prix du Cajou",
     "subtitle": "Suivez les prix du cajou en Guinée-Bissau",
@@ -262,6 +278,51 @@
     "updateDesc": "Une nouvelle version est disponible",
     "updateButton": "Mettre à jour",
     "updateLater": "Plus tard"
+  },
+  "register": {
+    "benefits": {
+      "title": "Rejoignez Notre Communauté",
+      "tracking": "Suivez les prix du cajou en temps réel",
+      "reputation": "Construisez votre réputation sur le marché",
+      "mobile": "Accédez depuis n'importe quel appareil, même hors ligne",
+      "community": "Connectez-vous avec les producteurs et commerçants"
+    }
+  },
+  "forms": {
+    "sourceType": {
+      "label": "Type de Source",
+      "market": "Marché",
+      "cooperative": "Coopérative",
+      "producer": "Producteur",
+      "trader": "Commerçant",
+      "other": "Autre"
+    },
+    "submitPrice": "Soumettre un Prix",
+    "submitPriceTitle": "Soumettre un Prix de Cajou",
+    "submitPriceDescription": "Partagez les prix actuels du cajou avec la communauté pour aider tout le monde à rester informé des conditions du marché.",
+    "region": "Région",
+    "selectRegion": "Sélectionner une région",
+    "qualityGrade": "Degré de Qualité",
+    "selectQuality": "Sélectionner le degré de qualité",
+    "price": "Prix (FCFA)",
+    "priceHelp": "Prix par kilogramme en francs CFA d'Afrique de l'Ouest",
+    "recordedDate": "Date d'Enregistrement",
+    "dateHelp": "Quand ce prix a-t-il été observé ?",
+    "sourceName": "Nom de la Source (Optionnel)",
+    "sourceNamePlaceholder": "ex: Marché Central de Bissau",
+    "sourceNameHelp": "Nom du marché, de la coopérative ou de la localisation",
+    "location": "Informations de Localisation",
+    "getCurrentLocation": "Obtenir la Localisation Actuelle",
+    "latitude": "Latitude (Optionnel)",
+    "latitudeHelp": "Coordonnée GPS de latitude",
+    "longitude": "Longitude (Optionnel)",
+    "longitudeHelp": "Coordonnée GPS de longitude",
+    "photo": "Photo (Optionnel)",
+    "photoHelp": "Téléchargez une photo des noix de cajou ou de l'affichage des prix (max 5MB)",
+    "notes": "Observations Supplémentaires (Optionnel)",
+    "notesPlaceholder": "Toute information supplémentaire sur ce prix...",
+    "notesHelp": "Conditions de marché, observations de qualité, etc.",
+    "cancel": "Annuler"
   }
 }
 

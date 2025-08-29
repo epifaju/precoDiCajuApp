@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '../../store/authStore';
+import { useAppStore } from '../../store/appStore';
 import { Menu, X, Globe, Sun, Moon } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { UserMenu } from './UserMenu';
+import { cn } from '../../utils/cn';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { theme, setTheme } = useAppStore();
   const { t, i18n } = useTranslation();
+  const { isAuthenticated } = useAuthStore();
   const location = useLocation();
 
   const navigation = [
@@ -18,8 +22,7 @@ export default function Header() {
   ];
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
+    setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   const changeLanguage = (lng: string) => {
@@ -82,22 +85,28 @@ export default function Header() {
               className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
               aria-label="Toggle theme"
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            {/* Auth Buttons */}
-            <Link
-              to="/login"
-              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white text-sm font-medium"
-            >
-              {t('nav.login')}
-            </Link>
-            <Link
-              to="/register"
-              className="btn btn-primary text-sm"
-            >
-              {t('nav.register')}
-            </Link>
+            {/* Auth Section */}
+            {isAuthenticated ? (
+              <UserMenu />
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white text-sm font-medium"
+                >
+                  {t('nav.login')}
+                </Link>
+                <Link
+                  to="/register"
+                  className="btn btn-primary text-sm"
+                >
+                  {t('nav.register')}
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -157,26 +166,57 @@ export default function Header() {
                   onClick={toggleTheme}
                   className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 >
-                  {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
               </div>
 
-              <div className="mt-4 space-y-2">
-                <Link
-                  to="/login"
-                  className="block btn btn-outline w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {t('nav.login')}
-                </Link>
-                <Link
-                  to="/register"
-                  className="block btn btn-primary w-full"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {t('nav.register')}
-                </Link>
-              </div>
+              {/* Mobile Auth Section */}
+              {isAuthenticated ? (
+                <div className="mt-4 space-y-2">
+                  <div className="px-3 py-2">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {t('user.welcome', 'Bienvenue')}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {t('user.connected', 'Connecté')}
+                    </p>
+                  </div>
+                  <Link
+                    to="/profile"
+                    className="block btn btn-outline w-full"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t('user.profile', 'Mon profil')}
+                  </Link>
+                  <button
+                    onClick={() => {
+                      useAuthStore.getState().logout();
+                      setIsMenuOpen(false);
+                      window.location.href = '/';
+                    }}
+                    className="block btn btn-outline w-full text-red-600 border-red-300 hover:bg-red-50"
+                  >
+                    {t('user.logout', 'Se déconnecter')}
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-4 space-y-2">
+                  <Link
+                    to="/login"
+                    className="block btn btn-outline w-full"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t('nav.login')}
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="block btn btn-primary w-full"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t('nav.register')}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}

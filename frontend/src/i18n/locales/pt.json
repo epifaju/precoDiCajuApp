@@ -8,6 +8,39 @@
     "register": "Registrar",
     "menu": "Menu"
   },
+  "user": {
+    "menu": "Menu do usuário",
+    "profile": "Meu perfil",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "welcome": "Bem-vindo",
+    "connected": "Conectado",
+    "lastLogin": "Último login",
+    "never": "Nunca",
+    "role": {
+      "admin": "Administrador",
+      "moderator": "Moderador",
+      "contributor": "Contribuidor"
+    }
+  },
+  "logout": {
+    "userInitiated": "Logout realizado com sucesso",
+    "userInitiatedMessage": "Você foi desconectado com sucesso.",
+    "sessionExpired": "Sessão expirada",
+    "sessionExpiredMessage": "Sua sessão expirou. Por favor, faça login novamente.",
+    "tokenExpired": "Token expirado",
+    "tokenExpiredMessage": "Seu token de autenticação expirou.",
+    "unauthorized": "Acesso negado",
+    "unauthorizedMessage": "Você não tem as permissões necessárias.",
+    "securityBreach": "Problema de segurança",
+    "securityBreachMessage": "Sua sessão foi interrompida por motivos de segurança.",
+    "default": "Logout",
+    "defaultMessage": "Você foi desconectado."
+  },
+  "common": {
+    "understand": "Entendi",
+    "reconnect": "Reconectar"
+  },
   "dashboard": {
     "goodMorning": "Bom dia",
     "goodAfternoon": "Boa tarde", 
@@ -39,6 +72,22 @@
     "region": "região",
     "quality": "qualidade",
     "price": "Preço"
+  },
+  "submission": {
+    "title": "Submeter Preço de Caju",
+    "description": "Compartilhe preços atuais de caju para ajudar a comunidade a se manter informada sobre as condições do mercado.",
+    "submittingAs": "Submetendo como",
+    "reputation": "Reputação",
+    "points": "pontos",
+    "tips": {
+      "title": "Dicas para Relatórios de Preços Precisos",
+      "current": "Reporte preços atuais que você observou recentemente",
+      "accurate": "Seja o mais preciso possível com quantidades e qualidade",
+      "location": "Inclua informações específicas de localização quando possível",
+      "photo": "Fotos ajudam a verificar informações de preços",
+      "notes": "Adicione notas sobre condições de mercado ou observações de qualidade",
+      "verification": "Preços verificados ganham mais pontos de reputação"
+    }
   },
   "auth": {
     "email": "Endereço de Email",
@@ -75,6 +124,15 @@
   "app": {
     "tagline": "Rastreamento de Preços de Caju para Guiné-Bissau"
   },
+  "register": {
+    "benefits": {
+      "title": "Junte-se à Nossa Comunidade",
+      "tracking": "Rastreie preços de caju em tempo real",
+      "reputation": "Construa sua reputação no mercado",
+      "mobile": "Acesse de qualquer dispositivo, mesmo offline",
+      "community": "Conecte-se com produtores e comerciantes"
+    }
+  },
   "login": {
     "demo": {
       "title": "Contas Demo"
@@ -89,6 +147,15 @@
     "allPrices": "Todos os Preços",
     "verifiedOnly": "Apenas Verificados",
     "unverifiedOnly": "Apenas Não Verificados",
+    "verified": "Verificado",
+    "recordedOn": "Registrado em",
+    "by": "por",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "page": "Página",
+    "of": "de",
+    "showing": "Mostrando",
+    "results": "resultados",
     "filters": "Filtros",
     "clearFilters": "Limpar Todos",
     "searchPlaceholder": "Pesquisar por nome da fonte...",
@@ -99,53 +166,167 @@
     "sortBy": {
       "date": "Data Registrada",
       "price": "Preço",
-      "submitted": "Data Submetida"
+      "region": "Região",
+      "quality": "Qualidade",
+      "created": "Data de Criação",
+      "submitted": "Data de Submissão"
+    },
+    "sortDirection": {
+      "asc": "Crescente",
+      "desc": "Decrescente"
     },
     "sortDir": {
-      "desc": "Mais Recentes Primeiro",
-      "asc": "Mais Antigos Primeiro"
+      "asc": "Mais Antigo Primeiro",
+      "desc": "Mais Novo Primeiro"
     },
-    "showing": "Mostrando",
-    "of": "de",
-    "results": "resultados",
-    "verified": "Verificado",
-    "recordedOn": "Registrado em",
-    "by": "por",
-    "noPrices": "Nenhum preço encontrado",
-    "noPricesDescription": "Tente ajustar seus filtros ou submeta o primeiro preço.",
-    "errorLoading": "Falha ao carregar preços. Tente novamente.",
-    "previous": "Anterior",
-    "next": "Próximo",
-    "page": "Página"
-  },
-  "submission": {
-    "title": "Submeter Preço",
-    "description": "Compartilhe informações de preços de caju com a comunidade",
-    "submittingAs": "Submetendo como",
-    "reputation": "Reputação",
-    "points": "pontos",
-    "tips": {
-      "title": "Dicas para Relatórios de Preços Precisos",
-      "current": "Relate preços atuais que você observou recentemente",
-      "accurate": "Seja o mais preciso possível com quantidades e qualidade",
-      "location": "Inclua informações específicas de localização quando possível",
-      "photo": "Fotos ajudam a verificar informações de preços",
-      "notes": "Adicione notas sobre condições do mercado ou observações de qualidade",
-      "verification": "Preços verificados ganham mais pontos de reputação"
+    "noPricesFound": "Nenhum preço encontrado",
+    "noPricesMessage": "Tente ajustar os filtros ou adicionar um novo preço.",
+    "addFirstPrice": "Adicionar Primeiro Preço",
+    "priceDetails": "Detalhes do Preço",
+    "editPrice": "Editar Preço",
+    "deletePrice": "Excluir Preço",
+    "verifyPrice": "Verificar Preço",
+    "priceHistory": "Histórico de Preços",
+    "sourceInfo": "Informações da Fonte",
+    "verificationStatus": "Status de Verificação",
+    "verificationDate": "Data de Verificação",
+    "verifiedBy": "Verificado por",
+    "verificationNotes": "Notas de Verificação",
+    "actions": "Ações",
+    "viewDetails": "Ver Detalhes",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "verify": "Verificar",
+    "unverify": "Desverificar",
+    "confirmDelete": "Confirmar Exclusão",
+    "deleteWarning": "Tem certeza de que deseja excluir este preço? Esta ação não pode ser desfeita.",
+    "deleteSuccess": "Preço excluído com sucesso",
+    "deleteError": "Erro ao excluir preço",
+    "verifySuccess": "Preço verificado com sucesso",
+    "verifyError": "Erro ao verificar preço",
+    "unverifySuccess": "Verificação removida com sucesso",
+    "unverifyError": "Erro ao remover verificação",
+    "updateSuccess": "Preço atualizado com sucesso",
+    "updateError": "Erro ao atualizar preço",
+    "createSuccess": "Preço criado com sucesso",
+    "createError": "Erro ao criar preço",
+    "form": {
+      "region": "Região",
+      "quality": "Qualidade",
+      "price": "Preço (FCFA)",
+      "date": "Data do Preço",
+      "source": "Fonte",
+      "sourceType": "Tipo de Fonte",
+      "notes": "Observações",
+      "photo": "Foto",
+      "location": "Localização",
+      "gpsCoordinates": "Coordenadas GPS",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "submit": "Submeter Preço",
+      "update": "Atualizar Preço",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "loading": "Carregando...",
+      "validation": {
+        "required": "Este campo é obrigatório",
+        "invalidEmail": "Email inválido",
+        "invalidPrice": "Preço deve ser um número positivo",
+        "invalidDate": "Data inválida",
+        "invalidCoordinates": "Coordenadas GPS inválidas",
+        "fileTooLarge": "Arquivo muito grande (máximo 5MB)",
+        "invalidFileType": "Tipo de arquivo não suportado"
+      }
+    },
+    "filterOptions": {
+      "title": "Filtros",
+      "apply": "Aplicar Filtros",
+      "clear": "Limpar Filtros",
+      "dateRange": "Intervalo de Datas",
+      "priceRange": "Intervalo de Preços",
+      "minPrice": "Preço Mínimo",
+      "maxPrice": "Preço Máximo",
+      "verificationStatus": "Status de Verificação",
+      "verified": "Verificado",
+      "unverified": "Não Verificado",
+      "all": "Todos"
+    },
+    "pagination": {
+      "showing": "Mostrando",
+      "to": "até",
+      "of": "de",
+      "results": "resultados",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "first": "Primeiro",
+      "last": "Último",
+      "page": "Página",
+      "ofPages": "de páginas"
     }
   },
+  "regions": {
+    "title": "Regiões",
+    "allRegions": "Todas as Regiões",
+    "selectRegion": "Selecionar Região",
+    "noRegions": "Nenhuma região encontrada",
+    "regionDetails": "Detalhes da Região",
+    "regionCode": "Código da Região",
+    "regionName": "Nome da Região",
+    "active": "Ativa",
+    "inactive": "Inativa",
+    "createdAt": "Criada em",
+    "updatedAt": "Atualizada em"
+  },
+  "qualities": {
+    "title": "Qualidades",
+    "allQualities": "Todas as Qualidades",
+    "selectQuality": "Selecionar Qualidade",
+    "noQualities": "Nenhuma qualidade encontrada",
+    "qualityDetails": "Detalhes da Qualidade",
+    "qualityCode": "Código da Qualidade",
+    "qualityName": "Nome da Qualidade",
+    "description": "Descrição",
+    "active": "Ativa",
+    "inactive": "Inativa",
+    "createdAt": "Criada em",
+    "updatedAt": "Atualizada em"
+  },
+  "errors": {
+    "general": "Ocorreu um erro",
+    "network": "Erro de rede",
+    "unauthorized": "Não autorizado",
+    "forbidden": "Acesso negado",
+    "notFound": "Não encontrado",
+    "serverError": "Erro do servidor",
+    "validation": "Erro de validação",
+    "timeout": "Tempo limite excedido",
+    "retry": "Tentar novamente",
+    "goBack": "Voltar",
+    "goHome": "Ir para o início"
+  },
+  "loading": {
+    "general": "Carregando...",
+    "data": "Carregando dados...",
+    "submitting": "Enviando...",
+    "processing": "Processando...",
+    "pleaseWait": "Por favor, aguarde..."
+  },
+  "success": {
+    "general": "Sucesso!",
+    "saved": "Salvo com sucesso!",
+    "updated": "Atualizado com sucesso!",
+    "deleted": "Excluído com sucesso!",
+    "created": "Criado com sucesso!"
+  },
+  "confirmation": {
+    "title": "Confirmar Ação",
+    "message": "Tem certeza de que deseja continuar?",
+    "yes": "Sim",
+    "no": "Não",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  },
   "forms": {
-    "region": "Região",
-    "selectRegion": "Selecione uma região",
-    "qualityGrade": "Grau de Qualidade",
-    "selectQuality": "Selecione o grau de qualidade",
-    "price": "Preço (FCFA)",
-    "priceHelp": "Preço por quilograma em francos CFA da África Ocidental",
-    "recordedDate": "Data Registrada",
-    "dateHelp": "Quando este preço foi observado?",
-    "sourceName": "Nome da Fonte (Opcional)",
-    "sourceNamePlaceholder": "ex: Mercado Central Bissau",
-    "sourceNameHelp": "Nome do mercado, cooperativa ou localização",
     "sourceType": {
       "label": "Tipo de Fonte",
       "market": "Mercado",
@@ -154,6 +335,20 @@
       "trader": "Comerciante",
       "other": "Outro"
     },
+    "submitPrice": "Submeter Preço",
+    "submitPriceTitle": "Submeter Preço de Caju",
+    "submitPriceDescription": "Compartilhe preços atuais de caju com a comunidade para ajudar todos a se manterem informados sobre as condições do mercado.",
+    "region": "Região",
+    "selectRegion": "Selecionar uma região",
+    "qualityGrade": "Grau de Qualidade",
+    "selectQuality": "Selecionar grau de qualidade",
+    "price": "Preço (FCFA)",
+    "priceHelp": "Preço por quilograma em francos CFA da África Ocidental",
+    "recordedDate": "Data Registrada",
+    "dateHelp": "Quando foi observado este preço?",
+    "sourceName": "Nome da Fonte (Opcional)",
+    "sourceNamePlaceholder": "ex: Mercado Central de Bissau",
+    "sourceNameHelp": "Nome do mercado, cooperativa ou localização",
     "location": "Informações de Localização",
     "getCurrentLocation": "Obter Localização Atual",
     "latitude": "Latitude (Opcional)",
@@ -161,15 +356,10 @@
     "longitude": "Longitude (Opcional)",
     "longitudeHelp": "Coordenada GPS de longitude",
     "photo": "Foto (Opcional)",
-    "photoHelp": "Carregue uma foto dos cajus ou exibição de preços (máx 5MB)",
-    "notes": "Notas Adicionais (Opcional)",
+    "photoHelp": "Faça upload de uma foto dos cajus ou da exibição de preços (máx 5MB)",
+    "notes": "Observações Adicionais (Opcional)",
     "notesPlaceholder": "Qualquer informação adicional sobre este preço...",
-    "notesHelp": "Condições do mercado, observações de qualidade, etc.",
-    "cancel": "Cancelar",
-    "submitPrice": "Submeter Preço",
-    "submitPrice": {
-      "title": "Submeter Preço de Caju",
-      "description": "Compartilhe preços atuais de caju com a comunidade para ajudar todos a se manterem informados sobre as condições do mercado."
-    }
+    "notesHelp": "Condições de mercado, observações de qualidade, etc.",
+    "cancel": "Cancelar"
   }
 }

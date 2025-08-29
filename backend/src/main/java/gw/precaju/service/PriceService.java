@@ -52,8 +52,14 @@ public class PriceService {
             LocalDate fromDate, LocalDate toDate,
             Pageable pageable, String language) {
 
-        Page<Price> prices = priceRepository.findWithFilters(
-                regionCode, qualityGrade, fromDate, toDate, pageable);
+        // Use the method without toDate if toDate is null to avoid PostgreSQL parameter
+        // type issues
+        Page<Price> prices;
+        if (toDate == null) {
+            prices = priceRepository.findWithFiltersForStats(regionCode, qualityGrade, fromDate, pageable);
+        } else {
+            prices = priceRepository.findWithFilters(regionCode, qualityGrade, fromDate, toDate, pageable);
+        }
 
         return prices.map(price -> priceMapper.toDTOWithLocalizedNames(price, language));
     }
@@ -238,11 +244,22 @@ public class PriceService {
             logger.debug("Querying prices with filters - region: {}, quality: {}, fromDate: {}",
                     regionCode, qualityGrade, fromDate);
 
-            Page<Price> prices = priceRepository.findWithFilters(
-                    regionCode, qualityGrade, fromDate, null,
-                    PageRequest.of(0, Integer.MAX_VALUE));
-
-            List<Price> priceList = prices.getContent();
+            // Use appropriate method based on which parameters are provided
+            List<Price> priceList;
+            if (regionCode != null && qualityGrade != null) {
+                // Both region and quality specified
+                priceList = priceRepository.findPricesForStatisticsWithAllParams(
+                        regionCode, qualityGrade, fromDate);
+            } else if (regionCode != null) {
+                // Only region specified
+                priceList = priceRepository.findPricesForStatisticsByRegion(regionCode, fromDate);
+            } else if (qualityGrade != null) {
+                // Only quality specified
+                priceList = priceRepository.findPricesForStatisticsByQuality(qualityGrade, fromDate);
+            } else {
+                // No filters, just date
+                priceList = priceRepository.findPricesForStatisticsByDateOnly(fromDate);
+            }
             logger.info("Found {} prices for statistics calculation", priceList.size());
 
             if (priceList.isEmpty()) {
