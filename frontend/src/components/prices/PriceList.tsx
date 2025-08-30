@@ -45,12 +45,12 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
     size,
     sortBy: filters.sortBy,
     sortDir: filters.sortDir,
-    regionCode: filters.regionCode || undefined,
-    qualityGrade: filters.qualityGrade || undefined,
+    region: filters.regionCode || undefined,
+    quality: filters.qualityGrade || undefined,
     verified: filters.verified ? filters.verified === 'true' : undefined,
     search: filters.search || undefined,
-    dateFrom: filters.dateFrom || undefined,
-    dateTo: filters.dateTo || undefined,
+    from: filters.dateFrom || undefined,
+    to: filters.dateTo || undefined,
   });
 
   const prices = pricesData?.content || [];
