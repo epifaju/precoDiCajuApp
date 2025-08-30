@@ -186,3 +186,4 @@ Cette solution résout complètement le problème "Operation is insecure" en :
 - Offrant une architecture modulaire et maintenable
 
 L'application peut maintenant fonctionner correctement en développement et en production avec une gestion sécurisée des Service Workers.
+

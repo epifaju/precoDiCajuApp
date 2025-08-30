@@ -35,6 +35,7 @@ export interface UserDTO {
   id: string;
   email: string;
   fullName: string;
+  phone?: string;
   role: UserRole;
   reputationScore: number;
   preferredRegions: string[];
@@ -179,4 +180,5 @@ export interface GpsCoordinates {
   accuracy?: number;
   timestamp?: number;
 }
+
 

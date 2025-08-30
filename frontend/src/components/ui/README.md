@@ -123,3 +123,4 @@ Pour tester les composants :
 - Videz le cache du navigateur
 - Désinscrivez et réinscrivez le Service Worker
 - Vérifiez la stratégie de cache dans `sw.ts`
+

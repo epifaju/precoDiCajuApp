@@ -169,3 +169,4 @@ Write-Host "4. Si des problèmes persistent, vérifiez la configuration de la ba
 
 Write-Host "`n=== REDÉMARRAGE TERMINÉ ===" -ForegroundColor Green
 Write-Host "Le backend est maintenant opérationnel avec les corrections PostgreSQL" -ForegroundColor White
+

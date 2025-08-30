@@ -4,13 +4,17 @@ import gw.precaju.entity.User;
 import gw.precaju.entity.enums.UserRole;
 import gw.precaju.repository.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,57 +81,143 @@ public class UserService implements UserDetailsService {
                     "UserService.findAllUsersWithFilters called with role: {}, active: {}, emailVerified: {}, search: {}, pageable: {}",
                     role, active, emailVerified, search, pageable);
 
-            // Validation des paramètres de recherche
-            if (search != null && search.trim().length() > 100) {
-                logger.warn("Search term too long ({} chars), truncating to 100 characters", search.length());
-                search = search.trim().substring(0, 100);
-            }
+            // Nettoyer et valider les paramètres
+            String cleanSearch = cleanSearchParameter(search);
+            String roleString = cleanRoleParameter(role);
+            String searchPattern = createSearchPattern(cleanSearch);
 
-            // Conversion du paramètre role de String vers UserRole
-            UserRole userRole = null;
-            if (role != null && !role.trim().isEmpty()) {
-                try {
-                    userRole = UserRole.valueOf(role.toUpperCase());
-                    logger.debug("Converted role parameter: {} -> {}", role, userRole);
-                } catch (IllegalArgumentException e) {
-                    logger.warn("Invalid role parameter: {}, ignoring role filter", role);
-                }
-            }
+            logger.debug(
+                    "Cleaned parameters - roleString: {}, active: {}, emailVerified: {}, cleanSearch: {}, searchPattern: {}",
+                    roleString, active, emailVerified, cleanSearch, searchPattern);
 
-            logger.debug("Calling repository with userRole: {}, active: {}, emailVerified: {}, search: {}",
-                    userRole, active, emailVerified, search);
-
-            // Essayer d'abord la méthode JPQL
-            try {
-                Page<User> result = userRepository.findAllUsersWithFilters(userRole, active, emailVerified, search,
-                        pageable);
-                logger.info("Successfully retrieved {} users with filters using JPQL", result.getTotalElements());
-                return result;
-            } catch (Exception jpqlException) {
-                logger.warn("JPQL query failed, falling back to native SQL: {}", jpqlException.getMessage());
-
-                // Fallback vers la requête native
-                String roleString = userRole != null ? userRole.name() : null;
-                Page<User> result = userRepository.findAllUsersWithFiltersNative(roleString, active, emailVerified,
-                        search, pageable);
-                logger.info("Successfully retrieved {} users with filters using native SQL", result.getTotalElements());
-                return result;
-            }
+            // Nettoyer le Pageable pour éviter les conflits avec les noms de colonnes SQL natives
+            Pageable cleanPageable = createCleanPageable(pageable);
+            
+            // Utiliser la méthode native SQL améliorée du repository
+            Page<User> result = userRepository.findAllUsersWithFiltersImproved(roleString, active, emailVerified,
+                    cleanSearch, searchPattern, cleanPageable);
+            logger.info("Successfully retrieved {} users with filters", result.getTotalElements());
+            return result;
 
         } catch (IllegalArgumentException e) {
             logger.error("Invalid argument in findAllUsersWithFilters: {}", e.getMessage(), e);
-            throw e; // Re-lancer l'exception pour la gestion appropriée dans le controller
+            throw e;
         } catch (org.springframework.dao.DataAccessException e) {
             logger.error("Database access error in findAllUsersWithFilters: {}", e.getMessage(), e);
-            // Log plus détaillé pour les erreurs de base de données
             if (e.getCause() != null) {
                 logger.error("Root cause: {}", e.getCause().getMessage());
+                logger.error("Root cause class: {}", e.getCause().getClass().getSimpleName());
             }
             throw new RuntimeException("Database error while retrieving users: " + e.getMessage(), e);
         } catch (Exception e) {
             logger.error("Unexpected error in findAllUsersWithFilters: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to retrieve users with filters: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Nettoie et valide le paramètre de recherche
+     */
+    private String cleanSearchParameter(String search) {
+        if (search == null) {
+            return null;
+        }
+
+        String trimmed = search.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+
+        // Limiter la longueur pour éviter les attaques par déni de service
+        if (trimmed.length() > 100) {
+            logger.warn("Search term too long ({} chars), truncating to 100 characters", trimmed.length());
+            return trimmed.substring(0, 100);
+        }
+
+        return trimmed;
+    }
+
+    /**
+     * Nettoie et valide le paramètre de rôle
+     */
+    private String cleanRoleParameter(String role) {
+        if (role == null || role.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            // Valider que le rôle est valide
+            UserRole.valueOf(role.toUpperCase());
+            return role.toUpperCase();
+        } catch (IllegalArgumentException e) {
+            logger.warn("Invalid role parameter: {}, ignoring role filter", role);
+            return null;
+        }
+    }
+
+    /**
+     * Crée le pattern de recherche pour la méthode SQL native
+     * Utilise ILIKE avec % pour une recherche insensible à la casse
+     */
+    private String createSearchPattern(String search) {
+        if (search == null || search.isEmpty()) {
+            return null;
+        }
+        return "%" + search + "%";
+    }
+
+    /**
+     * Nettoie le Pageable pour éviter les conflits avec les noms de colonnes SQL natives
+     * Convertit les noms de propriétés camelCase vers snake_case
+     */
+    private Pageable createCleanPageable(Pageable pageable) {
+        if (pageable == null || pageable.getSort().isUnsorted()) {
+            // Si pas de tri, utiliser un tri par défaut par created_at DESC
+            return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), 
+                                Sort.by("created_at").descending());
+        }
+
+        // Mapper les noms de propriétés camelCase vers snake_case pour PostgreSQL
+        List<Sort.Order> orders = new ArrayList<>();
+        for (Sort.Order order : pageable.getSort()) {
+            String property = order.getProperty();
+            
+            // Conversion des noms de propriétés
+            switch (property) {
+                case "createdAt":
+                    property = "created_at";
+                    break;
+                case "updatedAt":
+                    property = "updated_at";
+                    break;
+                case "fullName":
+                    property = "full_name";
+                    break;
+                case "emailVerified":
+                    property = "email_verified";
+                    break;
+                case "reputationScore":
+                    property = "reputation_score";
+                    break;
+                case "lastLoginAt":
+                    property = "last_login_at";
+                    break;
+                case "preferredRegions":
+                    property = "preferred_regions";
+                    break;
+                case "notificationPreferences":
+                    property = "notification_preferences";
+                    break;
+                // Les autres propriétés restent inchangées (id, email, role, active, etc.)
+                default:
+                    // Conserver la propriété telle quelle
+                    break;
+            }
+            
+            orders.add(new Sort.Order(order.getDirection(), property));
+        }
+
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
     }
 
     @Transactional(readOnly = true)

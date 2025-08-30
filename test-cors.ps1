@@ -67,3 +67,4 @@ Write-Host "   2. Check browser dev tools for specific CORS errors" -ForegroundC
 Write-Host "   3. Try refreshing the frontend page" -ForegroundColor White
 Write-Host "   4. Check that frontend is running on one of the allowed ports" -ForegroundColor White
 
+

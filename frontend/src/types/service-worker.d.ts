@@ -37,3 +37,4 @@ interface ServiceWorkerGlobalScope {
 interface Window {
   isSecureContext: boolean;
 }
+

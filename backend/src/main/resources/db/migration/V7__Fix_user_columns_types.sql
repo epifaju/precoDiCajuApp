@@ -37,3 +37,4 @@ CREATE INDEX idx_users_email ON users(email);
 
 -- Ajouter un index sur full_name pour améliorer les performances de recherche
 CREATE INDEX IF NOT EXISTS idx_users_full_name ON users(full_name);
+

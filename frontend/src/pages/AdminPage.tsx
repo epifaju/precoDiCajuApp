@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -27,6 +28,7 @@ interface PageResponse<T> {
 const AdminPage: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuthStore();
+  const navigate = useNavigate();
   const api = useApi();
 
   // États
@@ -73,23 +75,22 @@ const AdminPage: React.FC = () => {
 
   const [newPassword, setNewPassword] = useState('');
 
+  // Form errors
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
   // Vérifier les permissions
   useEffect(() => {
-
-
     if (user && user.role !== 'ADMIN') {
       console.log("user : ", user);
-  
       // Rediriger vers la page d'accueil si pas admin
-      window.location.href = '/';
+      navigate('/', { replace: true });
     }
-  }, [user]);
+  }, [user, navigate]);
 
   // Charger les données
   useEffect(() => {
-
-      console.log(user , user?.role);
-      if (user?.role === 'ADMIN') {
+    console.log(user, user?.role);
+    if (user?.role === 'ADMIN') {
       loadUsers();
       loadStats();
     }
@@ -107,7 +108,7 @@ const AdminPage: React.FC = () => {
         ...(filters.search && { search: filters.search })
       });
      
-      console.log("params :", params)
+      console.log("params :", params);
       const response = await api.get<PageResponse<UserDTO>>(`/api/v1/admin/users?${params}`);
       setUsers(response.content);
       setTotalPages(response.totalPages);
@@ -115,7 +116,9 @@ const AdminPage: React.FC = () => {
       console.error('Erreur lors du chargement des utilisateurs:', error);
       // Afficher un message d'erreur plus clair
       const errorMessage = error.data?.message || error.message || 'Erreur lors du chargement des utilisateurs';
-      alert(`Erreur: ${errorMessage}`);
+      // Utiliser une notification ou un toast au lieu d'alert
+      console.error(`Erreur: ${errorMessage}`);
+      // Ici vous pourriez utiliser un système de notification comme react-toastify
     } finally {
       setLoading(false);
     }
@@ -129,7 +132,8 @@ const AdminPage: React.FC = () => {
       console.error('Erreur lors du chargement des statistiques:', error);
       // Afficher un message d'erreur plus clair
       const errorMessage = error.data?.message || error.message || 'Erreur lors du chargement des statistiques';
-      alert(`Erreur: ${errorMessage}`);
+      console.error(`Erreur: ${errorMessage}`);
+      // Ici vous pourriez utiliser un système de notification comme react-toastify
     }
   };
 
@@ -288,10 +292,10 @@ const AdminPage: React.FC = () => {
                  value={filters.role}
                  onChange={(e) => setFilters(prev => ({ ...prev, role: e.target.value }))}
                  options={[
-                   { value: '', label: t('admin.filters.allRoles', 'Tous les rôles') },
-                   { value: 'ADMIN', label: t('admin.roles.admin', 'Admin') },
-                   { value: 'MODERATOR', label: t('admin.roles.moderator', 'Modérateur') },
-                   { value: 'CONTRIBUTOR', label: t('admin.roles.contributor', 'Contributeur') }
+                   { value: '', label: String(t('admin.filters.allRoles', 'Tous les rôles') || 'Tous les rôles') },
+                   { value: 'ADMIN', label: String(t('admin.roles.admin', 'Admin') || 'Admin') },
+                   { value: 'MODERATOR', label: String(t('admin.roles.moderator', 'Modérateur') || 'Modérateur') },
+                   { value: 'CONTRIBUTOR', label: String(t('admin.roles.contributor', 'Contributeur') || 'Contributeur') }
                  ]}
                  className="w-40"
                />
@@ -305,9 +309,9 @@ const AdminPage: React.FC = () => {
                  value={filters.active}
                  onChange={(e) => setFilters(prev => ({ ...prev, active: e.target.value }))}
                  options={[
-                   { value: '', label: t('admin.filters.allStatus', 'Tous') },
-                   { value: 'true', label: t('admin.filters.active', 'Actif') },
-                   { value: 'false', label: t('admin.filters.inactive', 'Inactif') }
+                   { value: '', label: String(t('admin.filters.allStatus', 'Tous') || 'Tous') },
+                   { value: 'true', label: String(t('admin.filters.active', 'Actif') || 'Actif') },
+                   { value: 'false', label: String(t('admin.filters.inactive', 'Inactif') || 'Inactif') }
                  ]}
                  className="w-32"
                />
@@ -373,7 +377,7 @@ const AdminPage: React.FC = () => {
                             user.role === 'MODERATOR' ? 'bg-blue-100 text-blue-800' :
                             'bg-gray-100 text-gray-800'
                           }`}>
-                            {t(`admin.roles.${user.role.toLowerCase()}`, user.role)}
+                            {t(`admin.roles.${user.role.toLowerCase()}`, user.role) || user.role}
                           </span>
                         </td>
                         <td className="p-3">
@@ -404,7 +408,7 @@ const AdminPage: React.FC = () => {
                             </Button>
                             <Button
                               size="sm"
-                              variant={user.active ? "destructive" : "default"}
+                              variant={user.active ? "destructive" : "outline"}
                               onClick={() => handleToggleUserStatus(user.id, user.active)}
                             >
                               {user.active ? t('admin.actions.deactivate', 'Désactiver') : t('admin.actions.activate', 'Activer')}

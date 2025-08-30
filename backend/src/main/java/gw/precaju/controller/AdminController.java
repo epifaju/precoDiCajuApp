@@ -63,6 +63,14 @@ public class AdminController {
             // Validation des paramètres
             validatePaginationParameters(page, size);
 
+            // Validation du paramètre role
+            if (role != null && !role.trim().isEmpty()) {
+                if (!isValidRoleParameter(role)) {
+                    logger.warn("Invalid role parameter: {}, ignoring role filter", role);
+                    role = null; // Ignorer le filtre de rôle invalide
+                }
+            }
+
             // Validation du champ de tri
             if (!isValidSortField(sortBy)) {
                 logger.warn("Invalid sort field: {}, using default 'createdAt'", sortBy);
@@ -90,13 +98,41 @@ public class AdminController {
 
         } catch (IllegalArgumentException e) {
             logger.error("Invalid argument in getAllUsers request: {}", e.getMessage(), e);
-            return ResponseEntity.badRequest().build();
+            return createErrorResponse("VALIDATION_ERROR", e.getMessage(), 400);
+        } catch (org.springframework.dao.InvalidDataAccessApiUsageException e) {
+            logger.error("Invalid data access API usage in getAllUsers request: {}", e.getMessage(), e);
+            if (e.getCause() != null) {
+                logger.error("Root cause: {}", e.getCause().getMessage());
+                logger.error("Root cause class: {}", e.getCause().getClass().getSimpleName());
+            }
+            return createErrorResponse("DATABASE_ERROR", "Erreur de paramètres de base de données", 400);
+        } catch (org.springframework.orm.jpa.JpaSystemException e) {
+            logger.error("JPA system error in getAllUsers request: {}", e.getMessage(), e);
+            if (e.getCause() != null) {
+                logger.error("Root cause: {}", e.getCause().getMessage());
+                logger.error("Root cause class: {}", e.getCause().getClass().getSimpleName());
+            }
+            return createErrorResponse("DATABASE_ERROR", "Erreur de système de base de données", 503);
+        } catch (org.springframework.dao.DataAccessException e) {
+            logger.error("Database access error in getAllUsers request: {}", e.getMessage(), e);
+            if (e.getCause() != null) {
+                logger.error("Root cause: {}", e.getCause().getMessage());
+                logger.error("Root cause class: {}", e.getCause().getClass().getSimpleName());
+            }
+            return createErrorResponse("DATABASE_ERROR", "Service temporairement indisponible", 503);
         } catch (RuntimeException e) {
             logger.error("Runtime error in getAllUsers request: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            // Log plus détaillé pour les erreurs runtime
+            if (e.getCause() != null) {
+                logger.error("Root cause: {}", e.getCause().getMessage());
+                logger.error("Root cause class: {}", e.getCause().getClass().getSimpleName());
+            }
+            return createErrorResponse("RUNTIME_ERROR", "Erreur interne du serveur", 500);
         } catch (Exception e) {
             logger.error("Unexpected error in getAllUsers request: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            // Log de la stack trace complète pour le débogage
+            logger.error("Full stack trace:", e);
+            return createErrorResponse("UNEXPECTED_ERROR", "Erreur inattendue du serveur", 500);
         }
     }
 
@@ -329,6 +365,24 @@ public class AdminController {
         return false;
     }
 
+    private boolean isValidRoleParameter(String role) {
+        try {
+            UserRole.valueOf(role.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Crée une réponse d'erreur avec des détails
+     */
+    private ResponseEntity<PageResponse<UserDTO>> createErrorResponse(String errorType, String message,
+            int statusCode) {
+        logger.error("{}: {}", errorType, message);
+        return ResponseEntity.status(statusCode).build();
+    }
+
     private void validatePaginationParameters(int page, int size) {
         if (page < 0) {
             throw new IllegalArgumentException("Page number must be non-negative");
@@ -357,6 +411,31 @@ public class AdminController {
 
         public void setNewPassword(String newPassword) {
             this.newPassword = newPassword;
+        }
+    }
+
+    public static class ErrorResponse {
+        private String error;
+        private String message;
+        private String timestamp;
+
+        public ErrorResponse(String error, String message) {
+            this.error = error;
+            this.message = message;
+            this.timestamp = java.time.Instant.now().toString();
+        }
+
+        // Getters
+        public String getError() {
+            return error;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getTimestamp() {
+            return timestamp;
         }
     }
 

@@ -4,39 +4,144 @@ import { useAppStore } from '../store/appStore';
 import { queryKeys } from '../lib/queryClient';
 import type { Price, PriceStats } from '../store/appStore';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_BASE_URL = import.meta.env['VITE_API_URL'] || 'http://localhost:8080';
+
+// Types pour une meilleure gestion des erreurs
+interface ApiErrorData {
+  message?: string;
+  status?: number;
+  statusText?: string;
+  details?: any;
+  timestamp?: string;
+}
+
+interface ApiError extends Error {
+  status: number;
+  statusText: string;
+  data: ApiErrorData;
+  url: string;
+  isApiError: true;
+}
 
 // Utility function to handle API responses
-const handleApiResponse = async (response: Response) => {
+const handleApiResponse = async <T>(response: Response): Promise<T> => {
   if (!response.ok) {
-    let errorData = {};
+    let errorData: ApiErrorData = {};
+    
     try {
-      errorData = await response.json();
+      // Vérifier si la réponse contient du contenu
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        errorData = await response.json();
+      } else {
+        // Si ce n'est pas du JSON, essayer de lire le texte
+        const textContent = await response.text();
+        if (textContent.trim()) {
+          errorData = { 
+            message: textContent,
+            details: { rawContent: textContent }
+          };
+        }
+      }
     } catch (e) {
-      // Si la réponse n'est pas du JSON, créer un message d'erreur basique
+      // Si la lecture échoue, créer un message d'erreur basique
       errorData = { 
         message: `Erreur HTTP ${response.status}: ${response.statusText}`,
-        status: response.status,
-        statusText: response.statusText
+        details: { parseError: e instanceof Error ? e.message : 'Unknown error' }
       };
     }
     
-    const error = new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
-    (error as any).status = response.status;
-    (error as any).data = errorData;
-    (error as any).statusText = response.statusText;
+    // Enrichir les données d'erreur
+    errorData.status = response.status;
+    errorData.statusText = response.statusText;
+    errorData.timestamp = new Date().toISOString();
     
-    // Log détaillé de l'erreur pour le débogage
-    console.error('API Error Response:', {
-      status: response.status,
-      statusText: response.statusText,
-      url: response.url,
-      errorData: errorData
-    });
+    // Créer un message d'erreur plus informatif
+    let errorMessage = errorData.message || `HTTP ${response.status}: ${response.statusText}`;
+    
+    // Messages d'erreur personnalisés selon le code HTTP
+    switch (response.status) {
+      case 400:
+        errorMessage = errorData.message || 'Requête invalide. Vérifiez les données envoyées.';
+        break;
+      case 401:
+        errorMessage = errorData.message || 'Session expirée. Veuillez vous reconnecter.';
+        break;
+      case 403:
+        errorMessage = errorData.message || 'Accès interdit. Vous n\'avez pas les permissions nécessaires.';
+        break;
+      case 404:
+        errorMessage = errorData.message || 'Ressource non trouvée.';
+        break;
+      case 408:
+        errorMessage = errorData.message || 'Délai d\'attente dépassé. Veuillez réessayer.';
+        break;
+      case 429:
+        errorMessage = errorData.message || 'Trop de requêtes. Veuillez ralentir.';
+        break;
+      case 500:
+        errorMessage = errorData.message || 'Erreur serveur interne. Veuillez réessayer plus tard.';
+        break;
+      case 502:
+        errorMessage = errorData.message || 'Serveur temporairement indisponible.';
+        break;
+      case 503:
+        errorMessage = errorData.message || 'Service temporairement indisponible.';
+        break;
+      case 504:
+        errorMessage = errorData.message || 'Délai d\'attente du serveur dépassé.';
+        break;
+      default:
+        if (response.status >= 500) {
+          errorMessage = errorData.message || 'Erreur serveur. Veuillez réessayer plus tard.';
+        } else if (response.status >= 400) {
+          errorMessage = errorData.message || 'Erreur de requête.';
+        } else {
+          errorMessage = errorData.message || `Erreur ${response.status}: ${response.statusText}`;
+        }
+    }
+    
+    // Créer une erreur typée
+    const error = new Error(errorMessage) as ApiError;
+    error.status = response.status;
+    error.statusText = response.statusText;
+    error.data = errorData;
+    error.url = response.url;
+    error.isApiError = true;
+    
+    // Log détaillé de l'erreur pour le débogage (seulement en développement)
+    if (import.meta.env.DEV) {
+      console.error('API Error Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url,
+        errorData: errorData,
+        errorMessage: errorMessage,
+        timestamp: new Date().toISOString()
+      });
+    }
     
     throw error;
   }
-  return response.json();
+  
+  // Gérer les réponses vides
+  const contentType = response.headers.get('content-type');
+  if (!contentType || response.status === 204) {
+    // Pour les réponses vides, retourner un objet vide du type attendu
+    return {} as T;
+  }
+  
+  // Vérifier si c'est du JSON avant de parser
+  if (contentType.includes('application/json')) {
+    try {
+      return await response.json() as T;
+    } catch (e) {
+      throw new Error(`Erreur lors du parsing de la réponse JSON: ${e instanceof Error ? e.message : 'Unknown error'}`);
+    }
+  }
+  
+  // Si ce n'est pas du JSON, retourner le texte
+  return await response.text() as T;
 };
 
 // Generic API hook for admin operations
@@ -46,7 +151,7 @@ export const useApi = () => {
   return {
     get: async <T>(url: string): Promise<T> => {
       const response = await authFetch(`${API_BASE_URL}${url}`);
-      return handleApiResponse(response);
+      return handleApiResponse<T>(response);
     },
     
     post: async <T>(url: string, data?: any): Promise<T> => {
@@ -57,7 +162,7 @@ export const useApi = () => {
         },
         body: data ? JSON.stringify(data) : undefined,
       });
-      return handleApiResponse(response);
+      return handleApiResponse<T>(response);
     },
     
     put: async <T>(url: string, data?: any): Promise<T> => {
@@ -68,7 +173,7 @@ export const useApi = () => {
         },
         body: data ? JSON.stringify(data) : undefined,
       });
-      return handleApiResponse(response);
+      return handleApiResponse<T>(response);
     },
     
     delete: async (url: string): Promise<void> => {
@@ -89,7 +194,7 @@ export const useRegions = () => {
     queryKey: queryKeys.regions,
     queryFn: async () => {
       const response = await fetch(`${API_BASE_URL}/api/v1/regions`);
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     staleTime: 30 * 60 * 1000, // 30 minutes (regions don't change often)
   });
@@ -100,7 +205,7 @@ export const useRegion = (code: string) => {
     queryKey: queryKeys.region(code),
     queryFn: async () => {
       const response = await fetch(`${API_BASE_URL}/api/v1/regions/${code}`);
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     enabled: !!code,
   });
@@ -112,7 +217,7 @@ export const useQualityGrades = () => {
     queryKey: queryKeys.qualities,
     queryFn: async () => {
       const response = await fetch(`${API_BASE_URL}/api/v1/qualities`);
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     staleTime: 30 * 60 * 1000, // 30 minutes
   });
@@ -123,7 +228,7 @@ export const useQualityGrade = (code: string) => {
     queryKey: queryKeys.quality(code),
     queryFn: async () => {
       const response = await fetch(`${API_BASE_URL}/api/v1/qualities/${code}`);
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     enabled: !!code,
   });
@@ -161,7 +266,7 @@ export const usePrices = (filters: PriceFilters = {}) => {
         },
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     staleTime: 2 * 60 * 1000, // 2 minutes (prices change more frequently)
   });
@@ -178,7 +283,7 @@ export const usePrice = (id: string) => {
           'Accept-Language': language,
         },
       });
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     enabled: !!id,
   });
@@ -204,7 +309,7 @@ export const usePriceStats = (filters: { region?: string; quality?: string; days
         },
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -248,7 +353,7 @@ export const useCreatePrice = () => {
         body: formData,
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     onSuccess: () => {
       // Invalidate and refetch prices
@@ -281,7 +386,7 @@ export const useUpdatePrice = () => {
         body: formData,
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.prices });
@@ -322,7 +427,7 @@ export const useVerifyPrice = () => {
         method: 'POST',
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     onSuccess: (data, priceId) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.prices });
@@ -355,7 +460,7 @@ export const useUserPrices = (userId: string, filters: PriceFilters = {}) => {
         },
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     enabled: !!userId,
   });
@@ -383,7 +488,7 @@ export const useUnverifiedPrices = (filters: PriceFilters = {}) => {
         },
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
   });
 };
@@ -402,7 +507,7 @@ export const useFileUpload = () => {
         body: formData,
       });
       
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
   });
 };
@@ -413,7 +518,7 @@ export const useFileInfo = () => {
     queryKey: queryKeys.fileInfo,
     queryFn: async () => {
       const response = await fetch(`${API_BASE_URL}/api/v1/files/info`);
-      return handleApiResponse(response);
+      return handleApiResponse<any>(response);
     },
     staleTime: 60 * 60 * 1000, // 1 hour (file info doesn't change)
   });

@@ -51,3 +51,4 @@ ENV JAVA_OPTS="-Xmx512m -Xms256m"
 # Commande de démarrage
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 
+

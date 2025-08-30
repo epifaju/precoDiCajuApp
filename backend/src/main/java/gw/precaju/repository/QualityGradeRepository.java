@@ -21,3 +21,4 @@ public interface QualityGradeRepository extends JpaRepository<QualityGrade, Stri
     boolean existsByCode(String code);
 }
 
+
