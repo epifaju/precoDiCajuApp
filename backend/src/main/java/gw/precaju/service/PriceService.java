@@ -49,19 +49,45 @@ public class PriceService {
 
     @Transactional(readOnly = true)
     public Page<PriceDTO> getAllPrices(String regionCode, String qualityGrade,
-            LocalDate fromDate, LocalDate toDate,
+            LocalDate fromDate, LocalDate toDate, Boolean verified,
             Pageable pageable, String language) {
 
-        // Use the method without toDate if toDate is null to avoid PostgreSQL parameter
-        // type issues
-        Page<Price> prices;
-        if (toDate == null) {
-            prices = priceRepository.findWithFiltersForStats(regionCode, qualityGrade, fromDate, pageable);
-        } else {
-            prices = priceRepository.findWithFilters(regionCode, qualityGrade, fromDate, toDate, pageable);
-        }
+        logger.debug("Getting prices with filters - region: {}, quality: {}, fromDate: {}, toDate: {}, verified: {}",
+                regionCode, qualityGrade, fromDate, toDate, verified);
 
-        return prices.map(price -> priceMapper.toDTOWithLocalizedNames(price, language));
+        try {
+            // Validate date parameters
+            if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
+                logger.warn("Invalid date range: fromDate {} is after toDate {}", fromDate, toDate);
+                throw new IllegalArgumentException("fromDate cannot be after toDate");
+            }
+
+            // Check if we have any filters
+            boolean hasFilters = (regionCode != null && !regionCode.trim().isEmpty()) ||
+                    (qualityGrade != null && !qualityGrade.trim().isEmpty()) ||
+                    fromDate != null || toDate != null || verified != null;
+
+            Page<Price> prices;
+            if (!hasFilters) {
+                // No filters - use simple method
+                logger.debug("No filters applied, using simple query");
+                prices = priceRepository.findAllActive(pageable);
+            } else {
+                // Has filters - use filtered method
+                logger.debug("Filters applied, using filtered query");
+                prices = priceRepository.findWithFilters(regionCode, qualityGrade, fromDate, toDate, verified,
+                        pageable);
+            }
+
+            logger.debug("Found {} prices with filters", prices.getTotalElements());
+            return prices.map(price -> priceMapper.toDTOWithLocalizedNames(price, language));
+
+        } catch (Exception e) {
+            logger.error(
+                    "Error retrieving prices with filters - region: {}, quality: {}, fromDate: {}, toDate: {}, verified: {}",
+                    regionCode, qualityGrade, fromDate, toDate, verified, e);
+            throw e;
+        }
     }
 
     @Transactional(readOnly = true)

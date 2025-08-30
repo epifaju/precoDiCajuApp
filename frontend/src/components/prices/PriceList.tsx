@@ -7,7 +7,7 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { usePrices, useRegions, useQualityGrades } from '../../hooks/useApi';
 
-interface PriceFilters {
+interface LocalFilters {
   search: string;
   regionCode: string;
   qualityGrade: string;
@@ -26,7 +26,7 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
   const { t } = useTranslation();
   const [page, setPage] = useState(0);
   const [size] = useState(20);
-  const [filters, setFilters] = useState<PriceFilters>({
+  const [filters, setFilters] = useState<LocalFilters>({
     search: '',
     regionCode: '',
     qualityGrade: '',
@@ -59,39 +59,39 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
 
   // Filter options
   const regionOptions = [
-    { value: '', label: t('prices.allRegions', 'All Regions') },
-    ...(regions || []).map(region => ({
+    { value: '', label: t('prices.allRegions', 'All Regions') || 'All Regions' },
+    ...(regions || []).map((region: any) => ({
       value: region.code,
       label: region.namePt,
     }))
   ];
 
   const qualityOptions = [
-    { value: '', label: t('prices.allQualities', 'All Qualities') },
-    ...(qualityGrades || []).map(quality => ({
+    { value: '', label: t('prices.allQualities', 'All Qualities') || 'All Qualities' },
+    ...(qualityGrades || []).map((quality: any) => ({
       value: quality.code,
       label: quality.namePt,
     }))
   ];
 
   const verifiedOptions = [
-    { value: '', label: t('prices.allPrices', 'All Prices') },
-    { value: 'true', label: t('prices.verifiedOnly', 'Verified Only') },
-    { value: 'false', label: t('prices.unverifiedOnly', 'Unverified Only') },
+    { value: '', label: t('prices.allPrices', 'All Prices') || 'All Prices' },
+    { value: 'true', label: t('prices.verifiedOnly', 'Verified Only') || 'Verified Only' },
+    { value: 'false', label: t('prices.unverifiedOnly', 'Unverified Only') || 'Unverified Only' },
   ];
 
   const sortOptions = [
-    { value: 'recordedDate', label: t('prices.sortBy.date', 'Date Recorded') },
-    { value: 'priceFcfa', label: t('prices.sortBy.price', 'Price') },
-    { value: 'createdAt', label: t('prices.sortBy.submitted', 'Date Submitted') },
+    { value: 'recordedDate', label: t('prices.sortBy.date', 'Date Recorded') || 'Date Recorded' },
+    { value: 'priceFcfa', label: t('prices.sortBy.price', 'Price') || 'Price' },
+    { value: 'createdAt', label: t('prices.sortBy.submitted', 'Date Submitted') || 'Date Submitted' },
   ];
 
   const sortDirOptions = [
-    { value: 'desc', label: t('prices.sortDir.desc', 'Newest First') },
-    { value: 'asc', label: t('prices.sortDir.asc', 'Oldest First') },
+    { value: 'desc', label: t('prices.sortDir.desc', 'Newest First') || 'Newest First' },
+    { value: 'asc', label: t('prices.sortDir.asc', 'Oldest First') || 'Oldest First' },
   ];
 
-  const updateFilter = (key: keyof PriceFilters, value: string) => {
+  const updateFilter = (key: keyof LocalFilters, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
     setPage(0); // Reset to first page when filters change
   };

@@ -45,6 +45,7 @@ public class PriceController {
             @RequestParam(required = false) String quality,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false) Boolean verified,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
@@ -52,11 +53,27 @@ public class PriceController {
             @RequestHeader(name = "Accept-Language", defaultValue = "pt") String language) {
 
         try {
+            logger.debug(
+                    "Received request for prices - region: {}, quality: {}, from: {}, to: {}, verified: {}, page: {}, size: {}, sortBy: {}, sortDir: {}",
+                    region, quality, from, to, verified, page, size, sortBy, sortDir);
+
             // Validate and limit page size
             if (size > 100)
                 size = 100;
             if (page < 0)
                 page = 0;
+
+            // Validate sortBy parameter
+            if (!isValidSortBy(sortBy)) {
+                logger.warn("Invalid sortBy parameter: {}", sortBy);
+                return ResponseEntity.badRequest().build();
+            }
+
+            // Validate sortDir parameter
+            if (!isValidSortDir(sortDir)) {
+                logger.warn("Invalid sortDir parameter: {}", sortDir);
+                return ResponseEntity.badRequest().build();
+            }
 
             // Create sort
             Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
@@ -64,14 +81,29 @@ public class PriceController {
             Pageable pageable = PageRequest.of(page, size, sort);
 
             Page<PriceDTO> prices = priceService.getAllPrices(
-                    region, quality, from, to, pageable, language);
+                    region, quality, from, to, verified, pageable, language);
+
+            logger.info("Successfully retrieved {} prices (page {} of {})",
+                    prices.getTotalElements(), page + 1, prices.getTotalPages());
 
             return ResponseEntity.ok(PageResponse.of(prices));
 
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid argument in prices request: {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             logger.error("Error retrieving prices", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    private boolean isValidSortBy(String sortBy) {
+        return sortBy != null
+                && (sortBy.equals("recordedDate") || sortBy.equals("priceFcfa") || sortBy.equals("createdAt"));
+    }
+
+    private boolean isValidSortDir(String sortDir) {
+        return sortDir != null && (sortDir.equalsIgnoreCase("asc") || sortDir.equalsIgnoreCase("desc"));
     }
 
     @GetMapping("/{id}")

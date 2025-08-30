@@ -24,11 +24,13 @@ public interface PriceRepository extends JpaRepository<Price, UUID> {
                         "AND (:qualityGrade IS NULL OR p.qualityGrade.code = :qualityGrade) " +
                         "AND (:fromDate IS NULL OR p.recordedDate >= :fromDate) " +
                         "AND (:toDate IS NULL OR p.recordedDate <= :toDate) " +
+                        "AND (:verified IS NULL OR p.verified = :verified) " +
                         "ORDER BY p.recordedDate DESC, p.createdAt DESC")
         Page<Price> findWithFilters(@Param("regionCode") String regionCode,
                         @Param("qualityGrade") String qualityGrade,
                         @Param("fromDate") LocalDate fromDate,
                         @Param("toDate") LocalDate toDate,
+                        @Param("verified") Boolean verified,
                         Pageable pageable);
 
         // Alternative method for statistics that doesn't use toDate parameter
@@ -36,10 +38,12 @@ public interface PriceRepository extends JpaRepository<Price, UUID> {
                         "AND (:regionCode IS NULL OR p.region.code = :regionCode) " +
                         "AND (:qualityGrade IS NULL OR p.qualityGrade.code = :qualityGrade) " +
                         "AND (:fromDate IS NULL OR p.recordedDate >= :fromDate) " +
+                        "AND (:verified IS NULL OR p.verified = :verified) " +
                         "ORDER BY p.recordedDate DESC, p.createdAt DESC")
         Page<Price> findWithFiltersForStats(@Param("regionCode") String regionCode,
                         @Param("qualityGrade") String qualityGrade,
                         @Param("fromDate") LocalDate fromDate,
+                        @Param("verified") Boolean verified,
                         Pageable pageable);
 
         // Method specifically for statistics that returns List (no pagination
@@ -53,6 +57,10 @@ public interface PriceRepository extends JpaRepository<Price, UUID> {
         List<Price> findPricesForStatistics(@Param("regionCode") String regionCode,
                         @Param("qualityGrade") String qualityGrade,
                         @Param("fromDate") LocalDate fromDate);
+
+        // Simple method without complex null handling - for basic queries
+        @Query("SELECT p FROM Price p WHERE p.active = true ORDER BY p.recordedDate DESC, p.createdAt DESC")
+        Page<Price> findAllActive(Pageable pageable);
 
         // Alternative method for when all parameters are non-null
         @Query("SELECT p FROM Price p " +
