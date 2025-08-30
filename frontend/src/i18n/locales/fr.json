@@ -476,6 +476,21 @@
       "accessDenied": "Accès non autorisé. Redirection...",
       "redirecting": "Redirection en cours..."
     }
+  },
+  "footer": {
+    "brand": {
+      "description": "Plateforme collaborative pour suivre les prix du cajou en Guinée-Bissau. Données en temps réel pour producteurs, commerçants et coopératives.",
+      "location": "Guinée-Bissau"
+    },
+    "quickLinks": "Liens Rapides",
+    "support": "Support",
+    "howToUse": "Comment utiliser",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "privacy": "Confidentialité",
+    "copyright": "© 2024 Preço di Cajú. Fait avec",
+    "forGuineaBissau": "pour la Guinée-Bissau",
+    "version": "Version 1.0.0"
   }
 }
 

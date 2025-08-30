@@ -459,5 +459,20 @@
       "newPassword": "Nova senha",
       "submit": "Alterar"
     }
+  },
+  "footer": {
+    "brand": {
+      "description": "Plataforma colaborativa para acompanhar os preços do cajú na Guiné-Bissau. Dados em tempo real para produtores, comerciantes e cooperativas.",
+      "location": "Guiné-Bissau"
+    },
+    "quickLinks": "Links Rápidos",
+    "support": "Suporte",
+    "howToUse": "Como usar",
+    "faq": "FAQ",
+    "contact": "Contacto",
+    "privacy": "Privacidade",
+    "copyright": "© 2024 Preço di Cajú. Feito com",
+    "forGuineaBissau": "para a Guiné-Bissau",
+    "version": "Versão 1.0.0"
   }
 }

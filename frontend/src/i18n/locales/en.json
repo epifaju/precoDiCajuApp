@@ -390,6 +390,21 @@
     "notesPlaceholder": "Any additional information about this price...",
     "notesHelp": "Market conditions, quality observations, etc.",
     "cancel": "Cancel"
+  },
+  "footer": {
+    "brand": {
+      "description": "Collaborative platform to track cashew prices in Guinea-Bissau. Real-time data for producers, traders and cooperatives.",
+      "location": "Guinea-Bissau"
+    },
+    "quickLinks": "Quick Links",
+    "support": "Support",
+    "howToUse": "How to use",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "copyright": "© 2024 Preço di Cajú. Made with",
+    "forGuineaBissau": "for Guinea-Bissau",
+    "version": "Version 1.0.0"
   }
 }
 

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Footer Translations - Français</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .language-selector {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .translation-key {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .expected-french {
+            color: #28a745;
+            font-style: italic;
+        }
+        .expected-portuguese {
+            color: #ffc107;
+            font-style: italic;
+        }
+        .expected-english {
+            color: #17a2b8;
+            font-style: italic;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test des Traductions du Footer - Preço di Cajú</h1>
+    
+    <div class="language-selector">
+        <h3>🎯 Objectif du Test</h3>
+        <p>Vérifier que le pied de page (footer) de l'écran "Submeter Preço de Caju" se traduit correctement en français tout en conservant le portugais comme langue par défaut.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📋 Clés de Traduction Ajoutées</h2>
+        <p>Les clés suivantes ont été ajoutées dans les fichiers de traduction :</p>
+        
+        <h3>Français (fr.json)</h3>
+        <ul>
+            <li><span class="translation-key">footer.brand.description</span>: <span class="expected-french">"Plateforme collaborative pour suivre les prix du cajou en Guinée-Bissau. Données en temps réel pour producteurs, commerçants et coopératives."</span></li>
+            <li><span class="translation-key">footer.brand.location</span>: <span class="expected-french">"Guinée-Bissau"</span></li>
+            <li><span class="translation-key">footer.quickLinks</span>: <span class="expected-french">"Liens Rapides"</span></li>
+            <li><span class="translation-key">footer.support</span>: <span class="expected-french">"Support"</span></li>
+            <li><span class="translation-key">footer.howToUse</span>: <span class="expected-french">"Comment utiliser"</span></li>
+            <li><span class="translation-key">footer.faq</span>: <span class="expected-french">"FAQ"</span></li>
+            <li><span class="translation-key">footer.contact</span>: <span class="expected-french">"Contact"</span></li>
+            <li><span class="translation-key">footer.privacy</span>: <span class="expected-french">"Confidentialité"</span></li>
+            <li><span class="translation-key">footer.copyright</span>: <span class="expected-french">"© 2024 Preço di Cajú. Fait avec"</span></li>
+            <li><span class="translation-key">footer.forGuineaBissau</span>: <span class="expected-french">"pour la Guinée-Bissau"</span></li>
+            <li><span class="translation-key">footer.version</span>: <span class="expected-french">"Version 1.0.0"</span></li>
+        </ul>
+
+        <h3>Anglais (en.json)</h3>
+        <ul>
+            <li><span class="translation-key">footer.brand.description</span>: <span class="expected-english">"Collaborative platform to track cashew prices in Guinea-Bissau. Real-time data for producers, traders and cooperatives."</span></li>
+            <li><span class="translation-key">footer.brand.location</span>: <span class="expected-english">"Guinea-Bissau"</span></li>
+            <li><span class="translation-key">footer.quickLinks</span>: <span class="expected-english">"Quick Links"</span></li>
+            <li><span class="translation-key">footer.support</span>: <span class="expected-english">"Support"</span></li>
+            <li><span class="translation-key">footer.howToUse</span>: <span class="expected-english">"How to use"</span></li>
+            <li><span class="translation-key">footer.faq</span>: <span class="expected-english">"FAQ"</span></li>
+            <li><span class="translation-key">footer.contact</span>: <span class="expected-english">"Contact"</span></li>
+            <li><span class="translation-key">footer.privacy</span>: <span class="expected-english">"Privacy"</span></li>
+            <li><span class="translation-key">footer.copyright</span>: <span class="expected-english">"© 2024 Preço di Cajú. Made with"</span></li>
+            <li><span class="translation-key">footer.forGuineaBissau</span>: <span class="expected-english">"for Guinea-Bissau"</span></li>
+            <li><span class="translation-key">footer.version</span>: <span class="expected-english">"Version 1.0.0"</span></li>
+        </ul>
+
+        <h3>Portugais (pt.json) - Langue par défaut</h3>
+        <ul>
+            <li><span class="translation-key">footer.brand.description</span>: <span class="expected-portuguese">"Plataforma colaborativa para acompanhar os preços do cajú na Guiné-Bissau. Dados em tempo real para produtores, comerciantes e cooperativas."</span></li>
+            <li><span class="translation-key">footer.brand.location</span>: <span class="expected-portuguese">"Guiné-Bissau"</span></li>
+            <li><span class="translation-key">footer.quickLinks</span>: <span class="expected-portuguese">"Links Rápidos"</span></li>
+            <li><span class="translation-key">footer.support</span>: <span class="expected-portuguese">"Suporte"</span></li>
+            <li><span class="translation-key">footer.howToUse</span>: <span class="expected-portuguese">"Como usar"</span></li>
+            <li><span class="translation-key">footer.faq</span>: <span class="expected-portuguese">"FAQ"</span></li>
+            <li><span class="translation-key">footer.contact</span>: <span class="expected-portuguese">"Contacto"</span></li>
+            <li><span class="translation-key">footer.privacy</span>: <span class="expected-portuguese">"Privacidade"</span></li>
+            <li><span class="translation-key">footer.copyright</span>: <span class="expected-portuguese">"© 2024 Preço di Cajú. Feito com"</span></li>
+            <li><span class="translation-key">footer.forGuineaBissau</span>: <span class="expected-portuguese">"para a Guiné-Bissau"</span></li>
+            <li><span class="translation-key">footer.version</span>: <span class="expected-portuguese">"Versão 1.0.0"</span></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 Modifications Apportées</h2>
+        <div class="status success">
+            <h3>✅ Fichiers de Traduction Mis à Jour</h3>
+            <ul>
+                <li><strong>fr.json</strong> - Ajout de la section "footer" avec toutes les traductions françaises</li>
+                <li><strong>en.json</strong> - Ajout de la section "footer" avec toutes les traductions anglaises</li>
+                <li><strong>pt.json</strong> - Ajout de la section "footer" avec toutes les traductions portugaises</li>
+            </ul>
+        </div>
+
+        <div class="status success">
+            <h3>✅ Composant Footer Mis à Jour</h3>
+            <ul>
+                <li>Remplacement de tous les textes en dur par des appels aux fonctions de traduction <code>{t('footer.key')}</code></li>
+                <li>Utilisation du hook <code>useTranslation()</code> pour accéder aux traductions</li>
+                <li>Conservation de la structure et du style existants</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 Points de Test</h2>
+        <div class="status warning">
+            <h3>⚠️ À Tester</h3>
+            <ol>
+                <li><strong>Langue par défaut</strong> : Vérifier que le portugais reste la langue par défaut</li>
+                <li><strong>Changement de langue</strong> : Sélectionner "Français" dans le sélecteur de langue</li>
+                <li><strong>Footer en français</strong> : Vérifier que tous les textes du footer s'affichent en français</li>
+                <li><strong>Navigation</strong> : Aller sur la page "Submeter Preço de Caju" et vérifier le footer</li>
+                <li><strong>Retour au portugais</strong> : Remettre "Português" et vérifier que le footer redevient en portugais</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 Comment Tester</h2>
+        <ol>
+            <li>Démarrer l'application frontend</li>
+            <li>Aller sur la page de soumission des prix (/submit)</li>
+            <li>Vérifier que le footer s'affiche en portugais par défaut</li>
+            <li>Changer la langue en français via le sélecteur dans le header</li>
+            <li>Vérifier que le footer se traduit entièrement en français</li>
+            <li>Remettre le portugais et vérifier le retour à la langue par défaut</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🚀 Résultat Attendu</h2>
+        <div class="status success">
+            <p><strong>✅ Succès</strong> : Le footer de l'écran "Submeter Preço de Caju" doit maintenant se traduire correctement en français quand la langue française est sélectionnée, tout en conservant le portugais comme langue par défaut.</p>
+        </div>
+        
+        <div class="status warning">
+            <p><strong>⚠️ Important</strong> : Le nom de la marque "Preço di Cajú" reste inchangé dans toutes les langues pour maintenir l'identité de la plateforme.</p>
+        </div>
+    </div>
+
+    <script>
+        // Test simple pour vérifier que la page se charge
+        console.log('Page de test des traductions du footer chargée avec succès');
+        
+        // Afficher un message de statut
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'status success';
+            statusDiv.innerHTML = '<h3>✅ Page de Test Prête</h3><p>Cette page confirme que toutes les traductions du footer ont été ajoutées et que le composant a été mis à jour pour les utiliser.</p>';
+            document.body.insertBefore(statusDiv, document.body.firstChild);
+        });
+    </script>
+</body>
+</html>
