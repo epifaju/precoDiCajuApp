@@ -194,6 +194,7 @@
     "region": "Région",
     "quality": "Qualité",
     "verified": "Vérifié",
+    "openInMaps": "Ouvrir la localisation dans les cartes",
     "selectRegion": "Sélectionner une Région",
     "selectQuality": "Sélectionner une Qualité",
     "selectVerified": "Sélectionner le Statut",

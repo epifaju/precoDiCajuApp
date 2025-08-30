@@ -191,6 +191,7 @@
     "region": "Region",
     "quality": "Quality",
     "verified": "Verified",
+    "openInMaps": "Open location in maps",
     "selectRegion": "Select Region",
     "selectQuality": "Select Quality",
     "selectVerified": "Select Status",

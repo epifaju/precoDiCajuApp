@@ -47,8 +47,6 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
     sortDir: filters.sortDir,
     region: filters.regionCode || undefined,
     quality: filters.qualityGrade || undefined,
-    verified: filters.verified ? filters.verified === 'true' : undefined,
-    search: filters.search || undefined,
     from: filters.dateFrom || undefined,
     to: filters.dateTo || undefined,
   });
@@ -125,6 +123,30 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
       month: 'short',
       day: 'numeric',
     });
+  };
+
+  // Function to open location in maps
+  const openLocationInMaps = (lat: number, lng: number, sourceName?: string) => {
+    // Try to detect the platform and open appropriate map app
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isIOS = /iphone|ipad|ipod/.test(userAgent);
+    const isAndroid = /android/.test(userAgent);
+    
+    let mapUrl: string;
+    
+    if (isIOS) {
+      // Apple Maps for iOS
+      mapUrl = `https://maps.apple.com/?q=${lat},${lng}&ll=${lat},${lng}&t=m`;
+    } else if (isAndroid) {
+      // Google Maps for Android
+      mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    } else {
+      // Default to Google Maps for web/desktop
+      mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    }
+    
+    // Open in new tab/window
+    window.open(mapUrl, '_blank');
   };
 
   if (error) {
@@ -298,7 +320,7 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
             </div>
           ) : (
             <div className="space-y-4">
-              {prices.map((price) => (
+              {prices.map((price: any) => (
                 <div
                   key={price.id}
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
@@ -351,7 +373,12 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
                       )}
                       
                       {(price.gpsLat && price.gpsLng) && (
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => openLocationInMaps(price.gpsLat!, price.gpsLng!, price.sourceName)}
+                          title={t('prices.openInMaps', 'Open location in maps')}
+                        >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           </svg>
