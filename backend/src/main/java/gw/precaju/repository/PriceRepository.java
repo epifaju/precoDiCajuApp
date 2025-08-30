@@ -33,6 +33,21 @@ public interface PriceRepository extends JpaRepository<Price, UUID> {
                         @Param("verified") Boolean verified,
                         Pageable pageable);
 
+        // New method that avoids PostgreSQL type issues by using explicit type casting
+        @Query("SELECT p FROM Price p WHERE p.active = true " +
+                        "AND (CAST(:regionCode AS string) IS NULL OR p.region.code = :regionCode) " +
+                        "AND (CAST(:qualityGrade AS string) IS NULL OR p.qualityGrade.code = :qualityGrade) " +
+                        "AND (CAST(:fromDate AS date) IS NULL OR p.recordedDate >= :fromDate) " +
+                        "AND (CAST(:toDate AS date) IS NULL OR p.recordedDate <= :toDate) " +
+                        "AND (CAST(:verified AS boolean) IS NULL OR p.verified = :verified) " +
+                        "ORDER BY p.recordedDate DESC, p.createdAt DESC")
+        Page<Price> findWithFiltersSafe(@Param("regionCode") String regionCode,
+                        @Param("qualityGrade") String qualityGrade,
+                        @Param("fromDate") LocalDate fromDate,
+                        @Param("toDate") LocalDate toDate,
+                        @Param("verified") Boolean verified,
+                        Pageable pageable);
+
         // Alternative method for statistics that doesn't use toDate parameter
         @Query("SELECT p FROM Price p WHERE p.active = true " +
                         "AND (:regionCode IS NULL OR p.region.code = :regionCode) " +

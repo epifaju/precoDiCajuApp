@@ -73,9 +73,9 @@ public class PriceService {
                 logger.debug("No filters applied, using simple query");
                 prices = priceRepository.findAllActive(pageable);
             } else {
-                // Has filters - use filtered method
-                logger.debug("Filters applied, using filtered query");
-                prices = priceRepository.findWithFilters(regionCode, qualityGrade, fromDate, toDate, verified,
+                // Has filters - use safe filtered method
+                logger.debug("Filters applied, using safe filtered query");
+                prices = priceRepository.findWithFiltersSafe(regionCode, qualityGrade, fromDate, toDate, verified,
                         pageable);
             }
 
