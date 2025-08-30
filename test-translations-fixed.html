@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des Traductions Françaises</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .key { font-weight: bold; }
+        .value { margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Test des Traductions Françaises - Prix</h1>
+    
+    <div class="test-section">
+        <h2>Clés de traduction testées :</h2>
+        <div class="key">prices.filters</div>
+        <div class="value">Attendu: "Filtres" (string)</div>
+        <div class="key">prices.clearFilters</div>
+        <div class="value">Attendu: "Effacer tous" (string)</div>
+        <div class="key">prices.allRegions</div>
+        <div class="value">Attendu: "Toutes les régions" (string)</div>
+        <div class="key">prices.sortBy.date</div>
+        <div class="value">Attendu: "Date enregistrée" (string)</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Instructions de test :</h2>
+        <ol>
+            <li>Ouvrir l'application dans le navigateur</li>
+            <li>Aller sur la page des prix</li>
+            <li>Changer la langue de Portugais à Français</li>
+            <li>Vérifier qu'il n'y a plus d'erreur "Objects are not valid as a React child"</li>
+            <li>Vérifier que tous les textes sont bien traduits en français</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Corrections apportées :</h2>
+        <ul>
+            <li class="success">✓ Ajout de la clé "prices.filters" comme string au lieu d'un objet</li>
+            <li class="success">✓ Ajout de la clé "prices.clearFilters" manquante</li>
+            <li class="success">✓ Ajout de toutes les clés de traduction manquantes pour la page des prix</li>
+            <li class="success">✓ Restructuration des clés de filtres dans "filterOptions"</li>
+        </ul>
+    </div>
+
+    <script>
+        console.log("Page de test des traductions françaises chargée");
+        console.log("Vérifiez que l'application fonctionne sans erreur lors du changement de langue");
+    </script>
+</body>
+</html>

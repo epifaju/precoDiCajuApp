@@ -92,14 +92,16 @@ public interface UserRepository extends JpaRepository<User, UUID> {
          * recherche
          * Plus robuste et compatible avec différents SGBD
          * Utilise ILIKE pour une recherche insensible à la casse (PostgreSQL)
-         * IMPORTANT: On retire ORDER BY de la requête pour éviter les conflits avec Pageable
+         * IMPORTANT: On retire ORDER BY de la requête pour éviter les conflits avec
+         * Pageable
          */
         @Query(value = "SELECT * FROM users u WHERE " +
                         "(:role IS NULL OR u.role = :role) AND " +
                         "(:active IS NULL OR u.active = :active) AND " +
                         "(:emailVerified IS NULL OR u.email_verified = :emailVerified) AND " +
                         "(:search IS NULL OR :search = '' OR " +
-                        "u.email ILIKE :searchPattern OR u.full_name ILIKE :searchPattern)", countQuery = "SELECT COUNT(*) FROM users u WHERE " +
+                        "u.email ILIKE :searchPattern OR u.full_name ILIKE :searchPattern)", countQuery = "SELECT COUNT(*) FROM users u WHERE "
+                                        +
                                         "(:role IS NULL OR u.role = :role) AND " +
                                         "(:active IS NULL OR u.active = :active) AND " +
                                         "(:emailVerified IS NULL OR u.email_verified = :emailVerified) AND " +

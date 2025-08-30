@@ -90,9 +90,10 @@ public class UserService implements UserDetailsService {
                     "Cleaned parameters - roleString: {}, active: {}, emailVerified: {}, cleanSearch: {}, searchPattern: {}",
                     roleString, active, emailVerified, cleanSearch, searchPattern);
 
-            // Nettoyer le Pageable pour éviter les conflits avec les noms de colonnes SQL natives
+            // Nettoyer le Pageable pour éviter les conflits avec les noms de colonnes SQL
+            // natives
             Pageable cleanPageable = createCleanPageable(pageable);
-            
+
             // Utiliser la méthode native SQL améliorée du repository
             Page<User> result = userRepository.findAllUsersWithFiltersImproved(roleString, active, emailVerified,
                     cleanSearch, searchPattern, cleanPageable);
@@ -167,21 +168,22 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * Nettoie le Pageable pour éviter les conflits avec les noms de colonnes SQL natives
+     * Nettoie le Pageable pour éviter les conflits avec les noms de colonnes SQL
+     * natives
      * Convertit les noms de propriétés camelCase vers snake_case
      */
     private Pageable createCleanPageable(Pageable pageable) {
         if (pageable == null || pageable.getSort().isUnsorted()) {
             // Si pas de tri, utiliser un tri par défaut par created_at DESC
-            return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), 
-                                Sort.by("created_at").descending());
+            return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                    Sort.by("created_at").descending());
         }
 
         // Mapper les noms de propriétés camelCase vers snake_case pour PostgreSQL
         List<Sort.Order> orders = new ArrayList<>();
         for (Sort.Order order : pageable.getSort()) {
             String property = order.getProperty();
-            
+
             // Conversion des noms de propriétés
             switch (property) {
                 case "createdAt":
@@ -213,7 +215,7 @@ public class UserService implements UserDetailsService {
                     // Conserver la propriété telle quelle
                     break;
             }
-            
+
             orders.add(new Sort.Order(order.getDirection(), property));
         }
 
