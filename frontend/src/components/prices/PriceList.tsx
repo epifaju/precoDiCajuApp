@@ -153,17 +153,27 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
                 {t('prices.description', 'Browse and search current cashew prices from across Guinea-Bissau')}
               </CardDescription>
             </div>
-            <Link to="/submit">
-              <Button
-                leftIcon={
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            <div className="flex items-center space-x-3">
+              <Link to="/map">
+                <Button variant="outline">
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   </svg>
-                }
-              >
-                {t('prices.submit', 'Submit Price')}
-              </Button>
-            </Link>
+                  {t('prices.mapView', 'Map View')}
+                </Button>
+              </Link>
+              <Link to="/submit">
+                <Button
+                  leftIcon={
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  }
+                >
+                  {t('prices.submit', 'Submit Price')}
+                </Button>
+              </Link>
+            </div>
           </div>
         </CardHeader>
 
