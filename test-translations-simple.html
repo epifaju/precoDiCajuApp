@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des Traductions</title>
+    <script src="https://unpkg.com/i18next@23.7.11/dist/umd/i18next.min.js"></script>
+    <script src="https://unpkg.com/react-i18next@13.5.0/dist/umd/react-i18next.min.js"></script>
+</head>
+<body>
+    <h1>Test des Traductions du Modal de Changement de Mot de Passe</h1>
+    
+    <div id="translations-test">
+        <h2>Clés de traduction testées :</h2>
+        <ul>
+            <li><strong>profile.actions.changePassword:</strong> <span id="changePassword-btn"></span></li>
+            <li><strong>profile.password.title:</strong> <span id="password-title"></span></li>
+            <li><strong>profile.password.change:</strong> <span id="password-change"></span></li>
+        </ul>
+        
+        <h2>Test de changement de langue :</h2>
+        <button onclick="changeLanguage('pt')">Português</button>
+        <button onclick="changeLanguage('fr')">Français</button>
+        <button onclick="changeLanguage('en')">English</button>
+        
+        <p>Langue actuelle : <span id="current-language"></span></p>
+    </div>
+
+    <script>
+        // Fichiers de traduction
+        const ptTranslations = {
+            "profile": {
+                "actions": {
+                    "changePassword": "Alterar palavra-passe"
+                },
+                "password": {
+                    "title": "Alterar Palavra-passe",
+                    "change": "Alterar Palavra-passe"
+                }
+            }
+        };
+
+        const frTranslations = {
+            "profile": {
+                "actions": {
+                    "changePassword": "Changer le mot de passe"
+                },
+                "password": {
+                    "title": "Changer le Mot de Passe",
+                    "change": "Changer le Mot de Passe"
+                }
+            }
+        };
+
+        const enTranslations = {
+            "profile": {
+                "actions": {
+                    "changePassword": "Change password"
+                },
+                "password": {
+                    "title": "Change Password",
+                    "change": "Change Password"
+                }
+            }
+        };
+
+        // Configuration i18next
+        i18next.init({
+            lng: 'pt',
+            fallbackLng: 'pt',
+            resources: {
+                pt: { translation: ptTranslations },
+                fr: { translation: frTranslations },
+                en: { translation: enTranslations }
+            }
+        });
+
+        // Fonction pour changer la langue
+        function changeLanguage(lang) {
+            i18next.changeLanguage(lang);
+            updateDisplay();
+        }
+
+        // Fonction pour mettre à jour l'affichage
+        function updateDisplay() {
+            document.getElementById('changePassword-btn').textContent = i18next.t('profile.actions.changePassword');
+            document.getElementById('password-title').textContent = i18next.t('profile.password.title');
+            document.getElementById('password-change').textContent = i18next.t('profile.password.change');
+            document.getElementById('current-language').textContent = i18next.language;
+        }
+
+        // Initialisation
+        updateDisplay();
+    </script>
+</body>
+</html>

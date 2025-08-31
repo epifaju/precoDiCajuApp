@@ -47,6 +47,9 @@ const AdminPage: React.FC = () => {
     search: ''
   });
 
+  // État pour afficher/masquer les filtres sur mobile
+  const [showFilters, setShowFilters] = useState(false);
+
   // Modal states
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -235,94 +238,176 @@ const AdminPage: React.FC = () => {
 
       {/* Statistiques */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-blue-600">{stats.totalUsers}</div>
-              <div className="text-sm text-gray-600">{t('admin.stats.total', 'Total')}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-green-600">{stats.activeUsers}</div>
-              <div className="text-sm text-gray-600">{t('admin.stats.active', 'Actifs')}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-purple-600">{stats.adminUsers}</div>
-              <div className="text-sm text-gray-600">{t('admin.stats.admins', 'Admins')}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-orange-600">{stats.moderatorUsers}</div>
-              <div className="text-sm text-gray-600">{t('admin.stats.moderators', 'Modérateurs')}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-gray-600">{stats.contributorUsers}</div>
-              <div className="text-sm text-gray-600">{t('admin.stats.contributors', 'Contributeurs')}</div>
-            </CardContent>
-          </Card>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 sm:p-5 shadow-sm mb-8">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+            <svg className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            {t('admin.stats.overview', 'Vue d\'ensemble des utilisateurs')}
+          </h3>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+            {/* Total Users */}
+            <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800/30">
+              <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                {stats.totalUsers}
+              </div>
+              <div className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium">
+                {t('admin.stats.total', 'Total')}
+              </div>
+            </div>
+
+            {/* Active Users */}
+            <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800/30">
+              <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mb-1">
+                {stats.activeUsers}
+              </div>
+              <div className="text-xs sm:text-sm text-green-700 dark:text-green-300 font-medium">
+                {t('admin.stats.active', 'Actifs')}
+              </div>
+            </div>
+
+            {/* Admin Users */}
+            <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800/30">
+              <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+                {stats.adminUsers}
+              </div>
+              <div className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium">
+                {t('admin.stats.admins', 'Admins')}
+              </div>
+            </div>
+
+            {/* Moderator Users */}
+            <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800/30">
+              <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mb-1">
+                {stats.moderatorUsers}
+              </div>
+              <div className="text-xs sm:text-sm text-orange-700 dark:text-orange-300 font-medium">
+                {t('admin.stats.moderators', 'Modérateurs')}
+              </div>
+            </div>
+
+            {/* Contributor Users */}
+            <div className="text-center p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg border border-gray-200 dark:border-gray-800/30">
+              <div className="text-2xl sm:text-3xl font-bold text-gray-600 dark:text-gray-400 mb-1">
+                {stats.contributorUsers}
+              </div>
+              <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">
+                {t('admin.stats.contributors', 'Contributeurs')}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Filtres et actions */}
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row gap-4 items-end">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('admin.filters.search', 'Recherche')}
-              </label>
+      {/* Filtres et actions - Section Pesquisar améliorée */}
+      <div className="space-y-4 mb-6">
+        {/* Mobile Filter Toggle */}
+        <div className="sm:hidden">
+          <Button
+            variant="outline"
+            onClick={() => setShowFilters(prev => !prev)}
+            className="w-full justify-between h-12 text-sm font-medium"
+          >
+            <span className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              {t('admin.filters.title', 'Filtres et Recherche')}
+            </span>
+            <svg 
+              className={`w-4 h-4 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </Button>
+        </div>
+
+        {/* Filtres et recherche - Design moderne et responsive */}
+        <div className={`space-y-4 p-4 sm:p-5 lg:p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 ${
+          showFilters ? 'block opacity-100' : 'hidden sm:block opacity-100'
+        }`}>
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white flex items-center">
+              <svg className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              {t('admin.filters.title', 'Filtres et Recherche')}
+            </h3>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setFilters({ role: '', active: '', emailVerified: '', search: '' })} 
+              className="text-xs px-3 py-2 h-8 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
+            >
+              {t('admin.filters.clearAll', 'Effacer tout')}
+            </Button>
+          </div>
+
+          {/* Mobile-first grid layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {/* Recherche - Full width on mobile, spans 2 on small screens */}
+            <div className="col-span-1 sm:col-span-2 lg:col-span-1">
               <Input
                 placeholder={t('admin.filters.searchPlaceholder', 'Email ou nom...')}
                 value={filters.search}
                 onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                leftIcon={
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                }
+                className="h-11"
               />
             </div>
-            
-                         <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 {t('admin.filters.role', 'Rôle')}
-               </label>
-               <Select
-                 value={filters.role}
-                 onChange={(e) => setFilters(prev => ({ ...prev, role: e.target.value }))}
-                 options={[
-                   { value: '', label: String(t('admin.filters.allRoles', 'Tous les rôles') || 'Tous les rôles') },
-                   { value: 'ADMIN', label: String(t('admin.roles.admin', 'Admin') || 'Admin') },
-                   { value: 'MODERATOR', label: String(t('admin.roles.moderator', 'Modérateur') || 'Modérateur') },
-                   { value: 'CONTRIBUTOR', label: String(t('admin.roles.contributor', 'Contributeur') || 'Contributeur') }
-                 ]}
-                 className="w-40"
-               />
-             </div>
 
-                         <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 {t('admin.filters.status', 'Statut')}
-               </label>
-               <Select
-                 value={filters.active}
-                 onChange={(e) => setFilters(prev => ({ ...prev, active: e.target.value }))}
-                 options={[
-                   { value: '', label: String(t('admin.filters.allStatus', 'Tous') || 'Tous') },
-                   { value: 'true', label: String(t('admin.filters.active', 'Actif') || 'Actif') },
-                   { value: 'false', label: String(t('admin.filters.inactive', 'Inactif') || 'Inactif') }
-                 ]}
-                 className="w-32"
-               />
-             </div>
+            {/* Rôle */}
+            <div className="col-span-1">
+              <Select
+                value={filters.role}
+                onChange={(e) => setFilters(prev => ({ ...prev, role: e.target.value }))}
+                options={[
+                  { value: '', label: String(t('admin.filters.allRoles', 'Tous les rôles')) },
+                  { value: 'ADMIN', label: String(t('admin.roles.admin', 'Admin')) },
+                  { value: 'MODERATOR', label: String(t('admin.roles.moderator', 'Modérateur')) },
+                  { value: 'CONTRIBUTOR', label: String(t('admin.roles.contributor', 'Contributeur')) }
+                ]}
+                className="h-11"
+              />
+            </div>
 
-            <Button onClick={() => setShowCreateModal(true)}>
+            {/* Statut */}
+            <div className="col-span-1">
+              <Select
+                value={filters.active}
+                onChange={(e) => setFilters(prev => ({ ...prev, active: e.target.value }))}
+                options={[
+                  { value: '', label: String(t('admin.filters.allStatus', 'Tous')) },
+                  { value: 'true', label: String(t('admin.filters.active', 'Actif')) },
+                  { value: 'false', label: String(t('admin.filters.inactive', 'Inactif')) }
+                ]}
+                className="h-11"
+              />
+            </div>
+          </div>
+
+          {/* Actions - Mobile optimized */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <Button 
+              onClick={() => setShowCreateModal(true)}
+              className="w-full sm:w-auto justify-center h-11 px-4 sm:px-6 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
+            >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
               {t('admin.actions.create', 'Créer un utilisateur')}
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Liste des utilisateurs */}
       <Card>

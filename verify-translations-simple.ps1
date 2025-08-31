@@ -1,4 +1,4 @@
-# Vérification des clés de traduction pour le modal de changement de mot de passe
+# Vérification simple des clés de traduction
 Write-Host "=== Vérification des Clés de Traduction ===" -ForegroundColor Cyan
 Write-Host ""
 
@@ -49,17 +49,17 @@ foreach ($key in $requiredKeys) {
         $enValue = $enValue.$part
     }
     
-    $ptStatus = if ($ptValue) { "✓" } else { "✗" }
-    $frStatus = if ($frValue) { "✓" } else { "✗" }
-    $enStatus = if ($enValue) { "✓" } else { "✗" }
+    $ptStatus = if ($ptValue) { "OK" } else { "MISSING" }
+    $frStatus = if ($frValue) { "OK" } else { "MISSING" }
+    $enStatus = if ($enValue) { "OK" } else { "MISSING" }
     
-    $overallStatus = if ($ptValue -and $frValue -and $enValue) { "✓" } else { "✗" }
+    $overallStatus = if ($ptValue -and $frValue -and $enValue) { "OK" } else { "MISSING" }
     
-    if ($overallStatus -eq "✗") {
+    if ($overallStatus -eq "MISSING") {
         $allKeysPresent = $false
     }
     
-    Write-Host "$overallStatus $key" -ForegroundColor $(if ($overallStatus -eq "✓") { "Green" } else { "Red" })
+    Write-Host "$overallStatus $key" -ForegroundColor $(if ($overallStatus -eq "OK") { "Green" } else { "Red" })
     Write-Host "  PT: $ptStatus $(if ($ptValue) { $ptValue } else { 'MANQUANT' })" -ForegroundColor $(if ($ptValue) { "Gray" } else { "Red" })
     Write-Host "  FR: $frStatus $(if ($frValue) { $frValue } else { 'MANQUANT' })" -ForegroundColor $(if ($frValue) { "Gray" } else { "Red" })
     Write-Host "  EN: $enStatus $(if ($enValue) { $enValue } else { 'MANQUANT' })" -ForegroundColor $(if ($enValue) { "Gray" } else { "Red" })
@@ -68,9 +68,9 @@ foreach ($key in $requiredKeys) {
 
 Write-Host "=== Résumé ===" -ForegroundColor Cyan
 if ($allKeysPresent) {
-    Write-Host "✓ Toutes les clés de traduction sont présentes !" -ForegroundColor Green
+    Write-Host "OK - Toutes les clés de traduction sont présentes !" -ForegroundColor Green
 } else {
-    Write-Host "✗ Certaines clés de traduction sont manquantes !" -ForegroundColor Red
+    Write-Host "MISSING - Certaines clés de traduction sont manquantes !" -ForegroundColor Red
     Write-Host ""
     Write-Host "Actions recommandées :" -ForegroundColor Yellow
     Write-Host "1. Vérifiez que toutes les clés manquantes sont ajoutées" -ForegroundColor White

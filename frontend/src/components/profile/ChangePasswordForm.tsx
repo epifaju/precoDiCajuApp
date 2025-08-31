@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Eye, EyeOff, Lock } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
@@ -9,7 +9,7 @@ interface ChangePasswordFormProps {
 }
 
 export default function ChangePasswordForm({ onClose, onSuccess }: ChangePasswordFormProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   // const { user } = useAuthStore(); // Not used in this component
   
   const [formData, setFormData] = useState({
@@ -27,6 +27,21 @@ export default function ChangePasswordForm({ onClose, onSuccess }: ChangePasswor
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  
+  // Force re-render when language changes
+  const [, forceUpdate] = useState({});
+  
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      forceUpdate({});
+    };
+    
+    i18n.on('languageChanged', handleLanguageChange);
+    
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, [i18n]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
