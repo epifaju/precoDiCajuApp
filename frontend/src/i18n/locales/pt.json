@@ -440,6 +440,41 @@
     "notesHelp": "Condições de mercado, observações de qualidade, etc.",
     "cancel": "Cancelar"
   },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Gerir informações da conta",
+    "info": {
+      "fullName": "Nome completo",
+      "email": "Email",
+      "phone": "Telefone",
+      "role": "Função",
+      "reputation": "Reputação",
+      "joinDate": "Membro desde",
+      "lastActive": "Último acesso"
+    },
+    "stats": {
+      "pricesSubmitted": "Preços submetidos",
+      "verified": "Verificados",
+      "pending": "Pendentes"
+    },
+    "preferences": {
+      "title": "Preferências",
+      "language": "Idioma",
+      "notifications": "Notificações",
+      "regions": "Regiões de interesse",
+      "theme": "Tema",
+      "themes": {
+        "light": "Claro",
+        "dark": "Escuro",
+        "system": "Sistema"
+      }
+    },
+    "actions": {
+      "edit": "Editar perfil",
+      "changePassword": "Alterar palavra-passe",
+      "logout": "Sair"
+    }
+  },
   "admin": {
     "title": "Administração de Usuários",
     "description": "Gerencie os usuários da plataforma",

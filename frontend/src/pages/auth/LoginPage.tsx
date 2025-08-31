@@ -41,8 +41,8 @@ const LoginPage: React.FC = () => {
             </h3>
             <div className="text-xs text-blue-700 dark:text-blue-400 space-y-1">
               <p><strong>Admin:</strong> admin@precaju.gw / password123</p>
-              <p><strong>Producer:</strong> produtor@test.gw / password123</p>
-              <p><strong>Trader:</strong> comerciante@test.gw / password123</p>
+              <p><strong>Producer:</strong> produtor@test.gw / produtor123</p>
+              <p><strong>Trader:</strong> comerciante@test.gw / comerciante123</p>
             </div>
           </div>
         </div>

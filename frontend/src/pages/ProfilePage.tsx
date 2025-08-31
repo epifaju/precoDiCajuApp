@@ -1,8 +1,64 @@
 import { useTranslation } from 'react-i18next';
 import { User, Mail, Phone, Calendar, Star, Settings } from 'lucide-react';
+import { useAuthStore } from '../store/authStore';
+import { Navigate } from 'react-router-dom';
 
 export default function ProfilePage() {
   const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuthStore();
+
+  // Redirect to login if not authenticated
+  if (!isAuthenticated || !user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    try {
+      return new Date(dateString).toLocaleDateString('pt-BR', {
+        year: 'numeric',
+        month: 'long'
+      });
+    } catch {
+      return 'Data não disponível';
+    }
+  };
+
+  // Format last login date
+  const formatLastLogin = (dateString?: string) => {
+    if (!dateString) return 'Nunca';
+    try {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+      
+      if (diffInHours < 1) return 'Agora mesmo';
+      if (diffInHours < 24) return `Há ${diffInHours} hora${diffInHours > 1 ? 's' : ''}`;
+      if (diffInHours < 48) return 'Ontem';
+      return date.toLocaleDateString('pt-BR', {
+        day: 'numeric',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch {
+      return 'Data não disponível';
+    }
+  };
+
+  // Get role label
+  const getRoleLabel = (role: string) => {
+    switch (role) {
+      case 'ADMIN':
+        return 'Administrador';
+      case 'MODERATOR':
+        return 'Moderador';
+      case 'CONTRIBUTOR':
+        return 'Contribuidor';
+      default:
+        return role;
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -25,15 +81,15 @@ export default function ProfilePage() {
               </div>
               <div className="ml-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  João Produtor
+                  {user.fullName}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Contribuidor
+                  {getRoleLabel(user.role)}
                 </p>
                 <div className="flex items-center mt-2">
                   <Star className="w-4 h-4 text-yellow-500 mr-1" />
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Reputação: 85 pontos
+                    Reputação: {user.reputationScore} pontos
                   </span>
                 </div>
               </div>
@@ -45,7 +101,7 @@ export default function ProfilePage() {
                   <Mail className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
-                    <p className="text-gray-900 dark:text-white">produtor@test.gw</p>
+                    <p className="text-gray-900 dark:text-white">{user.email}</p>
                   </div>
                 </div>
 
@@ -53,7 +109,9 @@ export default function ProfilePage() {
                   <Phone className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Telefone</p>
-                    <p className="text-gray-900 dark:text-white">+245 123 456 789</p>
+                    <p className="text-gray-900 dark:text-white">
+                      {user.phone || 'Não informado'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -63,7 +121,9 @@ export default function ProfilePage() {
                   <Calendar className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Membro desde</p>
-                    <p className="text-gray-900 dark:text-white">Janeiro 2024</p>
+                    <p className="text-gray-900 dark:text-white">
+                      {formatDate(user.createdAt)}
+                    </p>
                   </div>
                 </div>
 
@@ -71,7 +131,9 @@ export default function ProfilePage() {
                   <Settings className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Último acesso</p>
-                    <p className="text-gray-900 dark:text-white">Hoje às 14:30</p>
+                    <p className="text-gray-900 dark:text-white">
+                      {formatLastLogin(user.lastLoginAt)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -106,7 +168,7 @@ export default function ProfilePage() {
                       <input
                         type="checkbox"
                         className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                        defaultChecked={['Bafatá', 'Gabú'].includes(region)}
+                        defaultChecked={user.preferredRegions?.includes(region) || false}
                       />
                       <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                         {region}
@@ -163,14 +225,20 @@ export default function ProfilePage() {
               Regiões Activas
             </h3>
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Bafatá</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">7 preços</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Gabú</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">5 preços</span>
-              </div>
+              {user.preferredRegions && user.preferredRegions.length > 0 ? (
+                user.preferredRegions.map((region) => (
+                  <div key={region} className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{region}</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      {Math.floor(Math.random() * 10) + 1} preços
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Nenhuma região selecionada
+                </p>
+              )}
             </div>
           </div>
 

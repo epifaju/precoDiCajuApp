@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
+import { Link } from 'react-router-dom';
 import { ChevronDown, User, LogOut, Settings, Shield } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -142,14 +143,14 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
           {/* Menu Items */}
           <div className="py-1">
             {/* Profile Link */}
-            <a
-              href="/profile"
+            <Link
+              to="/profile"
               className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <User className="w-4 h-4 mr-3" />
               {t('user.profile', 'Mon profil')}
-            </a>
+            </Link>
 
             {/* Settings Link */}
             <a
