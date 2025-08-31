@@ -234,6 +234,10 @@
     "recordedOn": "Enregistré le",
     "by": "par",
     "errorLoading": "Échec du chargement des prix. Veuillez réessayer.",
+    "quickOverview": "Aperçu Rapide",
+    "avgPrice": "Prix Moyen",
+    "regions": "Régions",
+    "qualities": "Degrés de Qualité",
     "filterOptions": {
       "region": "Sélectionner une région",
       "quality": "Sélectionner une qualité",
@@ -528,9 +532,11 @@
       "active": "Actifs",
       "admins": "Admins",
       "moderators": "Modérateurs",
-      "contributors": "Contributeurs"
+      "contributors": "Contributeurs",
+      "overview": "Vue d'ensemble des utilisateurs"
     },
     "filters": {
+      "title": "Filtres et Recherche",
       "search": "Recherche",
       "searchPlaceholder": "Email ou nom...",
       "role": "Rôle",
@@ -538,7 +544,8 @@
       "status": "Statut",
       "allStatus": "Tous",
       "active": "Actif",
-      "inactive": "Inactif"
+      "inactive": "Inactif",
+      "clearAll": "Effacer tout"
     },
     "roles": {
       "admin": "Admin",

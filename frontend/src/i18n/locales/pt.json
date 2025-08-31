@@ -319,6 +319,10 @@
     "createSuccess": "Preço criado com sucesso",
     "createError": "Erro ao criar preço",
     "mapView": "Vista do Mapa",
+    "quickOverview": "Visão Geral Rápida",
+    "avgPrice": "Preço Médio",
+    "regions": "Regiões",
+    "qualities": "Graus de Qualidade",
     "form": {
       "region": "Região",
       "quality": "Qualidade",
@@ -389,6 +393,7 @@
     "region": "Região",
     "quality": "Qualidade",
     "verified": "Verificado",
+    "unverified": "Não Verificado",
     "openInMaps": "Abrir localização nos mapas",
     "selectRegion": "Selecionar Região",
     "selectQuality": "Selecionar Qualidade",
@@ -527,9 +532,11 @@
       "active": "Ativos",
       "admins": "Administradores",
       "moderators": "Moderadores",
-      "contributors": "Contribuidores"
+      "contributors": "Contribuidores",
+      "overview": "Visão geral dos usuários"
     },
     "filters": {
+      "title": "Filtros e Pesquisa",
       "search": "Pesquisar",
       "searchPlaceholder": "Email ou nome...",
       "role": "Função",
@@ -537,7 +544,8 @@
       "status": "Status",
       "allStatus": "Todos",
       "active": "Ativo",
-      "inactive": "Inativo"
+      "inactive": "Inativo",
+      "clearAll": "Limpar tudo"
     },
     "roles": {
       "admin": "Administrador",

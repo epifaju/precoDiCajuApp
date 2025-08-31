@@ -231,6 +231,10 @@
     "recordedOn": "Recorded on",
     "by": "by",
     "errorLoading": "Failed to load prices. Please try again.",
+    "quickOverview": "Quick Overview",
+    "avgPrice": "Avg Price",
+    "regions": "Regions",
+    "qualities": "Quality Grades",
     "filterOptions": {
       "region": "Select region",
       "quality": "Select quality",
@@ -514,6 +518,92 @@
     "notesPlaceholder": "Any additional information about this price...",
     "notesHelp": "Market conditions, quality observations, etc.",
     "cancel": "Cancel"
+  },
+  "admin": {
+    "title": "User Administration",
+    "description": "Manage platform users",
+    "accessDenied": "Access denied",
+    "redirecting": "Redirecting...",
+    "stats": {
+      "total": "Total",
+      "active": "Active",
+      "admins": "Admins",
+      "moderators": "Moderators",
+      "contributors": "Contributors",
+      "overview": "User Overview"
+    },
+    "filters": {
+      "title": "Filters and Search",
+      "search": "Search",
+      "searchPlaceholder": "Email or name...",
+      "role": "Role",
+      "allRoles": "All roles",
+      "status": "Status",
+      "allStatus": "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "clearAll": "Clear all"
+    },
+    "roles": {
+      "admin": "Admin",
+      "moderator": "Moderator",
+      "contributor": "Contributor"
+    },
+    "users": {
+      "title": "Users",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "reputation": "Reputation",
+      "verified": "Verified",
+      "notVerified": "Not verified",
+      "active": "Active",
+      "inactive": "Inactive",
+      "actions": "Actions"
+    },
+    "actions": {
+      "create": "Create user",
+      "edit": "Edit",
+      "password": "Password",
+      "deactivate": "Deactivate",
+      "activate": "Activate"
+    },
+    "create": {
+      "title": "Create user",
+      "email": "Email",
+      "password": "Password",
+      "fullName": "Full name",
+      "phone": "Phone",
+      "role": "Role",
+      "emailVerified": "Email verified",
+      "active": "Active",
+      "submit": "Create"
+    },
+    "edit": {
+      "title": "Edit",
+      "fullName": "Full name",
+      "phone": "Phone",
+      "role": "Role",
+      "reputationScore": "Reputation score",
+      "emailVerified": "Email verified",
+      "active": "Active",
+      "submit": "Update"
+    },
+    "password": {
+      "title": "Change password for",
+      "newPassword": "New password",
+      "submit": "Change"
+    },
+    "messages": {
+      "userCreated": "User created successfully",
+      "userUpdated": "User updated successfully",
+      "passwordChanged": "Password changed successfully",
+      "userActivated": "User activated successfully",
+      "userDeactivated": "User deactivated successfully",
+      "accessDenied": "Access not authorized. Redirecting...",
+      "redirecting": "Redirecting..."
+    }
   },
   "footer": {
     "brand": {
