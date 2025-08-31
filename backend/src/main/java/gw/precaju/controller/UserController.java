@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.UUID;
+import gw.precaju.dto.request.ChangePasswordRequest;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -84,6 +85,33 @@ public class UserController {
 
         } catch (Exception e) {
             logger.error("Error updating current user", e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/me/change-password")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
+    public ResponseEntity<Void> changeCurrentUserPassword(@Valid @RequestBody ChangePasswordRequest request) {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Verify current password
+            if (!authService.verifyPassword(request.getCurrentPassword(), currentUser.getPasswordHash())) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            // Update password
+            currentUser.setPasswordHash(authService.encodePassword(request.getNewPassword()));
+            userService.save(currentUser);
+
+            logger.info("Password changed successfully for user: {}", currentUser.getEmail());
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            logger.error("Error changing password for current user", e);
             return ResponseEntity.badRequest().build();
         }
     }

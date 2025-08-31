@@ -49,6 +49,27 @@
       "changePassword": "Changer le mot de passe",
       "logout": "Se déconnecter"
     },
+    "password": {
+      "title": "Changer le Mot de Passe",
+      "current": "Mot de Passe Actuel",
+      "currentPlaceholder": "Entrez votre mot de passe actuel",
+      "new": "Nouveau Mot de Passe",
+      "newPlaceholder": "Entrez votre nouveau mot de passe",
+      "confirm": "Confirmer le Nouveau Mot de Passe",
+      "confirmPlaceholder": "Confirmez votre nouveau mot de passe",
+      "requirements": "Doit contenir au moins 6 caractères",
+      "change": "Changer le Mot de Passe",
+      "success": "Mot de passe changé avec succès !",
+      "errors": {
+        "currentRequired": "Le mot de passe actuel est requis",
+        "newRequired": "Le nouveau mot de passe est requis",
+        "tooShort": "Le nouveau mot de passe doit contenir au moins 6 caractères",
+        "mismatch": "Les nouveaux mots de passe ne correspondent pas",
+        "samePassword": "Le nouveau mot de passe doit être différent de l'actuel",
+        "general": "Échec du changement de mot de passe. Veuillez réessayer.",
+        "network": "Erreur de réseau. Vérifiez votre connexion et réessayez."
+      }
+    },
     "form": {
       "success": {
         "update": "Profil mis à jour avec succès !"
@@ -85,7 +106,8 @@
     "of": "sur",
     "light": "Clair",
     "dark": "Sombre",
-    "system": "Système"
+    "system": "Système",
+    "saving": "Enregistrement..."
   },
   "dashboard": {
     "goodMorning": "Bonjour",

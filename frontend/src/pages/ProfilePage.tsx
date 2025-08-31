@@ -4,11 +4,13 @@ import { useAuthStore } from '../store/authStore';
 import { Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { EditProfileFormWorking } from '../components/profile/EditProfileFormWorking';
+import ChangePasswordForm from '../components/profile/ChangePasswordForm';
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, logout } = useAuthStore();
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isChangePasswordFormOpen, setIsChangePasswordFormOpen] = useState(false);
   
   // État pour les préférences
   const [preferences, setPreferences] = useState({
@@ -364,10 +366,16 @@ export default function ProfilePage() {
               >
                 {t('profile.actions.editProfile')}
               </button>
-                              <button className="btn btn-outline w-full text-sm">
-                  {t('profile.actions.changePassword')}
-                </button>
-                <button className="btn btn-outline w-full text-sm text-red-600 border-red-200 hover:bg-red-50">
+              <button 
+                className="btn btn-outline w-full text-sm"
+                onClick={() => setIsChangePasswordFormOpen(true)}
+              >
+                {t('profile.actions.changePassword')}
+              </button>
+                <button 
+                  className="btn btn-outline w-full text-sm text-red-600 border-red-200 hover:bg-red-50"
+                  onClick={() => logout()}
+                >
                   {t('profile.actions.logout')}
                 </button>
             </div>
@@ -382,6 +390,17 @@ export default function ProfilePage() {
           onSuccess={() => {
             setIsEditFormOpen(false);
             // Optionally refresh user data or show success message
+          }}
+        />
+      )}
+
+      {/* Change Password Form Modal */}
+      {isChangePasswordFormOpen && (
+        <ChangePasswordForm
+          onClose={() => setIsChangePasswordFormOpen(false)}
+          onSuccess={() => {
+            setIsChangePasswordFormOpen(false);
+            // Optionally show success message
           }}
         />
       )}

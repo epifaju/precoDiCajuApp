@@ -39,11 +39,11 @@ public class AuthService {
     private final UserMapper userMapper;
 
     public AuthService(AuthenticationManager authenticationManager,
-                      UserRepository userRepository,
-                      RefreshTokenRepository refreshTokenRepository,
-                      PasswordEncoder passwordEncoder,
-                      JwtTokenProvider tokenProvider,
-                      UserMapper userMapper) {
+            UserRepository userRepository,
+            RefreshTokenRepository refreshTokenRepository,
+            PasswordEncoder passwordEncoder,
+            JwtTokenProvider tokenProvider,
+            UserMapper userMapper) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -57,17 +57,15 @@ public class AuthService {
 
         // Authenticate user
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-            )
-        );
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Get user
         User user = userRepository.findByEmailAndActiveTrue(loginRequest.getEmail())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Update last login
         user.updateLastLogin();
@@ -88,11 +86,10 @@ public class AuthService {
         logger.info("User {} logged in successfully", user.getEmail());
 
         return new AuthResponse(
-            accessToken,
-            refreshToken,
-            tokenProvider.getAccessTokenExpirationMs(),
-            userDTO
-        );
+                accessToken,
+                refreshToken,
+                tokenProvider.getAccessTokenExpirationMs(),
+                userDTO);
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
@@ -117,9 +114,8 @@ public class AuthService {
 
         // Auto-login after registration
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-            user.getEmail(),
-            registerRequest.getPassword()
-        );
+                user.getEmail(),
+                registerRequest.getPassword());
 
         // Generate tokens
         String accessToken = tokenProvider.generateAccessToken(user.getEmail());
@@ -133,18 +129,17 @@ public class AuthService {
         logger.info("User {} registered successfully", user.getEmail());
 
         return new AuthResponse(
-            accessToken,
-            refreshToken,
-            tokenProvider.getAccessTokenExpirationMs(),
-            userDTO
-        );
+                accessToken,
+                refreshToken,
+                tokenProvider.getAccessTokenExpirationMs(),
+                userDTO);
     }
 
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         String refreshTokenValue = request.getRefreshToken();
 
         RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenValue)
-            .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
 
         if (refreshToken.isExpired()) {
             refreshTokenRepository.delete(refreshToken);
@@ -152,13 +147,13 @@ public class AuthService {
         }
 
         User user = refreshToken.getUser();
-        
+
         // Generate new access token
         String newAccessToken = tokenProvider.generateAccessToken(user.getEmail());
-        
+
         // Optionally generate new refresh token
         String newRefreshToken = tokenProvider.generateRefreshToken(user.getEmail());
-        
+
         // Delete old refresh token and save new one
         refreshTokenRepository.delete(refreshToken);
         saveRefreshToken(user, newRefreshToken);
@@ -168,17 +163,16 @@ public class AuthService {
         logger.info("Token refreshed for user: {}", user.getEmail());
 
         return new AuthResponse(
-            newAccessToken,
-            newRefreshToken,
-            tokenProvider.getAccessTokenExpirationMs(),
-            userDTO
-        );
+                newAccessToken,
+                newRefreshToken,
+                tokenProvider.getAccessTokenExpirationMs(),
+                userDTO);
     }
 
     public void logout(String refreshTokenValue) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenValue)
-            .orElse(null);
-        
+                .orElse(null);
+
         if (refreshToken != null) {
             refreshTokenRepository.delete(refreshToken);
             logger.info("User {} logged out", refreshToken.getUser().getEmail());
@@ -187,7 +181,7 @@ public class AuthService {
 
     private void saveRefreshToken(User user, String tokenValue) {
         Instant expiryDate = Instant.now().plusMillis(tokenProvider.getRefreshTokenExpirationMs());
-        
+
         RefreshToken refreshToken = new RefreshToken(tokenValue, user, expiryDate);
         refreshTokenRepository.save(refreshToken);
     }
@@ -195,7 +189,7 @@ public class AuthService {
     private void cleanupOldTokensForUser(User user) {
         int maxTokensPerUser = 5; // Allow max 5 active sessions per user
         int currentTokenCount = refreshTokenRepository.countByUser(user);
-        
+
         if (currentTokenCount >= maxTokensPerUser) {
             refreshTokenRepository.deleteOldestTokensForUser(user, maxTokensPerUser - 1);
         }
@@ -217,7 +211,18 @@ public class AuthService {
         refreshTokenRepository.deleteExpiredTokens(Instant.now());
         logger.info("Expired refresh tokens cleaned up");
     }
+
+    /**
+     * Verify if the provided password matches the stored hash
+     */
+    public boolean verifyPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    /**
+     * Encode a raw password to hash
+     */
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
 }
-
-
-

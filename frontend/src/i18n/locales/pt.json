@@ -68,6 +68,27 @@
       "changePassword": "Alterar palavra-passe",
       "logout": "Sair da conta"
     },
+    "password": {
+      "title": "Alterar Palavra-passe",
+      "current": "Palavra-passe Atual",
+      "currentPlaceholder": "Digite sua palavra-passe atual",
+      "new": "Nova Palavra-passe",
+      "newPlaceholder": "Digite sua nova palavra-passe",
+      "confirm": "Confirmar Nova Palavra-passe",
+      "confirmPlaceholder": "Confirme sua nova palavra-passe",
+      "requirements": "Deve ter pelo menos 6 caracteres",
+      "change": "Alterar Palavra-passe",
+      "success": "Palavra-passe alterada com sucesso!",
+      "errors": {
+        "currentRequired": "Palavra-passe atual é obrigatória",
+        "newRequired": "Nova palavra-passe é obrigatória",
+        "tooShort": "Nova palavra-passe deve ter pelo menos 6 caracteres",
+        "mismatch": "As novas palavras-passe não coincidem",
+        "samePassword": "Nova palavra-passe deve ser diferente da atual",
+        "general": "Falha ao alterar palavra-passe. Tente novamente.",
+        "network": "Erro de rede. Verifique sua conexão e tente novamente."
+      }
+    },
     "info": {
       "fullName": "Nome completo",
       "email": "Email",
@@ -121,7 +142,8 @@
     "of": "de",
     "light": "Claro",
     "dark": "Escuro",
-    "system": "Sistema"
+    "system": "Sistema",
+    "saving": "Salvando..."
   },
   "dashboard": {
     "goodMorning": "Bom dia",

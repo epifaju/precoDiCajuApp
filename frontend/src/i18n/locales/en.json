@@ -48,6 +48,27 @@
       "changePassword": "Change password",
       "logout": "Logout"
     },
+    "password": {
+      "title": "Change Password",
+      "current": "Current Password",
+      "currentPlaceholder": "Enter your current password",
+      "new": "New Password",
+      "newPlaceholder": "Enter your new password",
+      "confirm": "Confirm New Password",
+      "confirmPlaceholder": "Confirm your new password",
+      "requirements": "Must be at least 6 characters long",
+      "change": "Change Password",
+      "success": "Password changed successfully!",
+      "errors": {
+        "currentRequired": "Current password is required",
+        "newRequired": "New password is required",
+        "tooShort": "New password must be at least 6 characters long",
+        "mismatch": "New passwords do not match",
+        "samePassword": "New password must be different from current password",
+        "general": "Failed to change password. Please try again.",
+        "network": "Network error. Please check your connection and try again."
+      }
+    },
     "form": {
       "success": {
         "update": "Profile updated successfully!"
@@ -82,7 +103,8 @@
     "no": "No",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "saving": "Saving..."
   },
   "dashboard": {
     "goodMorning": "Good morning",
