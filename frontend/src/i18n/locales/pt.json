@@ -46,6 +46,12 @@
       "preferredRegions": {
         "label": "Regiões Preferidas",
         "help": "Selecione as regiões onde você atua ou tem interesse"
+      },
+      "success": {
+        "update": "Perfil atualizado com sucesso!"
+      },
+      "error": {
+        "update": "Erro ao atualizar o perfil. Tente novamente."
       }
     },
     "preferences": {
@@ -61,6 +67,15 @@
       "editProfile": "Editar perfil",
       "changePassword": "Alterar palavra-passe",
       "logout": "Sair da conta"
+    },
+    "info": {
+      "fullName": "Nome completo",
+      "email": "Email",
+      "phone": "Telefone",
+      "role": "Função",
+      "reputation": "Reputação",
+      "joinDate": "Membro desde",
+      "lastActive": "Último acesso"
     }
   },
   "logout": {
@@ -481,62 +496,6 @@
     "notesPlaceholder": "Qualquer informação adicional sobre este preço...",
     "notesHelp": "Condições de mercado, observações de qualidade, etc.",
     "cancel": "Cancelar"
-  },
-  "profile": {
-    "title": "Meu Perfil",
-    "subtitle": "Gerencie suas informações pessoais e preferências",
-    "edit": {
-      "title": "Editar Perfil"
-    },
-    "form": {
-      "fullName": {
-        "label": "Nome Completo",
-        "placeholder": "Seu nome completo",
-        "min": "Nome deve ter pelo menos 2 caracteres",
-        "max": "Nome não pode exceder 100 caracteres"
-      },
-      "phone": {
-        "label": "Telefone",
-        "placeholder": "+245 12345678",
-        "help": "Número de telefone opcional (8-15 dígitos)",
-        "invalid": "Número de telefone deve ser válido"
-      },
-      "preferredRegions": {
-        "label": "Regiões Preferidas",
-        "help": "Selecione as regiões onde você atua ou tem interesse"
-      }
-    },
-    "preferences": {
-      "title": "Preferências",
-      "language": "Idioma",
-      "regions": "Regiões de Interesse",
-      "theme": "Tema"
-    },
-    "stats": {
-      "pricesSubmitted": "Preços Submetidos"
-    },
-    "actions": {
-      "editProfile": "Editar perfil",
-      "changePassword": "Alterar palavra-passe",
-      "logout": "Sair da conta"
-    },
-    "form": {
-      "success": {
-        "update": "Perfil atualizado com sucesso!"
-      },
-      "error": {
-        "update": "Erro ao atualizar o perfil. Tente novamente."
-      }
-    },
-    "info": {
-      "fullName": "Nome completo",
-      "email": "Email",
-      "phone": "Telefone",
-      "role": "Função",
-      "reputation": "Reputação",
-      "joinDate": "Membro desde",
-      "lastActive": "Último acesso"
-    }
   },
   "admin": {
     "title": "Administração de Usuários",
