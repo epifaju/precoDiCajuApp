@@ -61,3 +61,4 @@ Write-Host "🎯 Demo accounts (if you prefer not to register):" -ForegroundColo
 Write-Host "   Email: admin@precaju.gw | Password: admin123" -ForegroundColor White
 
 
+

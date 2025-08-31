@@ -240,6 +240,7 @@ interface PriceFilters {
   quality?: string;
   from?: string;
   to?: string;
+  verified?: string;
   page?: number;
   size?: number;
   sortBy?: string;
