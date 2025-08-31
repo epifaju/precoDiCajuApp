@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Footer Amélioré - Preço di Cajú</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        accent: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                            950: '#500724',
+                        },
+                    },
+                    animation: {
+                        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Header simulé -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 mb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">PC</span>
+                    </div>
+                    <span class="ml-3 text-xl font-bold text-gray-900 dark:text-white">Preço di Cajú</span>
+                </div>
+                <button id="theme-toggle" class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal simulé -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Test du Footer Amélioré</h1>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
+                Cette page permet de tester le Footer amélioré avec sa nouvelle responsivité et son design harmonisé.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                    <h3 class="font-semibold text-primary-800 dark:text-primary-200">Responsive Design</h3>
+                    <p class="text-sm text-primary-700 dark:text-primary-300">Adaptatif mobile, tablette et desktop</p>
+                </div>
+                <div class="bg-accent-50 dark:bg-accent-900/20 p-4 rounded-lg">
+                    <h3 class="font-semibold text-accent-800 dark:text-accent-200">Style Harmonisé</h3>
+                    <p class="text-sm text-accent-700 dark:text-accent-300">Cohérent avec le reste de l'application</p>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-200">Icônes & Animations</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">Expérience utilisateur améliorée</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Amélioré -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <!-- Main Footer Content -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+                <!-- Brand Section - Full width on mobile, spans 2 columns on larger screens -->
+                <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-lg">PC</span>
+                        </div>
+                        <span class="ml-4 text-xl font-bold text-gray-900 dark:text-white">
+                            Preço di Cajú
+                        </span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-base leading-relaxed mb-6 max-w-sm">
+                        Plateforme de suivi des prix de la noix de cajou en Guinée-Bissau, offrant des données fiables et à jour pour les producteurs et commerçants.
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 rounded-lg px-4 py-3">
+                        <span class="w-4 h-4 mr-3 text-primary-600 dark:text-primary-400 flex-shrink-0">📍</span>
+                        <span class="font-medium">Guinée-Bissau, Afrique de l'Ouest</span>
+                    </div>
+                </div>
+
+                <!-- Quick Links Section -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                        <span class="w-5 h-5 mr-3 text-primary-600 dark:text-primary-400">🔗</span>
+                        Liens Rapides
+                    </h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group">
+                                <span class="w-2 h-2 bg-primary-400 rounded-full mr-3 group-hover:bg-primary-600 transition-colors duration-200"></span>
+                                Accueil
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group">
+                                <span class="w-2 h-2 bg-primary-400 rounded-full mr-3 group-hover:bg-primary-600 transition-colors duration-200"></span>
+                                Prix
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group">
+                                <span class="w-2 h-2 bg-primary-400 rounded-full mr-3 group-hover:bg-primary-600 transition-colors duration-200"></span>
+                                Soumettre
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Support Section -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                        <span class="w-5 h-5 mr-3 text-primary-600 dark:text-primary-400">❓</span>
+                        Support
+                    </h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group">
+                                <span class="w-2 h-2 bg-accent-400 rounded-full mr-3 group-hover:bg-accent-600 transition-colors duration-200"></span>
+                                Comment utiliser
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group">
+                                <span class="w-2 h-2 bg-accent-400 rounded-full mr-3 group-hover:bg-accent-600 transition-colors duration-200"></span>
+                                FAQ
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group">
+                                <span class="w-2 h-2 bg-accent-400 rounded-full mr-3 group-hover:bg-accent-600 transition-colors duration-200"></span>
+                                Contact
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group">
+                                <span class="w-2 h-2 bg-accent-400 rounded-full mr-3 group-hover:bg-accent-600 transition-colors duration-200"></span>
+                                Confidentialité
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Legal Section -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                        <span class="w-5 h-5 mr-3 text-primary-600 dark:text-primary-400">🛡️</span>
+                        Légal & Contact
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center text-gray-600 dark:text-gray-400">
+                            <span class="w-4 h-4 mr-3 text-gray-400 dark:text-gray-500 flex-shrink-0">✉️</span>
+                            <span class="text-sm">contact@precodicaju.gw</span>
+                        </div>
+                        <div class="flex items-center text-gray-600 dark:text-gray-400">
+                            <span class="w-4 h-4 mr-3 text-gray-400 dark:text-gray-500 flex-shrink-0">📞</span>
+                            <span class="text-sm">+245 XXX XXX XXX</span>
+                        </div>
+                        <div class="pt-2">
+                            <a href="#" class="inline-flex items-center text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200">
+                                <span class="w-4 h-4 mr-2">📄</span>
+                                Conditions d'utilisation
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
+                    <!-- Copyright Section -->
+                    <div class="flex flex-col sm:flex-row items-center text-center sm:text-left space-y-2 sm:space-y-0 sm:space-x-4">
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <span>© 2024 Preço di Cajú. Tous droits réservés.</span>
+                            <span class="w-4 h-4 mx-2 text-red-500 animate-pulse">❤️</span>
+                            <span class="font-medium">Pour la Guinée-Bissau</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Version & Language Info -->
+                    <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-500 dark:text-gray-400">
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 mr-2 text-gray-400">🌐</span>
+                            <span>Version 1.0.0</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                            <span class="text-xs font-medium text-green-600 dark:text-green-400">
+                                En ligne
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle du thème
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            themeToggle.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
+        });
+
+        // Test de responsivité
+        function updateResponsiveness() {
+            const width = window.innerWidth;
+            const footer = document.querySelector('footer');
+            const info = document.createElement('div');
+            info.className = 'fixed top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded text-sm z-50';
+            
+            if (width < 640) {
+                info.textContent = 'Mobile (1 colonne)';
+            } else if (width < 1024) {
+                info.textContent = 'Tablette (2 colonnes)';
+            } else {
+                info.textContent = 'Desktop (4 colonnes)';
+            }
+            
+            // Supprimer l'ancien indicateur s'il existe
+            const oldInfo = document.querySelector('.fixed.top-4.right-4');
+            if (oldInfo) oldInfo.remove();
+            
+            document.body.appendChild(info);
+        }
+
+        window.addEventListener('resize', updateResponsiveness);
+        updateResponsiveness();
+    </script>
+</body>
+</html>

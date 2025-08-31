@@ -68,31 +68,69 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
     <div className={className}>
       {/* Welcome Section */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        {/* Mobile Layout: Stacked vertically */}
+        <div className="block md:hidden">
+          <div className="text-center space-y-4">
+            <div className="space-y-2">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+                {getGreeting()}, {user?.fullName?.split(' ')[0] || 'User'}! 👋
+              </h1>
+              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-md mx-auto">
+                {t('dashboard.welcome', 'Here\'s what\'s happening with cashew prices today.')}
+              </p>
+            </div>
+            
+            {/* Period Selector - Mobile */}
+            <div className="flex flex-col items-center space-y-3">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {t('dashboard.period', 'Period')}:
+              </span>
+              <div className="flex items-center justify-center space-x-2">
+                {[7, 30, 90].map((days) => (
+                  <Button
+                    key={days}
+                    variant={statsPeriod === days ? 'primary' : 'outline'}
+                    size="sm"
+                    onClick={() => setStatsPeriod(days)}
+                    className="min-w-[60px] h-9 text-sm font-medium transition-all duration-200 hover:scale-105"
+                  >
+                    {days}d
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tablet/Desktop Layout: Side by side */}
+        <div className="hidden md:flex items-start justify-between">
+          <div className="flex-1 max-w-2xl">
+            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
               {getGreeting()}, {user?.fullName?.split(' ')[0] || 'User'}! 👋
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
               {t('dashboard.welcome', 'Here\'s what\'s happening with cashew prices today.')}
             </p>
           </div>
           
-          {/* Period Selector */}
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+          {/* Period Selector - Desktop */}
+          <div className="flex flex-col items-end space-y-3 ml-8">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
               {t('dashboard.period', 'Period')}:
             </span>
-            {[7, 30, 90].map((days) => (
-              <Button
-                key={days}
-                variant={statsPeriod === days ? 'primary' : 'outline'}
-                size="sm"
-                onClick={() => setStatsPeriod(days)}
-              >
-                {days}d
-              </Button>
-            ))}
+            <div className="flex items-center space-x-2">
+              {[7, 30, 90].map((days) => (
+                <Button
+                  key={days}
+                  variant={statsPeriod === days ? 'primary' : 'outline'}
+                  size="sm"
+                  onClick={() => setStatsPeriod(days)}
+                  className="min-w-[70px] h-10 text-sm font-medium transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-offset-2"
+                >
+                  {days}d
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
