@@ -147,9 +147,9 @@ public class UserService implements UserDetailsService {
         }
 
         try {
-            // Valider que le rôle est valide
-            UserRole.valueOf(role.toUpperCase());
-            return role.toUpperCase();
+            // Valider que le rôle est valide et retourner sa valeur (minuscule)
+            UserRole userRole = UserRole.valueOf(role.toUpperCase());
+            return userRole.getValue(); // Retourne "admin", "moderator", "contributor"
         } catch (IllegalArgumentException e) {
             logger.warn("Invalid role parameter: {}, ignoring role filter", role);
             return null;

@@ -37,6 +37,7 @@ const AdminPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
   const [pageSize] = useState(20);
   
   // Filtres
@@ -115,6 +116,7 @@ const AdminPage: React.FC = () => {
       const response = await api.get<PageResponse<UserDTO>>(`/api/v1/admin/users?${params}`);
       setUsers(response.content);
       setTotalPages(response.totalPages);
+      setTotalElements(response.totalElements);
     } catch (error: any) {
       console.error('Erreur lors du chargement des utilisateurs:', error);
       // Afficher un message d'erreur plus clair
@@ -409,124 +411,397 @@ const AdminPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Liste des utilisateurs */}
+      {/* Liste des utilisateurs - Design responsive amélioré */}
       <Card>
         <CardHeader>
-          <CardTitle>{t('admin.users.title', 'Utilisateurs')}</CardTitle>
+          <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
+            {t('admin.users.title', 'Utilisateurs')}
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0 sm:p-6">
           {loading ? (
-            <div className="text-center py-8">
-              <div className="text-gray-500">{t('common.loading', 'Chargement...')}</div>
+            <div className="text-center py-12">
+              <div className="inline-flex items-center px-4 py-2 font-semibold leading-6 text-gray-500 dark:text-gray-400">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {t('common.loading', 'Chargement...')}
+              </div>
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left p-3 font-medium">{t('admin.users.name', 'Nom')}</th>
-                      <th className="text-left p-3 font-medium">{t('admin.users.email', 'Email')}</th>
-                      <th className="text-left p-3 font-medium">{t('admin.users.role', 'Rôle')}</th>
-                      <th className="text-left p-3 font-medium">{t('admin.users.status', 'Statut')}</th>
-                      <th className="text-left p-3 font-medium">{t('admin.users.reputation', 'Réputation')}</th>
-                      <th className="text-left p-3 font-medium">{t('admin.users.actions', 'Actions')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.map((user) => (
-                      <tr key={user.id} className="border-b hover:bg-gray-50">
-                        <td className="p-3">
-                          <div>
-                            <div className="font-medium">{user.fullName}</div>
-                            {user.phone && (
-                              <div className="text-sm text-gray-500">{user.phone}</div>
-                            )}
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div>
-                            <div>{user.email}</div>
-                            <div className="text-sm text-gray-500">
-                              {user.emailVerified ? (
-                                <span className="text-green-600">✓ {t('admin.users.verified', 'Vérifié')}</span>
-                              ) : (
-                                <span className="text-red-600">✗ {t('admin.users.notVerified', 'Non vérifié')}</span>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            user.role === 'ADMIN' ? 'bg-red-100 text-red-800' :
-                            user.role === 'MODERATOR' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {t(`admin.roles.${user.role.toLowerCase()}`, user.role) || user.role}
-                          </span>
-                        </td>
-                        <td className="p-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            user.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                          }`}>
-                            {user.active ? t('admin.users.active', 'Actif') : t('admin.users.inactive', 'Inactif')}
-                          </span>
-                        </td>
-                        <td className="p-3">
-                          <div className="text-sm">{user.reputationScore}</div>
-                        </td>
-                        <td className="p-3">
-                          <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => openEditModal(user)}
-                            >
-                              {t('admin.actions.edit', 'Modifier')}
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => openPasswordModal(user)}
-                            >
-                              {t('admin.actions.password', 'Mot de passe')}
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant={user.active ? "destructive" : "outline"}
-                              onClick={() => handleToggleUserStatus(user.id, user.active)}
-                            >
-                              {user.active ? t('admin.actions.deactivate', 'Désactiver') : t('admin.actions.activate', 'Activer')}
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              {/* Vue mobile : Cartes empilées */}
+              <div className="block lg:hidden space-y-4 p-4 sm:p-6">
+                {users.map((user) => (
+                  <div key={user.id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+                    {/* En-tête de la carte */}
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+                          {user.fullName || String(t('admin.users.noName', 'Sans nom'))}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                          {user.email}
+                        </p>
+                        {user.phone && (
+                          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                            📞 {user.phone}
+                          </p>
+                        )}
+                      </div>
+                      
+                      {/* Statut et rôle */}
+                      <div className="flex flex-col items-end space-y-2 ml-3">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          user.role === 'ADMIN' ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' :
+                          user.role === 'MODERATOR' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' :
+                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                        }`}>
+                          {t(`admin.roles.${user.role.toLowerCase()}`, user.role) || user.role}
+                        </span>
+                        
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          user.active ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 
+                          'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                        }`}>
+                          {user.active ? t('admin.users.active', 'Actif') : t('admin.users.inactive', 'Inactif')}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Informations supplémentaires */}
+                    <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-500 dark:text-gray-400">⭐</span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {user.reputationScore} {t('admin.users.reputation', 'Réputation')}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-500 dark:text-gray-400">✉️</span>
+                        <span className={`${
+                          user.emailVerified ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                        }`}>
+                          {user.emailVerified ? t('admin.users.verified', 'Vérifié') : t('admin.users.notVerified', 'Non vérifié')}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Actions - Boutons empilés sur mobile */}
+                    <div className="flex flex-col space-y-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => openEditModal(user)}
+                        className="w-full justify-center h-10 text-sm font-medium"
+                      >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        {t('admin.actions.edit', 'Modifier')}
+                      </Button>
+                      
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => openPasswordModal(user)}
+                        className="w-full justify-center h-10 text-sm font-medium"
+                      >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                        {t('admin.actions.password', 'Mot de passe')}
+                      </Button>
+                      
+                      <Button
+                        size="sm"
+                        variant={user.active ? "destructive" : "outline"}
+                        onClick={() => handleToggleUserStatus(user.id, user.active)}
+                        className="w-full justify-center h-10 text-sm font-medium"
+                      >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={user.active ? "M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L5.636 5.636" : "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"} />
+                        </svg>
+                        {user.active ? t('admin.actions.deactivate', 'Désactiver') : t('admin.actions.activate', 'Activer')}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              {/* Pagination */}
+              {/* Vue tablette : Tableau simplifié */}
+              <div className="hidden lg:block xl:hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200 dark:border-gray-700">
+                        <th className="text-left p-3 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.name', 'Nom')}
+                        </th>
+                        <th className="text-left p-3 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.email', 'Email')}
+                        </th>
+                        <th className="text-left p-3 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.role', 'Rôle')}
+                        </th>
+                        <th className="text-left p-3 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.status', 'Statut')}
+                        </th>
+                        <th className="text-left p-3 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.actions', 'Actions')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((user) => (
+                        <tr key={user.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
+                          <td className="p-3">
+                            <div>
+                              <div className="font-medium text-sm text-gray-900 dark:text-white">{user.fullName}</div>
+                              {user.phone && (
+                                <div className="text-xs text-gray-500 dark:text-gray-400">{user.phone}</div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <div>
+                              <div className="text-sm text-gray-900 dark:text-white">{user.email}</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                {user.emailVerified ? (
+                                  <span className="text-green-600 dark:text-green-400">✓ {t('admin.users.verified', 'Vérifié')}</span>
+                                ) : (
+                                  <span className="text-red-600 dark:text-red-400">✗ {t('admin.users.notVerified', 'Non vérifié')}</span>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-3">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              user.role === 'ADMIN' ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' :
+                              user.role === 'MODERATOR' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' :
+                              'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                            }`}>
+                              {t(`admin.roles.${user.role.toLowerCase()}`, user.role) || user.role}
+                            </span>
+                          </td>
+                          <td className="p-3">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              user.active ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 
+                              'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                            }`}>
+                              {user.active ? t('admin.users.active', 'Actif') : t('admin.users.inactive', 'Inactif')}
+                            </span>
+                          </td>
+                          <td className="p-3">
+                            <div className="flex flex-col space-y-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openEditModal(user)}
+                                className="h-8 text-xs px-3"
+                              >
+                                {t('admin.actions.edit', 'Modifier')}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openPasswordModal(user)}
+                                className="h-8 text-xs px-3"
+                              >
+                                {t('admin.actions.password', 'Mot de passe')}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant={user.active ? "destructive" : "outline"}
+                                onClick={() => handleToggleUserStatus(user.id, user.active)}
+                                className="h-8 text-xs px-3"
+                              >
+                                {user.active ? t('admin.actions.deactivate', 'Désactiver') : t('admin.actions.activate', 'Activer')}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Vue desktop : Tableau complet */}
+              <div className="hidden xl:block">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200 dark:border-gray-700">
+                        <th className="text-left p-4 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.name', 'Nom')}
+                        </th>
+                        <th className="text-left p-4 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.email', 'Email')}
+                        </th>
+                        <th className="text-left p-4 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.role', 'Rôle')}
+                        </th>
+                        <th className="text-left p-4 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.status', 'Statut')}
+                        </th>
+                        <th className="text-left p-4 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.reputation', 'Réputation')}
+                        </th>
+                        <th className="text-left p-4 font-medium text-sm text-gray-700 dark:text-gray-300">
+                          {t('admin.users.actions', 'Actions')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((user) => (
+                        <tr key={user.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150">
+                          <td className="p-4">
+                            <div>
+                              <div className="font-medium text-gray-900 dark:text-white">{user.fullName}</div>
+                              {user.phone && (
+                                <div className="text-sm text-gray-500 dark:text-gray-400">{user.phone}</div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div>
+                              <div className="text-gray-900 dark:text-white">{user.email}</div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {user.emailVerified ? (
+                                  <span className="text-green-600 dark:text-green-400">✓ {t('admin.users.verified', 'Vérifié')}</span>
+                                ) : (
+                                  <span className="text-red-600 dark:text-red-400">✗ {t('admin.users.notVerified', 'Non vérifié')}</span>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${
+                              user.role === 'ADMIN' ? 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' :
+                              user.role === 'MODERATOR' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' :
+                              'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                            }`}>
+                              {t(`admin.roles.${user.role.toLowerCase()}`, user.role) || user.role}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${
+                              user.active ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 
+                              'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                            }`}>
+                              {user.active ? t('admin.users.active', 'Actif') : t('admin.users.inactive', 'Inactif')}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">⭐</span>
+                              <span className="text-gray-900 dark:text-white font-medium">{user.reputationScore}</span>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center space-x-3">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openEditModal(user)}
+                                className="h-9 px-4 text-sm"
+                              >
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                {t('admin.actions.edit', 'Modifier')}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openPasswordModal(user)}
+                                className="h-9 px-4 text-sm"
+                              >
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                </svg>
+                                {t('admin.actions.password', 'Mot de passe')}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant={user.active ? "destructive" : "outline"}
+                                onClick={() => handleToggleUserStatus(user.id, user.active)}
+                                className="h-9 px-4 text-sm"
+                              >
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={user.active ? "M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L5.636 5.636" : "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"} />
+                                </svg>
+                                {user.active ? t('admin.actions.deactivate', 'Désactiver') : t('admin.actions.activate', 'Activer')}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Pagination - Design responsive amélioré */}
               {totalPages > 1 && (
-                <div className="flex justify-center mt-6">
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      disabled={currentPage === 0}
-                      onClick={() => setCurrentPage(prev => prev - 1)}
-                    >
-                      {t('common.previous', 'Précédent')}
-                    </Button>
-                    <span className="flex items-center px-3">
-                      {t('common.page', 'Page')} {currentPage + 1} {t('common.of', 'sur')} {totalPages}
-                    </span>
-                    <Button
-                      variant="outline"
-                      disabled={currentPage === totalPages - 1}
-                      onClick={() => setCurrentPage(prev => prev + 1)}
-                    >
-                      {t('common.next', 'Suivant')}
-                    </Button>
+                <div className="mt-6 px-4 sm:px-6 pb-4 sm:pb-6">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    {/* Informations de pagination */}
+                    <div className="text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
+                      {t('common.showing', 'Affichage de')} <span className="font-medium">{currentPage * pageSize + 1}</span> {t('common.to', 'à')} <span className="font-medium">{Math.min((currentPage + 1) * pageSize, totalElements)}</span> {t('common.of', 'sur')} <span className="font-medium">{totalElements}</span> {t('admin.users.results', 'résultats')}
+                    </div>
+                    
+                    {/* Navigation */}
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage === 0}
+                        onClick={() => setCurrentPage(prev => prev - 1)}
+                        className="h-9 px-3 text-sm"
+                      >
+                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        {t('common.previous', 'Précédent')}
+                      </Button>
+                      
+                      {/* Indicateurs de page */}
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                          const pageNum = Math.max(0, Math.min(totalPages - 5, currentPage - 2)) + i;
+                          if (pageNum >= totalPages) return null;
+                          
+                          return (
+                            <Button
+                              key={pageNum}
+                              variant={currentPage === pageNum ? "primary" : "outline"}
+                              size="sm"
+                              onClick={() => setCurrentPage(pageNum)}
+                              className="h-8 w-8 p-0 text-sm"
+                            >
+                              {pageNum + 1}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage === totalPages - 1}
+                        onClick={() => setCurrentPage(prev => prev + 1)}
+                        className="h-9 px-3 text-sm"
+                      >
+                        {t('common.next', 'Suivant')}
+                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
