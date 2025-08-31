@@ -10,6 +10,45 @@
     "logout": "Logout",
     "menu": "Menu"
   },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Manage your personal information and preferences",
+    "edit": {
+      "title": "Edit Profile"
+    },
+    "form": {
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "Your full name",
+        "min": "Name must be at least 2 characters",
+        "max": "Name cannot exceed 100 characters"
+      },
+      "phone": {
+        "label": "Phone",
+        "placeholder": "+245 12345678",
+        "help": "Optional phone number (8-15 digits)",
+        "invalid": "Phone number must be valid"
+      },
+      "preferredRegions": {
+        "label": "Preferred Regions",
+        "help": "Select the regions where you operate or have interest"
+      }
+    },
+    "preferences": {
+      "title": "Preferences",
+      "language": "Language",
+      "regions": "Regions of Interest",
+      "theme": "Theme"
+    },
+    "stats": {
+      "pricesSubmitted": "Prices Submitted"
+    },
+    "actions": {
+      "editProfile": "Edit profile",
+      "changePassword": "Change password",
+      "logout": "Logout"
+    }
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -32,7 +71,10 @@
     "required": "Required",
     "optional": "Optional",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   },
   "dashboard": {
     "goodMorning": "Good morning",

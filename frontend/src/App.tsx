@@ -105,15 +105,17 @@ function App() {
                 </Suspense>
               } 
             />
-            <Route 
-              path="*" 
-              element={
-                <Suspense fallback={<LoadingSpinner />}>
-                  <NotFoundPage />
-                </Suspense>
-              } 
-            />
           </Route>
+          
+          {/* 404 route */}
+          <Route 
+            path="*" 
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <NotFoundPage />
+              </Suspense>
+            } 
+          />
         </Routes>
       </div>
     </ErrorBoundary>

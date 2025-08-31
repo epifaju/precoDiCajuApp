@@ -1,176 +1,127 @@
-# 🔧 Corrections des Traductions du Module Profile
+# Corrections des Problèmes de Traduction - Composant EditProfileForm
 
-## 📋 Problème Identifié
+## Problème Identifié
 
-Dans le module Profile de l'application, les clés de traduction suivantes étaient affichées directement sur la page au lieu d'être traduites :
+Dans la section "Acções Rápidas" du composant `EditProfileForm`, les utilisateurs voyaient des clés de traduction brutes comme :
+- `profile.actions.editProfile`
+- `profile.edit.title` 
+- `profile.form.fullName.label`
 
-- `profile.title`
-- `profile.subtitle`
-- `profile.stats.pricesSubmitted`
-- `profile.preferences.title`
-- `profile.preferences.language`
-- `profile.preferences.regions`
-- `profile.preferences.theme`
+Au lieu des valeurs traduites définies dans les fichiers de traduction.
 
-## 🔍 Analyse du Problème
+## Cause Racine
 
-Après analyse des fichiers de traduction, il a été constaté que :
+Le problème venait de deux sources principales :
 
-1. **Fichier anglais** (`en.json`) : ✅ Section `profile` complète avec toutes les clés
-2. **Fichier français** (`fr.json`) : ✅ Section `profile` complète avec toutes les clés
-3. **Fichier portugais** (`pt.json`) : ❌ Section `profile` manquante complètement
+1. **Schéma de validation Zod** : Les messages d'erreur étaient définis comme des clés de traduction directement dans le schéma, mais n'étaient pas traduits lors de l'affichage.
 
-## 🛠️ Corrections Apportées
+2. **Gestion des erreurs** : Les messages d'erreur retournés par Zod étaient des clés brutes qui n'étaient pas passées à la fonction `t()` de traduction.
 
-### 1. Ajout de la Section Profile dans le Fichier Portugais
+## Solutions Implémentées
 
-La section `profile` complète a été ajoutée au fichier `frontend/src/i18n/locales/pt.json` :
+### 1. Modification du Schéma de Validation
 
-```json
-"profile": {
-  "title": "Perfil",
-  "subtitle": "Gerir informações da conta",
-  "info": {
-    "fullName": "Nome completo",
-    "email": "Email",
-    "phone": "Telefone",
-    "role": "Função",
-    "reputation": "Reputação",
-    "joinDate": "Membro desde",
-    "lastActive": "Último acesso"
-  },
-  "stats": {
-    "pricesSubmitted": "Preços submetidos",
-    "verified": "Verificados",
-    "pending": "Pendentes"
-  },
-  "preferences": {
-    "title": "Preferências",
-    "language": "Idioma",
-    "notifications": "Notificações",
-    "regions": "Regiões de interesse",
-    "theme": "Tema",
-    "themes": {
-      "light": "Claro",
-      "dark": "Escuro",
-      "system": "Sistema"
-    }
-  },
-  "actions": {
-    "edit": "Editar perfil",
-    "changePassword": "Alterar palavra-passe",
-    "logout": "Sair"
-  }
-}
+**Avant :**
+```typescript
+const editProfileSchema = z.object({
+  fullName: z.string()
+    .min(2, 'profile.form.fullName.min')
+    .max(100, 'profile.form.fullName.max'),
+  phone: z.string()
+    .regex(/^[\+]?[0-9]{8,15}$/, 'profile.form.phone.invalid')
+    .optional()
+    .or(z.literal('')),
+  preferredRegions: z.array(z.string()).min(0),
+});
 ```
 
-### 2. Vérification de la Cohérence des Traductions
-
-Toutes les clés de traduction sont maintenant disponibles dans les trois langues :
-
-| Clé                             | Portugais                  | Français                         | Anglais                    |
-| ------------------------------- | -------------------------- | -------------------------------- | -------------------------- |
-| `profile.title`                 | Perfil                     | Profil                           | Profile                    |
-| `profile.subtitle`              | Gerir informações da conta | Gérer les informations du compte | Manage account information |
-| `profile.stats.pricesSubmitted` | Preços submetidos          | Prix soumis                      | Prices submitted           |
-| `profile.preferences.title`     | Preferências               | Préférences                      | Preferences                |
-| `profile.preferences.language`  | Idioma                     | Langue                           | Language                   |
-| `profile.preferences.regions`   | Regiões de interesse       | Régions d'intérêt                | Regions of interest        |
-| `profile.preferences.theme`     | Tema                       | Thème                            | Theme                      |
-
-## 🧪 Outils de Test Créés
-
-### 1. Fichier HTML de Test (`test-profile-translations.html`)
-
-- Interface web pour tester toutes les traductions
-- Affichage visuel des résultats par langue
-- Statistiques de succès/erreurs
-
-### 2. Script PowerShell de Test (`test-profile-translations.ps1`)
-
-- Test automatisé des traductions
-- Vérification de la présence de toutes les clés
-- Rapport détaillé des résultats
-
-### 3. Script de Test du Module (`test-profile-module.ps1`)
-
-- Test complet du module Profile
-- Vérification des fichiers de traduction
-- Validation du composant ProfilePage
-
-## 📱 Utilisation des Traductions
-
-### Dans le Composant ProfilePage
-
-Le composant utilise correctement le hook `useTranslation` :
-
-```tsx
-import { useTranslation } from "react-i18next";
-
-export default function ProfilePage() {
-  const { t } = useTranslation();
-
-  return (
-    <div>
-      <h1>{t("profile.title")}</h1>
-      <p>{t("profile.subtitle")}</p>
-      {/* ... autres éléments ... */}
-    </div>
-  );
-}
+**Après :**
+```typescript
+const editProfileSchema = z.object({
+  fullName: z.string()
+    .min(2, 'min_length')
+    .max(100, 'max_length'),
+  phone: z.string()
+    .regex(/^[\+]?[0-9]{8,15}$/, 'invalid_format')
+    .optional()
+    .or(z.literal('')),
+  preferredRegions: z.array(z.string()).min(0),
+});
 ```
 
-### Changement de Langue
+### 2. Fonction Helper pour la Traduction des Erreurs
 
-Les utilisateurs peuvent maintenant changer la langue et voir tous les textes du module Profile correctement traduits dans :
+```typescript
+const getErrorMessage = (errorType: string | undefined, field: string) => {
+  if (!errorType) return undefined;
+  
+  const errorMap: Record<string, string> = {
+    'min_length': `profile.form.${field}.min`,
+    'max_length': `profile.form.${field}.max`,
+    'invalid_format': `profile.form.${field}.invalid`,
+  };
+  
+  const translationKey = errorMap[errorType];
+  return translationKey ? t(translationKey) || errorType : errorType;
+};
+```
 
-- 🇵🇹 **Portugais** (langue par défaut)
-- 🇫🇷 **Français**
-- 🇬🇧 **Anglais**
+### 3. Fallbacks de Traduction
 
-## ✅ Résultat Final
+Ajout de valeurs par défaut en anglais pour éviter l'affichage de clés brutes :
 
-- ✅ Toutes les clés de traduction sont maintenant définies
-- ✅ Les traductions sont cohérentes dans les trois langues
-- ✅ Le module Profile affiche correctement les textes traduits
-- ✅ Plus d'affichage des clés de traduction brutes
-- ✅ Expérience utilisateur améliorée pour tous les locuteurs
+```typescript
+label={t('profile.form.fullName.label') || 'Full Name'}
+placeholder={t('profile.form.fullName.placeholder') || 'Your full name'}
+```
 
-## 🚀 Comment Tester
+## Fichiers Modifiés
 
-1. **Démarrer l'application** :
+- `frontend/src/components/profile/EditProfileForm.tsx` - Composant principal avec toutes les corrections
 
-   ```bash
-   npm start
-   ```
+## Vérification des Traductions
 
-2. **Naviguer vers la page Profile** :
+Le composant utilise maintenant correctement :
 
-   ```
-   http://localhost:3000/profile
-   ```
+✅ **Hook useTranslation()** : `const { t } = useTranslation();`
 
-3. **Changer la langue** dans l'interface utilisateur
+✅ **Fonction t() appliquée** : Toutes les clés sont traduites avec `t('clé.de.traduction')`
 
-4. **Vérifier** que tous les textes sont traduits
+✅ **Gestion des erreurs** : Les messages d'erreur sont traduits via la fonction helper
 
-5. **Exécuter les scripts de test** :
-   ```powershell
-   .\test-profile-translations.ps1
-   .\test-profile-module.ps1
-   ```
+✅ **Fallbacks** : Valeurs par défaut en cas d'échec de traduction
 
-## 📝 Fichiers Modifiés
+## Clés de Traduction Utilisées
 
-- `frontend/src/i18n/locales/pt.json` - Ajout de la section profile
-- `test-profile-translations.html` - Fichier de test HTML
-- `test-profile-translations.ps1` - Script de test PowerShell
-- `test-profile-module.ps1` - Script de test du module
-- `PROFILE_TRANSLATION_FIXES.md` - Cette documentation
+### Titres et Labels
+- `profile.edit.title` → "Modifier le Profil" / "Edit Profile"
+- `profile.form.fullName.label` → "Nom Complet" / "Full Name"
+- `profile.form.phone.label` → "Téléphone" / "Phone"
+- `profile.form.preferredRegions.label` → "Régions Préférées" / "Preferred Regions"
 
-## 🔮 Améliorations Futures
+### Placeholders et Aide
+- `profile.form.fullName.placeholder` → "Votre nom complet" / "Your full name"
+- `profile.form.phone.placeholder` → "+245 12345678"
+- `profile.form.phone.help` → "Numéro de téléphone optionnel" / "Optional phone number"
+- `profile.form.preferredRegions.help` → "Sélectionnez les régions..." / "Select the regions..."
 
-- Ajout de tests automatisés pour les traductions
-- Intégration dans le pipeline CI/CD
-- Validation automatique des nouvelles clés de traduction
-- Support de langues supplémentaires si nécessaire
+### Messages d'Erreur
+- `profile.form.fullName.min` → "Le nom doit contenir au moins 2 caractères"
+- `profile.form.fullName.max` → "Le nom ne peut pas dépasser 100 caractères"
+- `profile.form.phone.invalid` → "Le numéro de téléphone doit être valide"
+
+### Actions
+- `common.cancel` → "Annuler" / "Cancel"
+- `common.save` → "Enregistrer" / "Save"
+
+## Résultat
+
+Maintenant, au lieu d'afficher des clés brutes comme `profile.form.fullName.label`, les utilisateurs verront les textes traduits appropriés selon leur langue :
+
+- **Français** : "Nom Complet", "Modifier le Profil", "Annuler"
+- **Anglais** : "Full Name", "Edit Profile", "Cancel"
+- **Portugais** : Les traductions correspondantes
+
+## Test
+
+Utilisez le script `test-profile-translations-fixed.ps1` pour vérifier que toutes les corrections ont été appliquées correctement.

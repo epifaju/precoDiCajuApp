@@ -13,29 +13,48 @@ const resources = {
   en: { translation: en },
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: 'pt',
-    lng: 'pt', // Default language for Guinea-Bissau
-    debug: import.meta.env.DEV,
-    returnObjects: true, // Enable accessing nested objects
+// Initialize i18n
+const initI18n = async () => {
+  await i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      resources,
+      fallbackLng: 'pt',
+      lng: 'pt', // Force Portuguese as default
+      debug: import.meta.env.DEV,
+      
+      interpolation: {
+        escapeValue: false, // React already does escaping
+      },
 
-    interpolation: {
-      escapeValue: false, // React already does escaping
-    },
+      detection: {
+        // Simple detection order
+        order: ['localStorage', 'navigator'],
+        caches: ['localStorage'],
+        lookupLocalStorage: 'i18nextLng',
+      },
 
-    detection: {
-      order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
-      caches: ['localStorage'],
-    },
+      react: {
+        useSuspense: false,
+      },
+    });
 
-    react: {
-      useSuspense: false,
-    },
-  });
+  // Force Portuguese language after initialization
+  if (i18n.language !== 'pt') {
+    await i18n.changeLanguage('pt');
+  }
+  
+  // Clear any cached language that isn't Portuguese
+  const storedLang = localStorage.getItem('i18nextLng');
+  if (storedLang && storedLang !== 'pt') {
+    localStorage.setItem('i18nextLng', 'pt');
+    await i18n.changeLanguage('pt');
+  }
+};
+
+// Initialize immediately
+initI18n().catch(console.error);
 
 export default i18n;
 

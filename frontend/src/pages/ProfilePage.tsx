@@ -2,10 +2,17 @@ import { useTranslation } from 'react-i18next';
 import { User, Mail, Phone, Calendar, Star, Settings } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { EditProfileForm } from '../components/profile/EditProfileForm';
 
 export default function ProfilePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, isAuthenticated } = useAuthStore();
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+
+  // Debug: Log current language and translation
+  console.log('ProfilePage - Current language:', i18n.language);
+  console.log('ProfilePage - Translation test:', t('profile.actions.editProfile'));
 
   // Redirect to login if not authenticated
   if (!isAuthenticated || !user) {
@@ -59,6 +66,13 @@ export default function ProfilePage() {
         return role;
     }
   };
+
+  const editProfileText = t('profile.actions.editProfile');
+
+  // Debug: Log the translation values
+  console.log('Edit Profile Text:', editProfileText);
+  console.log('Raw translation key:', 'profile.actions.editProfile');
+  console.log('Translation function result:', t('profile.actions.editProfile'));
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -183,16 +197,16 @@ export default function ProfilePage() {
                   {t('profile.preferences.theme')}
                 </label>
                 <select className="input">
-                  <option value="light">Claro</option>
-                  <option value="dark">Escuro</option>
-                  <option value="system">Sistema</option>
+                  <option value="light">{t('common.light')}</option>
+                  <option value="dark">{t('common.dark')}</option>
+                  <option value="system">{t('common.system')}</option>
                 </select>
               </div>
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
               <button className="btn btn-primary">
-                Guardar alterações
+                {t('common.save')}
               </button>
             </div>
           </div>
@@ -247,19 +261,33 @@ export default function ProfilePage() {
               Acções Rápidas
             </h3>
             <div className="space-y-2">
-              <button className="btn btn-outline w-full text-sm">
-                Editar perfil
+              <button 
+                className="btn btn-outline w-full text-sm"
+                onClick={() => setIsEditFormOpen(true)}
+              >
+                {t('profile.actions.editProfile')}
               </button>
-              <button className="btn btn-outline w-full text-sm">
-                Alterar palavra-passe
-              </button>
-              <button className="btn btn-outline w-full text-sm text-red-600 border-red-200 hover:bg-red-50">
-                Sair da conta
-              </button>
+                              <button className="btn btn-outline w-full text-sm">
+                  {t('profile.actions.changePassword')}
+                </button>
+                <button className="btn btn-outline w-full text-sm text-red-600 border-red-200 hover:bg-red-50">
+                  {t('profile.actions.logout')}
+                </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Edit Profile Form Modal */}
+      {isEditFormOpen && (
+        <EditProfileForm
+          onClose={() => setIsEditFormOpen(false)}
+          onSuccess={() => {
+            setIsEditFormOpen(false);
+            // Optionally refresh user data or show success message
+          }}
+        />
+      )}
     </div>
   );
 }

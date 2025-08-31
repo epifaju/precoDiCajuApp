@@ -11,6 +11,45 @@
     "logout": "Se déconnecter",
     "menu": "Menu"
   },
+  "profile": {
+    "title": "Mon Profil",
+    "subtitle": "Gérez vos informations personnelles et préférences",
+    "edit": {
+      "title": "Modifier le Profil"
+    },
+    "form": {
+      "fullName": {
+        "label": "Nom Complet",
+        "placeholder": "Votre nom complet",
+        "min": "Le nom doit contenir au moins 2 caractères",
+        "max": "Le nom ne peut pas dépasser 100 caractères"
+      },
+      "phone": {
+        "label": "Téléphone",
+        "placeholder": "+245 12345678",
+        "help": "Numéro de téléphone optionnel (8-15 chiffres)",
+        "invalid": "Le numéro de téléphone doit être valide"
+      },
+      "preferredRegions": {
+        "label": "Régions Préférées",
+        "help": "Sélectionnez les régions où vous opérez ou avez un intérêt"
+      }
+    },
+    "preferences": {
+      "title": "Préférences",
+      "language": "Langue",
+      "regions": "Régions d'Intérêt",
+      "theme": "Thème"
+    },
+    "stats": {
+      "pricesSubmitted": "Prix Soumis"
+    },
+    "actions": {
+      "editProfile": "Modifier le profil",
+      "changePassword": "Changer le mot de passe",
+      "logout": "Se déconnecter"
+    }
+  },
   "common": {
     "loading": "Chargement...",
     "error": "Erreur",
@@ -35,7 +74,10 @@
     "yes": "Oui",
     "no": "Non",
     "page": "Page",
-    "of": "sur"
+    "of": "sur",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
   },
   "dashboard": {
     "goodMorning": "Bonjour",
