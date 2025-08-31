@@ -31,7 +31,7 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
     public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             String fileName = fileStorageService.storeFile(file);

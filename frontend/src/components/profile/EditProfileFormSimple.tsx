@@ -1,83 +1,54 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { X, Save, User, Mail, Phone, MapPin } from 'lucide-react';
-import { Input } from '../ui/Input';
-import { Button } from '../ui/Button';
+import { X, Save, User, Mail, Phone } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useApi } from '../../hooks/useApi';
 
-const editProfileSchema = z.object({
-  fullName: z.string()
-    .min(2, 'min_length')
-    .max(100, 'max_length'),
-  phone: z.string()
-    .regex(/^[\+]?[0-9]{8,15}$/, 'invalid_format')
-    .optional()
-    .or(z.literal('')),
-  preferredRegions: z.array(z.string()).min(0),
-});
-
-type EditProfileData = z.infer<typeof editProfileSchema>;
-
-interface EditProfileFormProps {
+interface EditProfileFormSimpleProps {
   onClose: () => void;
   onSuccess?: () => void;
 }
 
-export const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onSuccess }) => {
+export const EditProfileFormSimple: React.FC<EditProfileFormSimpleProps> = ({ onClose, onSuccess }) => {
   const { t } = useTranslation();
   const { user, updateUser } = useAuthStore();
   const api = useApi();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    setValue,
-    watch,
-  } = useForm<EditProfileData>({
-    resolver: zodResolver(editProfileSchema),
-    defaultValues: {
-      fullName: user?.fullName || '',
-      phone: user?.phone || '',
-      preferredRegions: user?.preferredRegions || [],
-    },
-  });
-
-  const watchedRegions = watch('preferredRegions');
+  
+  // Simple form state
+  const [fullName, setFullName] = useState(user?.fullName || '');
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [preferredRegions, setPreferredRegions] = useState<string[]>(user?.preferredRegions || []);
 
   const availableRegions = [
     'Bafatá', 'Gabú', 'Bissau', 'Cacheu', 'Quinara', 'Tombali', 'Bolama', 'Oio', 'Biombo'
   ];
 
   const toggleRegion = (region: string) => {
-    const currentRegions = watchedRegions || [];
-    if (currentRegions.includes(region)) {
-      setValue('preferredRegions', currentRegions.filter(r => r !== region));
+    if (preferredRegions.includes(region)) {
+      setPreferredRegions(preferredRegions.filter(r => r !== region));
     } else {
-      setValue('preferredRegions', [...currentRegions, region]);
+      setPreferredRegions([...preferredRegions, region]);
     }
   };
 
-  const onSubmit = async (data: EditProfileData) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     if (!user) return;
 
-    console.log('Submitting profile update with data:', data);
+    console.log('Submitting profile update with data:', { fullName, phone, preferredRegions });
     setIsSubmitting(true);
     setError(null);
     setSuccessMessage(null);
 
     try {
       const requestData = {
-        fullName: data.fullName,
-        phone: data.phone || null,
-        preferredRegions: data.preferredRegions,
+        fullName,
+        phone: phone || null,
+        preferredRegions,
       };
 
       console.log('Sending request to API:', requestData);
@@ -108,20 +79,6 @@ export const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onSuc
     }
   };
 
-  // Helper function to get translated error message
-  const getErrorMessage = (errorType: string | undefined, field: string) => {
-    if (!errorType) return undefined;
-    
-    const errorMap: Record<string, string> = {
-      'min_length': `profile.form.${field}.min`,
-      'max_length': `profile.form.${field}.max`,
-      'invalid_format': `profile.form.${field}.invalid`,
-    };
-    
-    const translationKey = errorMap[errorType];
-    return translationKey ? t(translationKey) || errorType : errorType;
-  };
-
   if (!user) return null;
 
   return (
@@ -141,7 +98,7 @@ export const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onSuc
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Success message */}
           {successMessage && (
             <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-3">
@@ -161,27 +118,49 @@ export const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onSuc
           )}
 
           {/* Full Name */}
-          <Input
-            label={t('profile.form.fullName.label') || 'Full Name'}
-            type="text"
-            autoComplete="name"
-            placeholder={t('profile.form.fullName.placeholder') || 'Your full name'}
-            error={getErrorMessage(errors.fullName?.message, 'fullName')}
-            leftIcon={<User className="w-4 h-4" />}
-            {...register('fullName')}
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {t('profile.form.fullName.label') || 'Full Name'}
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <User className="w-4 h-4 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-white pl-10 pr-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-600"
+                placeholder={t('profile.form.fullName.placeholder') || 'Your full name'}
+                required
+                minLength={2}
+                maxLength={100}
+              />
+            </div>
+          </div>
 
           {/* Phone */}
-          <Input
-            label={t('profile.form.phone.label') || 'Phone'}
-            type="tel"
-            autoComplete="tel"
-            placeholder={t('profile.form.phone.placeholder') || '+245 12345678'}
-            error={getErrorMessage(errors.phone?.message, 'phone')}
-            helpText={t('profile.form.phone.help') || 'Optional phone number'}
-            leftIcon={<Phone className="w-4 h-4" />}
-            {...register('phone')}
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {t('profile.form.phone.label') || 'Phone'}
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <Phone className="w-4 h-4 text-gray-400" />
+              </div>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-white pl-10 pr-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-600"
+                placeholder={t('profile.form.phone.placeholder') || '+245 12345678'}
+                pattern="^[\+]?[0-9]{8,15}$"
+              />
+            </div>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {t('profile.form.phone.help') || 'Optional phone number'}
+            </p>
+          </div>
 
           {/* Preferred Regions */}
           <div>
@@ -193,8 +172,8 @@ export const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onSuc
                 <label key={region} className="flex items-center">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    checked={watchedRegions?.includes(region) || false}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={preferredRegions.includes(region)}
                     onChange={() => toggleRegion(region)}
                   />
                   <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
@@ -212,35 +191,42 @@ export const EditProfileForm: React.FC<EditProfileFormProps> = ({ onClose, onSuc
           {import.meta.env.DEV && (
             <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded text-xs">
               <p><strong>Debug Info:</strong></p>
-              <p>Form valid: {isValid ? 'Yes' : 'No'}</p>
-              <p>Watched regions: {JSON.stringify(watchedRegions)}</p>
-              <p>Form errors: {JSON.stringify(errors)}</p>
+              <p>Full Name: {fullName}</p>
+              <p>Phone: {phone}</p>
+              <p>Preferred Regions: {JSON.stringify(preferredRegions)}</p>
+              <p>Form valid: {fullName.length >= 2 ? 'Yes' : 'No'}</p>
               <p>User data: {JSON.stringify(user)}</p>
             </div>
           )}
 
           {/* Actions */}
           <div className="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <Button
+            <button
               type="button"
-              variant="outline"
               onClick={onClose}
               disabled={isSubmitting}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
             >
               {t('common.cancel')}
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
-              disabled={!isValid || isSubmitting}
-              loading={isSubmitting}
+              disabled={fullName.length < 2 || isSubmitting}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save className="w-4 h-4 mr-2" />
+              {isSubmitting ? (
+                <svg className="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
               {t('common.save')}
-            </Button>
+            </button>
           </div>
         </form>
       </div>
     </div>
   );
 };
-

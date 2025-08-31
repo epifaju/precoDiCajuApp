@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
     public ResponseEntity<UserDTO> getCurrentUser() {
         try {
             User currentUser = authService.getCurrentUser();
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
     public ResponseEntity<UserDTO> updateCurrentUser(@Valid @RequestBody UpdateUserRequest request) {
         try {
             User currentUser = authService.getCurrentUser();

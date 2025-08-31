@@ -520,6 +520,14 @@
       "changePassword": "Alterar palavra-passe",
       "logout": "Sair da conta"
     },
+    "form": {
+      "success": {
+        "update": "Perfil atualizado com sucesso!"
+      },
+      "error": {
+        "update": "Erro ao atualizar o perfil. Tente novamente."
+      }
+    },
     "info": {
       "fullName": "Nome completo",
       "email": "Email",

@@ -123,7 +123,7 @@ public class PriceController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
     public ResponseEntity<PriceDTO> createPrice(
             @Valid @ModelAttribute CreatePriceRequest request,
             @RequestHeader(name = "Accept-Language", defaultValue = "pt") String language) {
@@ -152,7 +152,7 @@ public class PriceController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
     public ResponseEntity<PriceDTO> updatePrice(
             @PathVariable UUID id,
             @Valid @ModelAttribute CreatePriceRequest request) {
@@ -181,7 +181,7 @@ public class PriceController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
     public ResponseEntity<Void> deletePrice(@PathVariable UUID id) {
 
         try {
@@ -277,7 +277,7 @@ public class PriceController {
     }
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
     public ResponseEntity<PageResponse<PriceDTO>> getUserPrices(
             @PathVariable UUID userId,
             @RequestParam(defaultValue = "0") int page,

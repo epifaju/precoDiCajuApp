@@ -47,6 +47,14 @@
       "editProfile": "Edit profile",
       "changePassword": "Change password",
       "logout": "Logout"
+    },
+    "form": {
+      "success": {
+        "update": "Profile updated successfully!"
+      },
+      "error": {
+        "update": "Error updating profile. Please try again."
+      }
     }
   },
   "common": {

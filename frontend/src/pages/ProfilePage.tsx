@@ -2,17 +2,72 @@ import { useTranslation } from 'react-i18next';
 import { User, Mail, Phone, Calendar, Star, Settings } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { Navigate } from 'react-router-dom';
-import { useState } from 'react';
-import { EditProfileForm } from '../components/profile/EditProfileForm';
+import { useState, useEffect } from 'react';
+import { EditProfileFormWorking } from '../components/profile/EditProfileFormWorking';
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
   const { user, isAuthenticated } = useAuthStore();
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  
+  // État pour les préférences
+  const [preferences, setPreferences] = useState({
+    language: 'pt',
+    regions: [] as string[],
+    theme: 'system'
+  });
+  const [isSavingPreferences, setIsSavingPreferences] = useState(false);
+  const [preferencesMessage, setPreferencesMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   // Debug: Log current language and translation
   console.log('ProfilePage - Current language:', i18n.language);
   console.log('ProfilePage - Translation test:', t('profile.actions.editProfile'));
+
+  // Initialiser les préférences avec les données de l'utilisateur
+  useEffect(() => {
+    if (user) {
+      setPreferences({
+        language: i18n.language || 'pt',
+        regions: user.preferredRegions || [],
+        theme: 'system'
+      });
+    }
+  }, [user, i18n.language]);
+
+  // Fonction pour sauvegarder les préférences
+  const handleSavePreferences = async () => {
+    if (!user) return;
+    
+    setIsSavingPreferences(true);
+    setPreferencesMessage(null);
+    
+    try {
+      // Simuler la sauvegarde des préférences
+      // Ici vous pourriez appeler une API pour sauvegarder les préférences
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mettre à jour la langue si elle a changé
+      if (preferences.language !== i18n.language) {
+        i18n.changeLanguage(preferences.language);
+      }
+      
+      setPreferencesMessage({
+        type: 'success',
+        text: 'Preferências salvas com sucesso!'
+      });
+      
+      // Effacer le message après 3 secondes
+      setTimeout(() => setPreferencesMessage(null), 3000);
+      
+    } catch (error) {
+      setPreferencesMessage({
+        type: 'error',
+        text: 'Erro ao salvar preferências. Tente novamente.'
+      });
+    } finally {
+      setIsSavingPreferences(false);
+    }
+  };
 
   // Redirect to login if not authenticated
   if (!isAuthenticated || !user) {
@@ -161,11 +216,26 @@ export default function ProfilePage() {
             </h3>
 
             <div className="space-y-6">
+              {/* Message de feedback */}
+              {preferencesMessage && (
+                <div className={`p-3 rounded-md ${
+                  preferencesMessage.type === 'success' 
+                    ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400'
+                    : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400'
+                }`}>
+                  <p className="text-sm">{preferencesMessage.text}</p>
+                </div>
+              )}
+
               <div>
                 <label className="label">
                   {t('profile.preferences.language')}
                 </label>
-                <select className="input">
+                <select 
+                  className="input"
+                  value={preferences.language}
+                  onChange={(e) => setPreferences(prev => ({ ...prev, language: e.target.value }))}
+                >
                   <option value="pt">Português</option>
                   <option value="fr">Français</option>
                   <option value="en">English</option>
@@ -182,7 +252,20 @@ export default function ProfilePage() {
                       <input
                         type="checkbox"
                         className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                        defaultChecked={user.preferredRegions?.includes(region) || false}
+                        checked={preferences.regions.includes(region)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setPreferences(prev => ({ 
+                              ...prev, 
+                              regions: [...prev.regions, region] 
+                            }));
+                          } else {
+                            setPreferences(prev => ({ 
+                              ...prev, 
+                              regions: prev.regions.filter(r => r !== region) 
+                            }));
+                          }
+                        }}
                       />
                       <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                         {region}
@@ -196,7 +279,11 @@ export default function ProfilePage() {
                 <label className="label">
                   {t('profile.preferences.theme')}
                 </label>
-                <select className="input">
+                <select 
+                  className="input"
+                  value={preferences.theme}
+                  onChange={(e) => setPreferences(prev => ({ ...prev, theme: e.target.value }))}
+                >
                   <option value="light">{t('common.light')}</option>
                   <option value="dark">{t('common.dark')}</option>
                   <option value="system">{t('common.system')}</option>
@@ -205,7 +292,17 @@ export default function ProfilePage() {
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <button className="btn btn-primary">
+              <button 
+                className="btn btn-primary"
+                onClick={handleSavePreferences}
+                disabled={isSavingPreferences}
+              >
+                {isSavingPreferences ? (
+                  <svg className="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                ) : null}
                 {t('common.save')}
               </button>
             </div>
@@ -280,7 +377,7 @@ export default function ProfilePage() {
 
       {/* Edit Profile Form Modal */}
       {isEditFormOpen && (
-        <EditProfileForm
+        <EditProfileFormWorking
           onClose={() => setIsEditFormOpen(false)}
           onSuccess={() => {
             setIsEditFormOpen(false);

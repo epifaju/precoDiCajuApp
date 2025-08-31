@@ -48,6 +48,14 @@
       "editProfile": "Modifier le profil",
       "changePassword": "Changer le mot de passe",
       "logout": "Se déconnecter"
+    },
+    "form": {
+      "success": {
+        "update": "Profil mis à jour avec succès !"
+      },
+      "error": {
+        "update": "Erreur lors de la mise à jour du profil. Veuillez réessayer."
+      }
     }
   },
   "common": {
