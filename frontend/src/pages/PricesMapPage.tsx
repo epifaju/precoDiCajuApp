@@ -90,41 +90,48 @@ const PricesMapPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Header - Section Description améliorée */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          {/* Layout responsive avec disposition adaptative */}
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-8">
+            {/* Contenu principal - Titre et description */}
+            <div className="flex-1 space-y-4">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
                 {t('map.pageTitle', 'Price Map')}
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl">
                 {t('map.pageDescription', 'Visualize cashew prices across Guinea-Bissau on an interactive map')}
               </p>
             </div>
             
-            <div className="flex items-center space-x-3">
-              <Link to="/prices">
-                <Button variant="outline">
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Boutons d'action - Disposition responsive */}
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3 sm:gap-4 lg:gap-3 w-full sm:w-auto lg:w-auto">
+              <Link to="/prices" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto justify-center">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                   </svg>
-                  {t('map.listView', 'List View')}
+                  <span className="text-sm sm:text-base font-medium">
+                    {t('map.listView', 'List View')}
+                  </span>
                 </Button>
               </Link>
               
-              <Link to="/submit">
-                <Button>
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Link to="/submit" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto justify-center">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
-                  {t('map.submitPrice', 'Submit Price')}
+                  <span className="text-sm sm:text-base font-medium">
+                    {t('map.submitPrice', 'Submit Price')}
+                  </span>
                 </Button>
               </Link>
             </div>
           </div>
 
           {/* Statistiques rapides */}
-          <div className="mt-6">
+          <div className="mt-8 lg:mt-10">
             <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 sm:p-5 shadow-sm">
               <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                 <svg className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
