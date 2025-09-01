@@ -11,6 +11,26 @@
     "logout": "Se déconnecter",
     "menu": "Menu"
   },
+  "websocket": {
+    "connected": "Temps réel actif",
+    "connecting": "Connexion...",
+    "disconnected": "Hors ligne",
+    "error": "Erreur de connexion"
+  },
+  "notification": {
+    "title": "Notification",
+    "newPrice": "Nouveau Prix",
+    "priceUpdated": "Prix Mis à Jour",
+    "priceVerified": "Prix Vérifié"
+  },
+  "price": {
+    "alert": "Alerte Prix",
+    "variationDetected": "Variation de prix détectée",
+    "increase": "augmentation",
+    "decrease": "diminution",
+    "verified": "Prix Vérifié",
+    "verifiedMessage": "Le prix de {{price}} FCFA/kg pour {{quality}} a été vérifié"
+  },
   "profile": {
     "title": "Mon Profil",
     "subtitle": "Gérez vos informations personnelles et préférences",

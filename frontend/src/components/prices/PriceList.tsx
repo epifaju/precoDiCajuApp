@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/Card';
@@ -6,6 +6,8 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { usePrices, useRegions, useQualityGrades } from '../../hooks/useApi';
+import { usePriceUpdates, useWebSocket } from '../../hooks/useWebSocket';
+import { webSocketService } from '../../services/WebSocketService';
 import { PriceCard } from './PriceCard';
 import { FilterPanel } from './FilterPanel';
 import { MobilePagination } from './MobilePagination';
@@ -47,10 +49,13 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
+  // WebSocket connection state
+  const { isConnected } = useWebSocket();
+
   // API queries
   const { data: regions } = useRegions();
   const { data: qualityGrades } = useQualityGrades();
-  const { data: pricesData, isLoading, error } = usePrices({
+  const { data: pricesData, isLoading, error, refetch } = usePrices({
     page,
     size,
     sortBy: filters.sortBy,
@@ -61,6 +66,30 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
     to: filters.dateTo || undefined,
     verified: filters.verified || undefined,
   });
+
+  // Subscribe to price updates via WebSocket
+  usePriceUpdates(
+    (newPrice) => {
+      // Refetch prices when a new price is added
+      refetch();
+    },
+    (updatedPrice) => {
+      // Refetch prices when a price is updated
+      refetch();
+    }
+  );
+
+  // Subscribe to region and quality updates when filters change
+  useEffect(() => {
+    if (isConnected) {
+      if (filters.regionCode) {
+        webSocketService.subscribeToRegion(filters.regionCode);
+      }
+      if (filters.qualityGrade) {
+        webSocketService.subscribeToQuality(filters.qualityGrade);
+      }
+    }
+  }, [isConnected, filters.regionCode, filters.qualityGrade]);
 
   const prices = pricesData?.content || [];
   const totalPages = pricesData?.totalPages || 0;

@@ -6,6 +6,9 @@ import { Suspense, lazy } from 'react';
 import Layout from '@/components/layout/Layout';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import { WebSocketNotifications } from '@/components/WebSocketNotifications';
+import { ToastContainer } from '@/components/ui/Toast';
+import { useNotificationStore } from '@/store/notificationStore';
 
 // Lazy loaded pages
 const HomePage = lazy(() => import('@/pages/HomePage'));
@@ -21,6 +24,7 @@ const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 function App() {
   const { i18n } = useTranslation();
+  const { toasts, removeToast } = useNotificationStore();
 
   // Update document language
   document.documentElement.lang = i18n.language;
@@ -28,6 +32,11 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* WebSocket Notifications */}
+        <WebSocketNotifications />
+        
+        {/* Toast Notifications */}
+        <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
         <Routes>
           {/* Auth routes without layout */}
           <Route 

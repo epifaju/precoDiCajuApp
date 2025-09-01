@@ -10,6 +10,26 @@
     "logout": "Logout",
     "menu": "Menu"
   },
+  "websocket": {
+    "connected": "Real-time active",
+    "connecting": "Connecting...",
+    "disconnected": "Offline",
+    "error": "Connection error"
+  },
+  "notification": {
+    "title": "Notification",
+    "newPrice": "New Price",
+    "priceUpdated": "Price Updated",
+    "priceVerified": "Price Verified"
+  },
+  "price": {
+    "alert": "Price Alert",
+    "variationDetected": "Price variation detected",
+    "increase": "increase",
+    "decrease": "decrease",
+    "verified": "Price Verified",
+    "verifiedMessage": "The price of {{price}} FCFA/kg for {{quality}} has been verified"
+  },
   "profile": {
     "title": "My Profile",
     "subtitle": "Manage your personal information and preferences",

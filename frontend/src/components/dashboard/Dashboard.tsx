@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
 import { usePriceStats, usePrices } from '../../hooks/useApi';
+import { useStatsUpdates, useWebSocket } from '../../hooks/useWebSocket';
+import { webSocketService } from '../../services/WebSocketService';
 import { StatsCard } from './StatsCard';
 import { PriceChart } from '../charts/PriceChart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { Wifi, WifiOff } from 'lucide-react';
 
 interface DashboardProps {
   className?: string;
@@ -18,15 +21,31 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
   const [chartType, setChartType] = useState<'line' | 'bar' | 'doughnut'>('line');
   const [chartGroupBy, setChartGroupBy] = useState<'date' | 'region' | 'quality'>('date');
 
+  // WebSocket connection state
+  const { isConnected, isConnecting, error } = useWebSocket();
+
   // Fetch statistics
-  const { data: stats, isLoading: statsLoading } = usePriceStats({ days: statsPeriod });
+  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = usePriceStats({ days: statsPeriod });
   
   // Fetch recent prices for charts
-  const { data: pricesData, isLoading: pricesLoading } = usePrices({
+  const { data: pricesData, isLoading: pricesLoading, refetch: refetchPrices } = usePrices({
     size: 50,
     sortBy: 'recordedDate',
     sortDir: 'desc',
   });
+
+  // Subscribe to stats updates via WebSocket
+  useStatsUpdates((updatedStats) => {
+    // Refetch stats when WebSocket update is received
+    refetchStats();
+  });
+
+  // Subscribe to stats updates when component mounts
+  useEffect(() => {
+    if (isConnected) {
+      webSocketService.subscribeToStats();
+    }
+  }, [isConnected]);
 
   const prices = pricesData?.content || [];
 
@@ -66,6 +85,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
 
   return (
     <div className={className}>
+      {/* WebSocket Connection Status */}
+      <div className="mb-4 flex justify-end">
+        <div className="flex items-center space-x-2 text-sm">
+          {isConnected ? (
+            <div className="flex items-center text-green-600 dark:text-green-400">
+              <Wifi className="h-4 w-4 mr-1" />
+              <span>{t('websocket.connected', 'Temps réel actif')}</span>
+            </div>
+          ) : isConnecting ? (
+            <div className="flex items-center text-yellow-600 dark:text-yellow-400">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600 mr-2"></div>
+              <span>{t('websocket.connecting', 'Connexion...')}</span>
+            </div>
+          ) : (
+            <div className="flex items-center text-red-600 dark:text-red-400">
+              <WifiOff className="h-4 w-4 mr-1" />
+              <span>{t('websocket.disconnected', 'Hors ligne')}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Welcome Section */}
       <div className="mb-8">
         {/* Mobile Layout: Stacked vertically */}

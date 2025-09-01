@@ -1,5 +1,6 @@
 package gw.precaju.service;
 
+import gw.precaju.controller.WebSocketController;
 import gw.precaju.dto.PriceDTO;
 import gw.precaju.dto.PriceStatsDTO;
 import gw.precaju.dto.request.CreatePriceRequest;
@@ -8,6 +9,7 @@ import gw.precaju.mapper.PriceMapper;
 import gw.precaju.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,19 +34,22 @@ public class PriceService {
     private final UserRepository userRepository;
     private final PriceMapper priceMapper;
     private final FileStorageService fileStorageService;
+    private final WebSocketController webSocketController;
 
     public PriceService(PriceRepository priceRepository,
             RegionRepository regionRepository,
             QualityGradeRepository qualityGradeRepository,
             UserRepository userRepository,
             PriceMapper priceMapper,
-            FileStorageService fileStorageService) {
+            FileStorageService fileStorageService,
+            WebSocketController webSocketController) {
         this.priceRepository = priceRepository;
         this.regionRepository = regionRepository;
         this.qualityGradeRepository = qualityGradeRepository;
         this.userRepository = userRepository;
         this.priceMapper = priceMapper;
         this.fileStorageService = fileStorageService;
+        this.webSocketController = webSocketController;
     }
 
     @Transactional(readOnly = true)
@@ -141,6 +146,17 @@ public class PriceService {
 
         logger.info("Price created successfully with ID: {}", price.getId());
 
+        // Broadcast new price via WebSocket
+        try {
+            PriceDTO priceDTO = priceMapper.toDTO(price);
+            webSocketController.broadcastNewPrice(priceDTO);
+
+            // Check for significant price variations and send notifications
+            checkAndNotifyPriceVariation(priceDTO);
+        } catch (Exception e) {
+            logger.error("Error broadcasting new price via WebSocket", e);
+        }
+
         return priceMapper.toDTO(price);
     }
 
@@ -198,6 +214,14 @@ public class PriceService {
 
         logger.info("Price {} updated successfully", price.getId());
 
+        // Broadcast price update via WebSocket
+        try {
+            PriceDTO priceDTO = priceMapper.toDTO(price);
+            webSocketController.broadcastPriceUpdate(priceDTO);
+        } catch (Exception e) {
+            logger.error("Error broadcasting price update via WebSocket", e);
+        }
+
         return priceMapper.toDTO(price);
     }
 
@@ -238,6 +262,26 @@ public class PriceService {
         }
 
         logger.info("Price {} verified by {}", price.getId(), verifier.getEmail());
+
+        // Broadcast price verification via WebSocket
+        try {
+            PriceDTO priceDTO = priceMapper.toDTO(price);
+            webSocketController.broadcastPriceVerification(priceDTO);
+
+            // Send notification to the price creator
+            if (price.getCreatedBy() != null) {
+                webSocketController.sendNotificationToUser(
+                        price.getCreatedBy().getId().toString(),
+                        "Prix Vérifié",
+                        String.format("Votre prix de %s FCFA/kg pour %s a été vérifié par %s",
+                                price.getPriceFcfa(),
+                                price.getQualityGrade().getNamePt(),
+                                verifier.getFullName()),
+                        "success");
+            }
+        } catch (Exception e) {
+            logger.error("Error broadcasting price verification via WebSocket", e);
+        }
 
         return priceMapper.toDTO(price);
     }
@@ -441,5 +485,74 @@ public class PriceService {
     private void updateUserReputation(User user, int points) {
         user.setReputationScore(user.getReputationScore() + points);
         userRepository.save(user);
+    }
+
+    /**
+     * Check for significant price variations and send notifications
+     */
+    private void checkAndNotifyPriceVariation(PriceDTO newPrice) {
+        try {
+            // Get recent prices for the same region and quality
+            LocalDate fromDate = LocalDate.now().minusDays(7); // Last 7 days
+            List<Price> recentPrices = priceRepository.findPricesForStatisticsWithAllParams(
+                    newPrice.getRegion(),
+                    newPrice.getQuality(),
+                    fromDate);
+
+            if (recentPrices.size() > 1) {
+                // Calculate average price excluding the new one
+                BigDecimal avgPrice = recentPrices.stream()
+                        .filter(p -> !p.getId().toString().equals(newPrice.getId()))
+                        .map(Price::getPriceFcfa)
+                        .filter(Objects::nonNull)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add)
+                        .divide(BigDecimal.valueOf(recentPrices.size() - 1), 2, BigDecimal.ROUND_HALF_UP);
+
+                if (avgPrice.compareTo(BigDecimal.ZERO) > 0) {
+                    BigDecimal newPriceValue = newPrice.getPriceFcfa();
+                    BigDecimal percentChange = newPriceValue.subtract(avgPrice)
+                            .divide(avgPrice, 4, BigDecimal.ROUND_HALF_UP)
+                            .abs();
+
+                    // If price variation is more than 10%, send notification
+                    if (percentChange.compareTo(BigDecimal.valueOf(0.1)) > 0) {
+                        String direction = newPriceValue.compareTo(avgPrice) > 0 ? "augmentation" : "diminution";
+                        String message = String.format(
+                                "Variation significative de prix détectée: %s de %.1f%% pour %s en %s",
+                                direction,
+                                percentChange.multiply(BigDecimal.valueOf(100)).doubleValue(),
+                                newPrice.getQualityName(),
+                                newPrice.getRegionName());
+
+                        // Broadcast price alert to all users
+                        Map<String, Object> alert = new HashMap<>();
+                        alert.put("type", "price_alert");
+                        alert.put("title", "Alerte Prix");
+                        alert.put("message", message);
+                        alert.put("price", newPrice);
+                        alert.put("variation", percentChange.multiply(BigDecimal.valueOf(100)).doubleValue());
+                        alert.put("timestamp", System.currentTimeMillis());
+
+                        webSocketController.broadcastToTopic("/topic/price_alerts", alert);
+                        logger.info("Price variation alert sent: {}% change",
+                                percentChange.multiply(BigDecimal.valueOf(100)));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error checking price variation", e);
+        }
+    }
+
+    /**
+     * Broadcast updated statistics to all connected users
+     */
+    public void broadcastStatsUpdate() {
+        try {
+            PriceStatsDTO stats = getPriceStatistics(null, null, 30, "pt");
+            webSocketController.broadcastStatsUpdate(stats);
+        } catch (Exception e) {
+            logger.error("Error broadcasting stats update", e);
+        }
     }
 }
