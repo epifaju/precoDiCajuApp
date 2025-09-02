@@ -1,0 +1,157 @@
+# Configuration GPS pour l'application Preço di Cajú
+
+app:
+  gps:
+    # Configuration de la validation GPS
+    validation:
+      enabled: true
+      # Limites géographiques de la Guinée-Bissau
+      guinea-bissau:
+        min-latitude: 10.5
+        max-latitude: 12.7
+        min-longitude: -16.8
+        max-longitude: -13.6
+      # Seuils de précision GPS
+      accuracy:
+        excellent: 10.0 # mètres
+        good: 25.0
+        fair: 50.0
+        poor: 100.0
+      # Distance maximale acceptable entre GPS et région (mètres)
+      max-distance-from-region: 50000
+      # Validation automatique lors de la création de prix
+      auto-validate-on-create: true
+      # Rejeter les prix avec des coordonnées invalides
+      reject-invalid-coordinates: true
+      # Avertir pour les coordonnées de faible qualité
+      warn-on-poor-quality: true
+
+    # Configuration du géocodage
+    geocoding:
+      enabled: true
+      # Service de géocodage à utiliser
+      provider: nominatim
+      # URL du service Nominatim
+      nominatim:
+        url: https://nominatim.openstreetmap.org/reverse
+        email: contact@precodicaju.gw
+        user-agent: PrecoDiCaju/1.0
+        # Délai entre les requêtes (ms)
+        rate-limit: 1000
+        # Timeout des requêtes (ms)
+        timeout: 5000
+        # Langues acceptées
+        accept-language: pt,fr,en
+        # Niveau de détail
+        zoom: 18
+        # Détails d'adresse
+        address-details: true
+      # Cache de géocodage
+      cache:
+        enabled: true
+        # Taille maximale du cache
+        max-size: 1000
+        # Durée de vie des entrées (heures)
+        ttl-hours: 24
+        # Nettoyage automatique
+        auto-cleanup: true
+        # Intervalle de nettoyage (heures)
+        cleanup-interval-hours: 6
+
+    # Configuration de l'analyse GPS
+    analysis:
+      enabled: true
+      # Analyse automatique des régions
+      auto-analyze-regions: true
+      # Intervalle d'analyse (heures)
+      analysis-interval-hours: 24
+      # Seuil de distance pour les clusters (mètres)
+      cluster-distance-threshold: 1000
+      # Nombre maximum de résultats pour les prix proches
+      max-nearby-results: 50
+      # Rayon par défaut pour la recherche de prix proches (km)
+      default-search-radius-km: 10
+
+    # Configuration des notifications GPS
+    notifications:
+      enabled: true
+      # Notifier les coordonnées invalides
+      notify-invalid-coordinates: true
+      # Notifier les coordonnées de faible qualité
+      notify-poor-quality: true
+      # Notifier les problèmes de cohérence avec la région
+      notify-region-inconsistency: true
+      # Notifier les problèmes de plausibilité
+      notify-plausibility-issues: true
+
+    # Configuration des statistiques GPS
+    statistics:
+      enabled: true
+      # Calculer les statistiques en temps réel
+      real-time-calculation: true
+      # Intervalle de mise à jour des statistiques (minutes)
+      update-interval-minutes: 15
+      # Conserver l'historique des statistiques
+      keep-history: true
+      # Durée de conservation de l'historique (jours)
+      history-retention-days: 90
+
+    # Configuration de la performance
+    performance:
+      # Mise en cache des validations GPS
+      cache-validations: true
+      # Taille du cache de validation
+      validation-cache-size: 500
+      # Durée de vie du cache de validation (heures)
+      validation-cache-ttl-hours: 1
+      # Traitement asynchrone du géocodage
+      async-geocoding: true
+      # Pool de threads pour le géocodage
+      geocoding-thread-pool-size: 5
+      # Traitement par lots des analyses
+      batch-analysis: true
+      # Taille des lots pour l'analyse
+      batch-size: 100
+
+    # Configuration de la sécurité
+    security:
+      # Validation des coordonnées GPS
+      validate-coordinates: true
+      # Sanitisation des adresses géocodées
+      sanitize-geocoded-addresses: true
+      # Limitation du taux de requêtes de géocodage
+      rate-limit-geocoding: true
+      # Nombre maximum de requêtes par minute
+      max-requests-per-minute: 60
+      # Blocage des coordonnées suspectes
+      block-suspicious-coordinates: true
+      # Seuil de suspicion (distance anormale)
+      suspicion-threshold-km: 1000
+
+# Configuration des logs GPS
+logging:
+  level:
+    gw.precaju.service.GpsValidationService: DEBUG
+    gw.precaju.service.GpsGeocodingService: DEBUG
+    gw.precaju.service.GpsAnalysisService: DEBUG
+    gw.precaju.controller.GpsController: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Configuration des métriques GPS
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gps
+  endpoint:
+    gps:
+      enabled: true
+  metrics:
+    export:
+      simple:
+        enabled: true
+    tags:
+      application: precodicaju
+      component: gps

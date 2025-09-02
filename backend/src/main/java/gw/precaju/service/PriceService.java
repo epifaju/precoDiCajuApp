@@ -35,6 +35,8 @@ public class PriceService {
     private final PriceMapper priceMapper;
     private final FileStorageService fileStorageService;
     private final WebSocketController webSocketController;
+    private final GpsValidationService gpsValidationService;
+    private final GpsGeocodingService gpsGeocodingService;
 
     public PriceService(PriceRepository priceRepository,
             RegionRepository regionRepository,
@@ -42,7 +44,9 @@ public class PriceService {
             UserRepository userRepository,
             PriceMapper priceMapper,
             FileStorageService fileStorageService,
-            WebSocketController webSocketController) {
+            WebSocketController webSocketController,
+            GpsValidationService gpsValidationService,
+            GpsGeocodingService gpsGeocodingService) {
         this.priceRepository = priceRepository;
         this.regionRepository = regionRepository;
         this.qualityGradeRepository = qualityGradeRepository;
@@ -50,6 +54,8 @@ public class PriceService {
         this.priceMapper = priceMapper;
         this.fileStorageService = fileStorageService;
         this.webSocketController = webSocketController;
+        this.gpsValidationService = gpsValidationService;
+        this.gpsGeocodingService = gpsGeocodingService;
     }
 
     @Transactional(readOnly = true)
@@ -113,6 +119,24 @@ public class PriceService {
         // Validate quality grade
         QualityGrade qualityGrade = qualityGradeRepository.findByCodeAndActiveTrue(request.getQualityGrade())
                 .orElseThrow(() -> new RuntimeException("Invalid quality grade: " + request.getQualityGrade()));
+
+        // Validate GPS coordinates if provided
+        if (request.getGpsLat() != null && request.getGpsLng() != null) {
+            logger.debug("Validating GPS coordinates for price creation");
+            GpsValidationService.GpsValidationResult gpsValidation = gpsValidationService.validatePriceGps(request);
+
+            if (!gpsValidation.isValid()) {
+                logger.warn("Invalid GPS coordinates for price: {}", gpsValidation.getErrors());
+                throw new RuntimeException("Invalid GPS coordinates: " + String.join(", ", gpsValidation.getErrors()));
+            }
+
+            if (!gpsValidation.getWarnings().isEmpty()) {
+                logger.info("GPS validation warnings for price: {}", gpsValidation.getWarnings());
+            }
+
+            logger.info("GPS coordinates validated successfully with quality score: {}",
+                    gpsValidation.getQualityScore());
+        }
 
         // Create price entity
         Price price = new Price();

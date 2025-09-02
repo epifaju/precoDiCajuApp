@@ -37,6 +37,314 @@
       "title": "Edit Profile"
     },
     "form": {
+      "geolocation": {
+        "notSupported": "Geolocation is not supported by this browser",
+        "permissionError": "Error checking permissions: {{error}}",
+        "benefits": {
+          "title": "Why enable location access?",
+          "autoLocation": "Automatically fill in your location when submitting prices",
+          "nearbyPrices": "See prices from nearby locations on the map",
+          "accuracy": "Improve price accuracy with precise location data",
+          "community": "Help the community by sharing accurate location data"
+        },
+        "permissionDenied": {
+          "title": "Location access was denied",
+          "instructions": "To enable location access:",
+          "step1": "Click the location icon in your browser's address bar",
+          "step2": "Select \"Allow\" for location access",
+          "step3": "Refresh the page",
+          "message": "Location access was denied. Please enable it in your browser settings."
+        },
+        "permissionPrompt": {
+          "message": "Click the button above to enable location access."
+        },
+        "requestPermission": "Enable Location Access",
+        "skip": "Skip for now",
+        "privacy": {
+          "note": "Your location data is only used to improve price accuracy and is not shared with third parties. You can disable location access at any time in your browser settings."
+        },
+        "permissionModal": {
+          "title": "Enable Location Access"
+        },
+        "permissionCard": {
+          "title": "Location Access Required",
+          "description": "Enable location access to automatically fill in your location when submitting prices and see nearby prices on the map."
+        },
+        "status": {
+          "error": "Error",
+          "loading": "Loading...",
+          "denied": "Access Denied",
+          "active": "Active",
+          "prompt": "Permission Required",
+          "unknown": "Unknown"
+        },
+        "statusCard": {
+          "title": "Location Status",
+          "description": "Current GPS location and accuracy information"
+        },
+        "coordinates": "Coordinates",
+        "accuracy": "Accuracy",
+        "address": "Address",
+        "validation": "Validation",
+        "valid": "Valid",
+        "invalid": "Invalid",
+        "inBounds": "In Bounds",
+        "outOfBounds": "Out of Bounds",
+        "dismiss": "Dismiss",
+        "gettingLocation": "Getting Location...",
+        "getCurrentLocation": "Get Current Location",
+        "enablePermission": "Enable",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "addressPlaceholder": "Enter address or let GPS fill it automatically",
+        "gettingAddress": "Getting address...",
+        "inputCard": {
+          "title": "Location Information",
+          "description": "Enter coordinates manually or use GPS to get your current location"
+        },
+        "quality": {
+          "excellent": "Excellent",
+          "good": "Good",
+          "fair": "Fair",
+          "poor": "Poor",
+          "invalid": "Invalid"
+        },
+        "mapInstructions": "Click on the map to select a location",
+        "clear": "Clear",
+        "selectedLocation": "Selected Location",
+        "noAddress": "No address available",
+        "pickerCard": {
+          "title": "Select Location",
+          "description": "Click on the map to select a location or use GPS to get your current position"
+        },
+        "qualityScore": "Quality Score",
+        "validation": "Validation",
+        "improvement": "Accuracy Improvement",
+        "original": "Original",
+        "improved": "Improved",
+        "movement": "Movement",
+        "moving": "Moving",
+        "stationary": "Stationary",
+        "speed": "Speed",
+        "direction": "Direction",
+        "consistency": "Consistency",
+        "consistent": "Consistent",
+        "inconsistent": "Inconsistent",
+        "validate": "Validate",
+        "geocode": "Geocode",
+        "improve": "Improve",
+        "reset": "Reset",
+        "source": {
+          "nominatim": "Nominatim",
+          "cache": "Cache",
+          "fallback": "Fallback"
+        },
+        "confidence": "Confidence",
+        "method": {
+          "averaging": "Averaging",
+          "filtering": "Filtering",
+          "weighted": "Weighted",
+          "kalman": "Kalman"
+        },
+        "accuracyCard": {
+          "title": "GPS Accuracy Analysis",
+          "description": "Detailed analysis of GPS accuracy and quality"
+        },
+        "offline": {
+          "title": "Offline Status",
+          "online": "Online",
+          "offline": "Offline",
+          "canWorkOffline": "Can work offline",
+          "cannotWorkOffline": "Cannot work offline",
+          "sync": "Sync",
+          "syncing": "Syncing...",
+          "syncSuccess": "Sync successful",
+          "syncError": "Sync error",
+          "lastSync": "Last sync",
+          "pendingSync": "Pending sync",
+          "never": "Never",
+          "justNow": "Just now",
+          "minutesAgo": "{{count}} minute(s) ago",
+          "hoursAgo": "{{count}} hour(s) ago",
+          "connectivity": "Connectivity",
+          "synchronization": "Synchronization",
+          "status": "Status",
+          "progress": "Progress",
+          "upToDate": "Up to date",
+          "offlineWarning": "You are offline. Changes will be synchronized when connection is restored.",
+          "confirmClearCache": "Are you sure you want to clear the cache? This action cannot be undone.",
+          "cacheTitle": "Offline Cache",
+          "cacheSize": "Cache size",
+          "cacheStats": "Cache statistics",
+          "totalPositions": "Total positions",
+          "totalGeocoding": "Total geocoding",
+          "syncQueue": "Sync queue",
+          "cacheHitRate": "Cache hit rate",
+          "positions": "Positions",
+          "geocoding": "Geocoding",
+          "clearCache": "Clear cache",
+          "loading": "Loading...",
+                "noCachedPositions": "No cached positions",
+      "noCachedGeocoding": "No cached geocoding",
+      "accuracy": "Accuracy"
+    },
+    "dashboard": {
+      "title": "GPS Dashboard",
+      "subtitle": "Complete overview of geolocation",
+      "overview": "Overview",
+      "currentLocation": "Current Location",
+      "accuracy": "Accuracy",
+      "status": "Status",
+      "lastUpdate": "Last Update",
+      "totalPositions": "Total Positions",
+      "averageAccuracy": "Average Accuracy",
+      "qualityScore": "Quality Score",
+      "offlinePositions": "Offline Positions",
+      "syncStatus": "Sync Status"
+    },
+    "navigation": {
+      "title": "GPS Navigation",
+      "subtitle": "GPS navigation interface",
+      "currentLocation": "Current Location",
+      "destination": "Destination",
+      "distance": "Distance",
+      "bearing": "Bearing",
+      "speed": "Speed",
+      "eta": "ETA",
+      "route": "Route",
+      "startNavigation": "Start Navigation",
+      "stopNavigation": "Stop Navigation",
+      "recalculateRoute": "Recalculate Route",
+      "voiceGuidance": "Voice Guidance",
+      "turnByTurn": "Turn-by-Turn Instructions"
+    },
+    "widget": {
+      "title": "GPS Widget",
+      "compact": "Compact Mode",
+      "expanded": "Expanded Mode",
+      "currentLocation": "Current Location",
+      "accuracy": "Accuracy",
+      "status": "Status",
+      "lastUpdate": "Last Update",
+      "toggleExpanded": "Toggle Mode",
+      "refresh": "Refresh",
+      "settings": "Settings"
+    },
+    "settings": {
+      "title": "GPS Settings",
+      "subtitle": "Configure geolocation preferences",
+      "general": "General",
+      "accuracy": "Accuracy",
+      "offline": "Offline",
+      "notifications": "Notifications",
+      "advanced": "Advanced",
+      "enableGps": "Enable GPS",
+      "enableHighAccuracy": "High Accuracy",
+      "enableOfflineMode": "Offline Mode",
+      "enableNotifications": "Notifications",
+      "enableVoiceGuidance": "Voice Guidance",
+      "enableTurnByTurn": "Turn-by-Turn Instructions",
+      "enableAutoSync": "Auto Sync",
+      "enableGeocoding": "Geocoding",
+      "enableValidation": "Validation",
+      "enableImprovement": "Accuracy Improvement",
+      "enableMovementDetection": "Movement Detection",
+      "enableConsistencyCheck": "Consistency Check",
+      "enableQualityScore": "Quality Score",
+      "enableOfflineCache": "Offline Cache",
+      "enableOfflineSync": "Offline Sync",
+      "enableOfflineValidation": "Offline Validation",
+      "enableOfflineGeocoding": "Offline Geocoding",
+      "enableOfflineImprovement": "Offline Improvement",
+      "enableOfflineMovement": "Offline Movement Detection",
+      "enableOfflineConsistency": "Offline Consistency",
+      "enableOfflineQuality": "Offline Quality",
+      "enableOfflineNotifications": "Offline Notifications",
+      "enableOfflineVoice": "Offline Voice",
+      "enableOfflineTurnByTurn": "Offline Turn-by-Turn",
+      "enableOfflineAutoSync": "Offline Auto Sync",
+      "enableOfflineGeocodingCache": "Offline Geocoding Cache",
+      "enableOfflineValidationCache": "Offline Validation Cache",
+      "enableOfflineImprovementCache": "Offline Improvement Cache",
+      "enableOfflineMovementCache": "Offline Movement Cache",
+      "enableOfflineConsistencyCache": "Offline Consistency Cache",
+      "enableOfflineQualityCache": "Offline Quality Cache",
+      "enableOfflineNotificationsCache": "Offline Notifications Cache",
+      "enableOfflineVoiceCache": "Offline Voice Cache",
+      "enableOfflineTurnByTurnCache": "Offline Turn-by-Turn Cache",
+      "enableOfflineAutoSyncCache": "Offline Auto Sync Cache",
+      "saveSettings": "Save Settings",
+      "resetSettings": "Reset Settings",
+      "exportSettings": "Export Settings",
+      "importSettings": "Import Settings"
+    },
+    "visualization": {
+      "title": "GPS Visualization",
+      "subtitle": "Charts and metrics for geolocation",
+      "noData": "No GPS data",
+      "noDataDescription": "No GPS data available for visualization",
+      "accuracyChart": "Accuracy Chart",
+      "qualityChart": "Quality Chart",
+      "trajectoryChart": "Trajectory Chart",
+      "speedChart": "Speed Chart",
+      "avgAccuracy": "Average Accuracy",
+      "minAccuracy": "Minimum Accuracy",
+      "maxAccuracy": "Maximum Accuracy",
+      "totalPoints": "Total Points",
+      "legend": "Legend",
+      "periods": {
+        "1h": "1 Hour",
+        "6h": "6 Hours",
+        "24h": "24 Hours",
+        "7d": "7 Days",
+        "30d": "30 Days"
+      },
+      "types": {
+        "accuracy": "Accuracy",
+        "trajectory": "Trajectory",
+        "quality": "Quality",
+        "speed": "Speed",
+        "all": "All"
+      }
+    },
+    "notifications": {
+      "clearAll": "Clear All",
+      "accuracyImproved": {
+        "title": "Accuracy Improved",
+        "message": "GPS accuracy improved to {{accuracy}}m"
+      },
+      "accuracyDegraded": {
+        "title": "Accuracy Degraded",
+        "message": "GPS accuracy degraded to {{accuracy}}m"
+      },
+      "permissionGranted": {
+        "title": "Permission Granted",
+        "message": "Location access has been granted"
+      },
+      "permissionDenied": {
+        "title": "Permission Denied",
+        "message": "Location access has been denied",
+        "retry": "Retry"
+      },
+      "offlineMode": {
+        "title": "Offline Mode",
+        "message": "GPS is now working in offline mode"
+      },
+      "syncCompleted": {
+        "title": "Sync Completed",
+        "message": "{{count}} positions have been synchronized"
+      },
+      "syncFailed": {
+        "title": "Sync Failed",
+        "message": "Synchronization failed",
+        "retry": "Retry"
+      },
+      "validationFailed": {
+        "title": "Validation Failed",
+        "message": "GPS validation failed: {{reason}}"
+      }
+    }
+  },
       "fullName": {
         "label": "Full Name",
         "placeholder": "Your full name",
@@ -301,6 +609,8 @@
     "pricesWithGps": "With GPS",
     "verifiedPrices": "Verified Prices",
     "regionsCovered": "Regions",
+    "regionsInView": "Regions in View",
+    "filtered": "Filtered",
     "legend": "Map Legend",
     "markerColors": "Marker Colors",
     "unverifiedPrices": "Unverified Prices",

@@ -28,6 +28,24 @@ export const queryClient = new QueryClient({
   },
 });
 
+// Helper function to safely serialize objects for query keys
+const safeSerialize = (obj: Record<string, any>): Record<string, any> => {
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (value !== undefined && value !== null && value !== '') {
+      // Only include primitive values and simple objects
+      if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+        result[key] = value;
+      } else if (Array.isArray(value)) {
+        result[key] = value;
+      } else if (typeof value === 'object' && value.constructor === Object) {
+        result[key] = safeSerialize(value);
+      }
+    }
+  }
+  return result;
+};
+
 // Query keys factory
 export const queryKeys = {
   // Auth
@@ -43,11 +61,11 @@ export const queryKeys = {
   
   // Prices
   prices: ['prices'] as const,
-  pricesList: (filters: Record<string, any>) => ['prices', 'list', filters] as const,
+  pricesList: (filters: Record<string, any>) => ['prices', 'list', safeSerialize(filters)] as const,
   price: (id: string) => ['prices', id] as const,
-  priceStats: (filters: Record<string, any>) => ['prices', 'stats', filters] as const,
-  userPrices: (userId: string, filters: Record<string, any>) => ['prices', 'user', userId, filters] as const,
-  unverifiedPrices: (filters: Record<string, any>) => ['prices', 'unverified', filters] as const,
+  priceStats: (filters: Record<string, any>) => ['prices', 'stats', safeSerialize(filters)] as const,
+  userPrices: (userId: string, filters: Record<string, any>) => ['prices', 'user', userId, safeSerialize(filters)] as const,
+  unverifiedPrices: (filters: Record<string, any>) => ['prices', 'unverified', safeSerialize(filters)] as const,
   
   // Files
   fileInfo: ['files', 'info'] as const,

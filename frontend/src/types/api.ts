@@ -181,4 +181,26 @@ export interface GpsCoordinates {
   timestamp?: number;
 }
 
+// Enhanced GPS types for geolocation hooks
+export interface GeolocationPosition {
+  coordinates: GpsCoordinates;
+  accuracy: number;
+  timestamp: number;
+  isValid: boolean;
+  quality: 'excellent' | 'good' | 'fair' | 'poor' | 'invalid';
+}
+
+export interface GeocodingAddress {
+  formatted: string;
+  components: {
+    country?: string;
+    region?: string;
+    city?: string;
+    village?: string;
+    road?: string;
+    postcode?: string;
+  };
+  confidence: number;
+}
+
 

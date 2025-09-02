@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -27,6 +28,12 @@ public class Region {
 
     @Column(name = "active")
     private Boolean active = true;
+
+    @Column(name = "center_latitude", precision = 10, scale = 8)
+    private BigDecimal centerLatitude;
+
+    @Column(name = "center_longitude", precision = 11, scale = 8)
+    private BigDecimal centerLongitude;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -88,6 +95,22 @@ public class Region {
         this.active = active;
     }
 
+    public BigDecimal getCenterLatitude() {
+        return centerLatitude;
+    }
+
+    public void setCenterLatitude(BigDecimal centerLatitude) {
+        this.centerLatitude = centerLatitude;
+    }
+
+    public BigDecimal getCenterLongitude() {
+        return centerLongitude;
+    }
+
+    public void setCenterLongitude(BigDecimal centerLongitude) {
+        this.centerLongitude = centerLongitude;
+    }
+
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -137,8 +160,3 @@ public class Region {
                 '}';
     }
 }
-
-
-
-
-

@@ -29,25 +29,29 @@ const PricesMapPage: React.FC = () => {
 
   // API queries
   const { data: regions } = useRegions();
-  const { data: qualityGrades } = useRegions();
-  const { data: pricesData, isLoading, error } = usePrices({
+  const { data: qualityGrades } = useQualityGrades();
+  
+  // Create a clean filters object to avoid circular references
+  const cleanFilters = {
     page: 0,
     size: 1000, // Charger plus de prix pour la carte
     sortBy: 'recordedDate',
-    sortDir: 'desc',
+    sortDir: 'desc' as const,
     region: filters.regionCode || undefined,
     quality: filters.qualityGrade || undefined,
-    verified: filters.verified ? filters.verified === 'true' : undefined,
+    verified: filters.verified || undefined,
     search: filters.search || undefined,
     from: filters.dateFrom || undefined,
     to: filters.dateTo || undefined,
-  });
+  };
+  
+  const { data: pricesData, isLoading } = usePrices(cleanFilters);
 
   const prices = pricesData?.content || [];
 
   // Filter options
   const regionOptions = [
-    { value: '', label: t('map.allRegions', 'All Regions') },
+    { value: '', label: t('map.allRegions', 'All Regions') || 'All Regions' },
     ...(regions || []).map((region: any) => ({
       value: region.code,
       label: region.namePt,
@@ -55,7 +59,7 @@ const PricesMapPage: React.FC = () => {
   ];
 
   const qualityOptions = [
-    { value: '', label: t('map.allQualities', 'All Qualities') },
+    { value: '', label: t('map.allQualities', 'All Qualities') || 'All Qualities' },
     ...(qualityGrades || []).map((quality: any) => ({
       value: quality.code,
       label: quality.namePt,
@@ -63,9 +67,9 @@ const PricesMapPage: React.FC = () => {
   ];
 
   const verifiedOptions = [
-    { value: '', label: t('map.allPrices', 'All Prices') },
-    { value: 'true', label: t('map.verifiedOnly', 'Verified Only') },
-    { value: 'false', label: t('map.unverifiedOnly', 'Unverified Only') },
+    { value: '', label: t('map.allPrices', 'All Prices') || 'All Prices' },
+    { value: 'true', label: t('map.verifiedOnly', 'Verified Only') || 'Verified Only' },
+    { value: 'false', label: t('map.unverifiedOnly', 'Unverified Only') || 'Unverified Only' },
   ];
 
   const updateFilter = (key: string, value: string) => {
@@ -83,7 +87,7 @@ const PricesMapPage: React.FC = () => {
     });
   };
 
-  const pricesWithGPS = prices.filter(price => price.gpsLat && price.gpsLng);
+  const pricesWithGPS = prices.filter((price: any) => price.gpsLat && price.gpsLng);
   const totalPrices = prices.length;
   const pricesWithGPSCount = pricesWithGPS.length;
 
@@ -138,6 +142,11 @@ const PricesMapPage: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 {t('map.quickStats', 'Quick Statistics')}
+                {(filters.regionCode || filters.qualityGrade || filters.verified || filters.dateFrom || filters.dateTo || filters.search) && (
+                  <span className="ml-2 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
+                    {t('map.filtered', 'Filtered')}
+                  </span>
+                )}
               </h3>
               
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -180,7 +189,7 @@ const PricesMapPage: React.FC = () => {
                     </svg>
                   </div>
                   <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-                    {prices.filter(p => p.verified).length}
+                    {prices.filter((p: any) => p.verified).length}
                   </div>
                   <div className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium">
                     {t('map.verifiedPrices', 'Verified')}
@@ -195,10 +204,10 @@ const PricesMapPage: React.FC = () => {
                     </svg>
                   </div>
                   <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-600 dark:text-orange-400 mb-1">
-                    {new Set(prices.map(p => p.region)).size}
+                    {new Set(prices.map((p: any) => p.region)).size}
                   </div>
                   <div className="text-xs sm:text-sm text-orange-700 dark:text-orange-300 font-medium">
-                    {t('map.regionsCovered', 'Regions')}
+                    {t('map.regionsInView', 'Regions in View')}
                   </div>
                 </div>
               </div>
@@ -219,9 +228,9 @@ const PricesMapPage: React.FC = () => {
                 </label>
                 <Select
                   value={filters.regionCode}
-                  onChange={(value) => updateFilter('regionCode', value)}
+                  onChange={(e) => updateFilter('regionCode', e.target.value)}
                   options={regionOptions}
-                  placeholder={t('map.selectRegion', 'Select Region')}
+                  placeholder={t('map.selectRegion', 'Select Region') || 'Select Region'}
                 />
               </div>
               
@@ -231,9 +240,9 @@ const PricesMapPage: React.FC = () => {
                 </label>
                 <Select
                   value={filters.qualityGrade}
-                  onChange={(value) => updateFilter('qualityGrade', value)}
+                  onChange={(e) => updateFilter('qualityGrade', e.target.value)}
                   options={qualityOptions}
-                  placeholder={t('map.selectQuality', 'Select Quality')}
+                  placeholder={t('map.selectQuality', 'Select Quality') || 'Select Quality'}
                 />
               </div>
               
@@ -243,9 +252,9 @@ const PricesMapPage: React.FC = () => {
                 </label>
                 <Select
                   value={filters.verified}
-                  onChange={(value) => updateFilter('verified', value)}
+                  onChange={(e) => updateFilter('verified', e.target.value)}
                   options={verifiedOptions}
-                  placeholder={t('map.selectVerified', 'Select Status')}
+                  placeholder={t('map.selectVerified', 'Select Status') || 'Select Status'}
                 />
               </div>
               

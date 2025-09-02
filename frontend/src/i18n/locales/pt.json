@@ -44,6 +44,314 @@
       "contributor": "Contribuidor"
     }
   },
+  "geolocation": {
+    "notSupported": "Geolocalização não é suportada por este navegador",
+    "permissionError": "Erro ao verificar permissões: {{error}}",
+    "benefits": {
+      "title": "Por que habilitar o acesso à localização?",
+      "autoLocation": "Preencher automaticamente sua localização ao submeter preços",
+      "nearbyPrices": "Ver preços de locais próximos no mapa",
+      "accuracy": "Melhorar a precisão dos preços com dados de localização precisos",
+      "community": "Ajudar a comunidade compartilhando dados de localização precisos"
+    },
+    "permissionDenied": {
+      "title": "Acesso à localização foi negado",
+      "instructions": "Para habilitar o acesso à localização:",
+      "step1": "Clique no ícone de localização na barra de endereços do seu navegador",
+      "step2": "Selecione \"Permitir\" para acesso à localização",
+      "step3": "Atualize a página",
+      "message": "O acesso à localização foi negado. Por favor, habilite-o nas configurações do seu navegador."
+    },
+    "permissionPrompt": {
+      "message": "Clique no botão acima para habilitar o acesso à localização."
+    },
+    "requestPermission": "Habilitar Acesso à Localização",
+    "skip": "Pular por enquanto",
+    "privacy": {
+      "note": "Seus dados de localização são usados apenas para melhorar a precisão dos preços e não são compartilhados com terceiros. Você pode desabilitar o acesso à localização a qualquer momento nas configurações do seu navegador."
+    },
+    "permissionModal": {
+      "title": "Habilitar Acesso à Localização"
+    },
+    "permissionCard": {
+      "title": "Acesso à Localização Necessário",
+      "description": "Habilite o acesso à localização para preencher automaticamente sua localização ao submeter preços e ver preços próximos no mapa."
+    },
+    "status": {
+      "error": "Erro",
+      "loading": "Carregando...",
+      "denied": "Acesso Negado",
+      "active": "Ativo",
+      "prompt": "Permissão Necessária",
+      "unknown": "Desconhecido"
+    },
+    "statusCard": {
+      "title": "Status da Localização",
+      "description": "Informações atuais de GPS e precisão"
+    },
+    "coordinates": "Coordenadas",
+    "accuracy": "Precisão",
+    "address": "Endereço",
+    "validation": "Validação",
+    "valid": "Válido",
+    "invalid": "Inválido",
+    "inBounds": "Dentro dos Limites",
+    "outOfBounds": "Fora dos Limites",
+    "dismiss": "Dispensar",
+    "gettingLocation": "Obtendo Localização...",
+    "getCurrentLocation": "Obter Localização Atual",
+    "enablePermission": "Habilitar",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "addressPlaceholder": "Digite o endereço ou deixe o GPS preenchê-lo automaticamente",
+    "gettingAddress": "Obtendo endereço...",
+    "inputCard": {
+      "title": "Informações de Localização",
+      "description": "Digite as coordenadas manualmente ou use GPS para obter sua localização atual"
+    },
+    "quality": {
+      "excellent": "Excelente",
+      "good": "Bom",
+      "fair": "Razoável",
+      "poor": "Ruim",
+      "invalid": "Inválido"
+    },
+    "mapInstructions": "Clique no mapa para selecionar uma localização",
+    "clear": "Limpar",
+    "selectedLocation": "Localização Selecionada",
+    "noAddress": "Nenhum endereço disponível",
+    "pickerCard": {
+      "title": "Selecionar Localização",
+      "description": "Clique no mapa para selecionar uma localização ou use GPS para obter sua posição atual"
+    },
+    "qualityScore": "Pontuação de Qualidade",
+    "validation": "Validação",
+    "improvement": "Melhoria de Precisão",
+    "original": "Original",
+    "improved": "Melhorado",
+    "movement": "Movimento",
+    "moving": "Em Movimento",
+    "stationary": "Parado",
+    "speed": "Velocidade",
+    "direction": "Direção",
+    "consistency": "Consistência",
+    "consistent": "Consistente",
+    "inconsistent": "Inconsistente",
+    "validate": "Validar",
+    "geocode": "Geocodificar",
+    "improve": "Melhorar",
+    "reset": "Redefinir",
+    "source": {
+      "nominatim": "Nominatim",
+      "cache": "Cache",
+      "fallback": "Fallback"
+    },
+    "confidence": "Confiança",
+    "method": {
+      "averaging": "Média",
+      "filtering": "Filtragem",
+      "weighted": "Ponderado",
+      "kalman": "Kalman"
+    },
+    "accuracyCard": {
+      "title": "Análise de Precisão GPS",
+      "description": "Análise detalhada da precisão e qualidade do GPS"
+    },
+    "offline": {
+      "title": "Status Offline",
+      "online": "Online",
+      "offline": "Offline",
+      "canWorkOffline": "Pode funcionar offline",
+      "cannotWorkOffline": "Não pode funcionar offline",
+      "sync": "Sincronizar",
+      "syncing": "Sincronizando...",
+      "syncSuccess": "Sincronização bem-sucedida",
+      "syncError": "Erro de sincronização",
+      "lastSync": "Última sincronização",
+      "pendingSync": "Sincronização pendente",
+      "never": "Nunca",
+      "justNow": "Agora mesmo",
+      "minutesAgo": "{{count}} minuto(s) atrás",
+      "hoursAgo": "{{count}} hora(s) atrás",
+      "connectivity": "Conectividade",
+      "synchronization": "Sincronização",
+      "status": "Status",
+      "progress": "Progresso",
+      "upToDate": "Atualizado",
+      "offlineWarning": "Você está offline. As alterações serão sincronizadas quando a conexão for restaurada.",
+      "confirmClearCache": "Tem certeza de que deseja limpar o cache? Esta ação não pode ser desfeita.",
+      "cacheTitle": "Cache Offline",
+      "cacheSize": "Tamanho do cache",
+      "cacheStats": "Estatísticas do cache",
+      "totalPositions": "Total de posições",
+      "totalGeocoding": "Total de geocodificação",
+      "syncQueue": "Fila de sincronização",
+      "cacheHitRate": "Taxa de acerto do cache",
+      "positions": "Posições",
+      "geocoding": "Geocodificação",
+      "clearCache": "Limpar cache",
+      "loading": "Carregando...",
+      "noCachedPositions": "Nenhuma posição em cache",
+      "noCachedGeocoding": "Nenhuma geocodificação em cache",
+      "accuracy": "Precisão"
+    },
+    "dashboard": {
+      "title": "Painel GPS",
+      "subtitle": "Visão geral completa da geolocalização",
+      "overview": "Visão Geral",
+      "currentLocation": "Localização Atual",
+      "accuracy": "Precisão",
+      "status": "Status",
+      "lastUpdate": "Última Atualização",
+      "totalPositions": "Total de Posições",
+      "averageAccuracy": "Precisão Média",
+      "qualityScore": "Pontuação de Qualidade",
+      "offlinePositions": "Posições Offline",
+      "syncStatus": "Status de Sincronização"
+    },
+    "navigation": {
+      "title": "Navegação GPS",
+      "subtitle": "Interface de navegação GPS",
+      "currentLocation": "Localização Atual",
+      "destination": "Destino",
+      "distance": "Distância",
+      "bearing": "Direção",
+      "speed": "Velocidade",
+      "eta": "ETA",
+      "route": "Rota",
+      "startNavigation": "Iniciar Navegação",
+      "stopNavigation": "Parar Navegação",
+      "recalculateRoute": "Recalcular Rota",
+      "voiceGuidance": "Orientação por Voz",
+      "turnByTurn": "Instruções Passo a Passo"
+    },
+    "widget": {
+      "title": "Widget GPS",
+      "compact": "Modo Compacto",
+      "expanded": "Modo Expandido",
+      "currentLocation": "Localização Atual",
+      "accuracy": "Precisão",
+      "status": "Status",
+      "lastUpdate": "Última Atualização",
+      "toggleExpanded": "Alternar Modo",
+      "refresh": "Atualizar",
+      "settings": "Configurações"
+    },
+    "settings": {
+      "title": "Configurações GPS",
+      "subtitle": "Configure as preferências de geolocalização",
+      "general": "Geral",
+      "accuracy": "Precisão",
+      "offline": "Offline",
+      "notifications": "Notificações",
+      "advanced": "Avançado",
+      "enableGps": "Habilitar GPS",
+      "enableHighAccuracy": "Alta Precisão",
+      "enableOfflineMode": "Modo Offline",
+      "enableNotifications": "Notificações",
+      "enableVoiceGuidance": "Orientação por Voz",
+      "enableTurnByTurn": "Instruções Passo a Passo",
+      "enableAutoSync": "Sincronização Automática",
+      "enableGeocoding": "Geocodificação",
+      "enableValidation": "Validação",
+      "enableImprovement": "Melhoria de Precisão",
+      "enableMovementDetection": "Detecção de Movimento",
+      "enableConsistencyCheck": "Verificação de Consistência",
+      "enableQualityScore": "Pontuação de Qualidade",
+      "enableOfflineCache": "Cache Offline",
+      "enableOfflineSync": "Sincronização Offline",
+      "enableOfflineValidation": "Validação Offline",
+      "enableOfflineGeocoding": "Geocodificação Offline",
+      "enableOfflineImprovement": "Melhoria Offline",
+      "enableOfflineMovement": "Detecção de Movimento Offline",
+      "enableOfflineConsistency": "Consistência Offline",
+      "enableOfflineQuality": "Qualidade Offline",
+      "enableOfflineNotifications": "Notificações Offline",
+      "enableOfflineVoice": "Voz Offline",
+      "enableOfflineTurnByTurn": "Instruções Offline",
+      "enableOfflineAutoSync": "Sincronização Automática Offline",
+      "enableOfflineGeocodingCache": "Cache de Geocodificação Offline",
+      "enableOfflineValidationCache": "Cache de Validação Offline",
+      "enableOfflineImprovementCache": "Cache de Melhoria Offline",
+      "enableOfflineMovementCache": "Cache de Movimento Offline",
+      "enableOfflineConsistencyCache": "Cache de Consistência Offline",
+      "enableOfflineQualityCache": "Cache de Qualidade Offline",
+      "enableOfflineNotificationsCache": "Cache de Notificações Offline",
+      "enableOfflineVoiceCache": "Cache de Voz Offline",
+      "enableOfflineTurnByTurnCache": "Cache de Instruções Offline",
+      "enableOfflineAutoSyncCache": "Cache de Sincronização Automática Offline",
+      "saveSettings": "Salvar Configurações",
+      "resetSettings": "Redefinir Configurações",
+      "exportSettings": "Exportar Configurações",
+      "importSettings": "Importar Configurações"
+    },
+    "visualization": {
+      "title": "Visualização GPS",
+      "subtitle": "Graphiques et métriques pour la géolocalisation",
+      "noData": "Aucune donnée GPS",
+      "noDataDescription": "Aucune donnée GPS disponible pour la visualisation",
+      "accuracyChart": "Graphique de Précision",
+      "qualityChart": "Graphique de Qualité",
+      "trajectoryChart": "Graphique de Trajectoire",
+      "speedChart": "Graphique de Vitesse",
+      "avgAccuracy": "Précision Moyenne",
+      "minAccuracy": "Précision Minimale",
+      "maxAccuracy": "Précision Maximale",
+      "totalPoints": "Total de Points",
+      "legend": "Légende",
+      "periods": {
+        "1h": "1 Heure",
+        "6h": "6 Heures",
+        "24h": "24 Heures",
+        "7d": "7 Jours",
+        "30d": "30 Jours"
+      },
+      "types": {
+        "accuracy": "Précision",
+        "trajectory": "Trajectoire",
+        "quality": "Qualité",
+        "speed": "Vitesse",
+        "all": "Tout"
+      }
+    },
+    "notifications": {
+      "clearAll": "Effacer Tout",
+      "accuracyImproved": {
+        "title": "Précision Améliorée",
+        "message": "La précision GPS s'est améliorée à {{accuracy}}m"
+      },
+      "accuracyDegraded": {
+        "title": "Précision Dégradée",
+        "message": "La précision GPS s'est dégradée à {{accuracy}}m"
+      },
+      "permissionGranted": {
+        "title": "Permission Accordée",
+        "message": "L'accès à la localisation a été accordé"
+      },
+      "permissionDenied": {
+        "title": "Permission Refusée",
+        "message": "L'accès à la localisation a été refusé",
+        "retry": "Réessayer"
+      },
+      "offlineMode": {
+        "title": "Mode Offline",
+        "message": "Le GPS fonctionne maintenant en mode offline"
+      },
+      "syncCompleted": {
+        "title": "Synchronisation Terminée",
+        "message": "{{count}} positions ont été synchronisées"
+      },
+      "syncFailed": {
+        "title": "Échec de Synchronisation",
+        "message": "La synchronisation a échoué",
+        "retry": "Réessayer"
+      },
+      "validationFailed": {
+        "title": "Validation Échouée",
+        "message": "La validation GPS a échoué: {{reason}}"
+      }
+    }
+  },
   "profile": {
     "title": "Meu Perfil",
     "subtitle": "Gerencie suas informações pessoais e preferências",
@@ -426,6 +734,8 @@
     "pricesWithGps": "Com GPS",
     "verifiedPrices": "Preços Verificados",
     "regionsCovered": "Regiões",
+    "regionsInView": "Regiões em Exibição",
+    "filtered": "Filtrado",
     "legend": "Legenda do Mapa",
     "markerColors": "Cores dos Marcadores",
     "unverifiedPrices": "Preços Não Verificados",

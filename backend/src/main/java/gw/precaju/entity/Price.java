@@ -49,6 +49,21 @@ public class Price {
     @Column(name = "gps_lng", precision = 11, scale = 8)
     private BigDecimal gpsLng;
 
+    @Column(name = "gps_accuracy", precision = 8, scale = 2)
+    private BigDecimal gpsAccuracy;
+
+    @Column(name = "gps_quality_score", precision = 5, scale = 2)
+    private BigDecimal gpsQualityScore;
+
+    @Column(name = "gps_validation_status", length = 20)
+    private String gpsValidationStatus;
+
+    @Column(name = "gps_geocoded_address", columnDefinition = "TEXT")
+    private String gpsGeocodedAddress;
+
+    @Column(name = "gps_geocoded_at")
+    private Instant gpsGeocodedAt;
+
     @Column(name = "photo_url", length = 500)
     private String photoUrl;
 
@@ -172,6 +187,46 @@ public class Price {
         this.gpsLng = gpsLng;
     }
 
+    public BigDecimal getGpsAccuracy() {
+        return gpsAccuracy;
+    }
+
+    public void setGpsAccuracy(BigDecimal gpsAccuracy) {
+        this.gpsAccuracy = gpsAccuracy;
+    }
+
+    public BigDecimal getGpsQualityScore() {
+        return gpsQualityScore;
+    }
+
+    public void setGpsQualityScore(BigDecimal gpsQualityScore) {
+        this.gpsQualityScore = gpsQualityScore;
+    }
+
+    public String getGpsValidationStatus() {
+        return gpsValidationStatus;
+    }
+
+    public void setGpsValidationStatus(String gpsValidationStatus) {
+        this.gpsValidationStatus = gpsValidationStatus;
+    }
+
+    public String getGpsGeocodedAddress() {
+        return gpsGeocodedAddress;
+    }
+
+    public void setGpsGeocodedAddress(String gpsGeocodedAddress) {
+        this.gpsGeocodedAddress = gpsGeocodedAddress;
+    }
+
+    public Instant getGpsGeocodedAt() {
+        return gpsGeocodedAt;
+    }
+
+    public void setGpsGeocodedAt(Instant gpsGeocodedAt) {
+        this.gpsGeocodedAt = gpsGeocodedAt;
+    }
+
     public String getPhotoUrl() {
         return photoUrl;
     }
@@ -284,8 +339,3 @@ public class Price {
                 '}';
     }
 }
-
-
-
-
-
