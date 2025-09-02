@@ -6,6 +6,8 @@ interface ServiceWorkerState {
   isSecure: boolean;
   error: string | null;
   registration: ServiceWorkerRegistration | null;
+  syncStatus: 'idle' | 'syncing' | 'completed' | 'failed';
+  lastSyncTime: string | null;
 }
 
 export const useServiceWorker = () => {
@@ -15,6 +17,8 @@ export const useServiceWorker = () => {
     isSecure: false,
     error: null,
     registration: null,
+    syncStatus: 'idle',
+    lastSyncTime: null,
   });
 
   useEffect(() => {
@@ -83,6 +87,31 @@ export const useServiceWorker = () => {
           console.log('Service Worker controller changed');
         });
 
+        // Handle messages from service worker
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          const { type, timestamp, error } = event.data;
+          
+          switch (type) {
+            case 'SYNC_STARTED':
+              setState(prev => ({ ...prev, syncStatus: 'syncing' }));
+              break;
+            case 'SYNC_COMPLETED':
+              setState(prev => ({ 
+                ...prev, 
+                syncStatus: 'completed',
+                lastSyncTime: timestamp
+              }));
+              break;
+            case 'SYNC_FAILED':
+              setState(prev => ({ 
+                ...prev, 
+                syncStatus: 'failed',
+                error: error || 'Sync failed'
+              }));
+              break;
+          }
+        });
+
       } catch (error) {
         console.error('Service Worker registration failed:', error);
         setState(prev => ({
@@ -130,10 +159,25 @@ export const useServiceWorker = () => {
     }
   };
 
+  const triggerSync = async () => {
+    try {
+      if (state.registration && 'sync' in window.ServiceWorkerRegistration.prototype) {
+        await state.registration.sync.register('precaju-sync-queue');
+        setState(prev => ({ ...prev, syncStatus: 'syncing' }));
+      } else {
+        console.warn('Background Sync not supported');
+      }
+    } catch (error) {
+      console.error('Failed to trigger sync:', error);
+      setState(prev => ({ ...prev, syncStatus: 'failed', error: 'Failed to trigger sync' }));
+    }
+  };
+
   return {
     ...state,
     unregister,
-    update
+    update,
+    triggerSync
   };
 };
 

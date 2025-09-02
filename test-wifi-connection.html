@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Connexion WiFi - Preço di Cajú</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status-card {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .status-online {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+        }
+        .status-offline {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        .status-poor {
+            border-color: #f59e0b;
+            background-color: #fffbeb;
+        }
+        .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .online { color: #22c55e; }
+        .offline { color: #ef4444; }
+        .poor { color: #f59e0b; }
+        .info {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .error {
+            color: #ef4444;
+            background: #fef2f2;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Test de Connexion WiFi - Preço di Cajú</h1>
+        <p>Cette page teste la détection de connexion et l'endpoint de santé du backend.</p>
+        
+        <div id="statusCard" class="status-card">
+            <div id="statusIcon" class="icon">📡</div>
+            <h2 id="statusText">Vérification en cours...</h2>
+            <p id="statusDescription">Test de la connexion au backend</p>
+        </div>
+
+        <div class="info">
+            <strong>Informations de connexion :</strong><br>
+            <div id="connectionInfo">
+                <div>Statut navigateur: <span id="navigatorStatus">-</span></div>
+                <div>Endpoint testé: <span id="endpoint">-</span></div>
+                <div>Latence: <span id="latency">-</span></div>
+                <div>Dernière vérification: <span id="lastCheck">-</span></div>
+                <div>Erreur: <span id="error">-</span></div>
+            </div>
+        </div>
+
+        <div>
+            <button onclick="testConnection()">🔄 Tester la Connexion</button>
+            <button onclick="forceOffline()">📴 Forcer Offline</button>
+            <button onclick="forceOnline()">📶 Forcer Online</button>
+            <button onclick="resetStatus()">🔄 Réinitialiser</button>
+        </div>
+
+        <div id="errorContainer"></div>
+    </div>
+
+    <script>
+        let forcedStatus = null;
+        const CONNECTION_TIMEOUT = 5000;
+        const GOOD_LATENCY_THRESHOLD = 1000;
+
+        function updateStatus(isOnline, quality, latency, error) {
+            const statusCard = document.getElementById('statusCard');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            const statusDescription = document.getElementById('statusDescription');
+            const errorContainer = document.getElementById('errorContainer');
+
+            // Mettre à jour les informations
+            document.getElementById('navigatorStatus').textContent = navigator.onLine ? 'En ligne' : 'Hors ligne';
+            document.getElementById('endpoint').textContent = '/actuator/health';
+            document.getElementById('latency').textContent = latency ? `${latency}ms` : 'N/A';
+            document.getElementById('lastCheck').textContent = new Date().toLocaleTimeString();
+            document.getElementById('error').textContent = error || 'Aucune';
+
+            // Mettre à jour l'affichage
+            statusCard.className = 'status-card';
+            statusIcon.className = 'icon';
+            statusText.textContent = '';
+            statusDescription.textContent = '';
+
+            if (!isOnline) {
+                statusCard.classList.add('status-offline');
+                statusIcon.classList.add('offline');
+                statusIcon.textContent = '📴';
+                statusText.textContent = 'Hors ligne';
+                statusDescription.textContent = 'Connexion au backend perdue';
+            } else if (quality === 'good') {
+                statusCard.classList.add('status-online');
+                statusIcon.classList.add('online');
+                statusIcon.textContent = '📶';
+                statusText.textContent = 'En ligne';
+                statusDescription.textContent = `Connexion stable (${latency}ms)`;
+            } else {
+                statusCard.classList.add('status-poor');
+                statusIcon.classList.add('poor');
+                statusIcon.textContent = '⚠️';
+                statusText.textContent = 'Connexion lente';
+                statusDescription.textContent = `Connexion lente (${latency}ms)`;
+            }
+
+            // Afficher les erreurs
+            if (error) {
+                errorContainer.innerHTML = `<div class="error"><strong>Erreur:</strong> ${error}</div>`;
+            } else {
+                errorContainer.innerHTML = '';
+            }
+        }
+
+        async function testConnection() {
+            if (forcedStatus === 'offline') {
+                updateStatus(false, 'offline', null, 'Mode offline forcé');
+                return;
+            }
+
+            try {
+                const start = Date.now();
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), CONNECTION_TIMEOUT);
+                
+                const response = await fetch('/actuator/health', {
+                    method: 'HEAD',
+                    cache: 'no-cache',
+                    signal: controller.signal,
+                });
+                
+                clearTimeout(timeoutId);
+                const duration = Date.now() - start;
+                
+                if (response.ok) {
+                    const quality = duration < GOOD_LATENCY_THRESHOLD ? 'good' : 'poor';
+                    updateStatus(true, quality, duration, null);
+                } else {
+                    updateStatus(false, 'offline', duration, `HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : 'Erreur inconnue';
+                updateStatus(false, 'offline', null, errorMessage);
+            }
+        }
+
+        function forceOffline() {
+            forcedStatus = 'offline';
+            updateStatus(false, 'offline', null, 'Mode offline forcé');
+        }
+
+        function forceOnline() {
+            forcedStatus = 'online';
+            updateStatus(true, 'good', 50, null);
+        }
+
+        function resetStatus() {
+            forcedStatus = null;
+            testConnection();
+        }
+
+        // Test initial
+        testConnection();
+
+        // Test périodique
+        setInterval(testConnection, 30000);
+
+        // Écouter les événements de connexion du navigateur
+        window.addEventListener('online', () => {
+            if (forcedStatus === null) {
+                testConnection();
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            if (forcedStatus === null) {
+                updateStatus(false, 'offline', null, 'Connexion perdue');
+            }
+        });
+    </script>
+</body>
+</html>
