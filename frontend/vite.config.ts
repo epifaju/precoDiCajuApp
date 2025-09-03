@@ -66,7 +66,7 @@ export default defineConfig({
       injectRegister: 'auto', // Let the plugin handle registration automatically
       strategies: 'injectManifest', // Use injectManifest strategy for better control
       srcDir: 'src',
-      filename: 'sw.js'
+      filename: 'sw.ts'
     })
   ],
   resolve: {

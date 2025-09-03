@@ -291,3 +291,4 @@ export const useGeolocation = (options: GeolocationOptions = {}): GeolocationSta
     refreshPosition,
   };
 };
+

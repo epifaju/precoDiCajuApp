@@ -315,3 +315,4 @@ export const OfflineSync: React.FC<OfflineSyncProps> = ({
 };
 
 export default OfflineSync;
+

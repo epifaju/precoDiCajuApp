@@ -196,3 +196,4 @@ All hooks provide comprehensive error handling:
 - **User consent**: Always request permission before accessing location
 - **Data privacy**: Coordinates are only stored locally unless explicitly sent to server
 - **API limits**: Geocoding API has rate limits and usage policies
+

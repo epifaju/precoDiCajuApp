@@ -226,3 +226,4 @@ export const GeolocationPermission: React.FC<GeolocationPermissionProps> = ({
     </Card>
   );
 };
+

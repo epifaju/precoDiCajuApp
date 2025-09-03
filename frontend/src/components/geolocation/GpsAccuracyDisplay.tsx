@@ -387,3 +387,4 @@ export const GpsAccuracyDisplay: React.FC<GpsAccuracyDisplayProps> = ({
     </Card>
   );
 };
+

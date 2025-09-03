@@ -418,3 +418,4 @@ export const GpsNotificationManager: React.FC<GpsNotificationManagerProps> = ({
 };
 
 export default GpsNotification;
+

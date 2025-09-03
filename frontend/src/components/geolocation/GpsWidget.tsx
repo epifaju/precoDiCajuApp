@@ -403,3 +403,4 @@ export const GpsWidget: React.FC<GpsWidgetProps> = ({
 };
 
 export default GpsWidget;
+

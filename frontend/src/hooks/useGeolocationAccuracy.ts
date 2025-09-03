@@ -124,3 +124,4 @@ export const useGeolocationAccuracy = (options: AccuracyOptions = {}): AccuracyA
     getQualityScore,
   };
 };
+

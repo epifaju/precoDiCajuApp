@@ -579,4 +579,64 @@ public class PriceService {
             logger.error("Error broadcasting stats update", e);
         }
     }
+
+    /**
+     * Récupère l'historique des prix pour une région et qualité spécifiques
+     * Utilisé pour les graphiques sparklines
+     */
+    public List<PriceDTO> getPriceHistory(String regionCode, String qualityGrade, int days, String language) {
+        logger.debug("Getting price history for region: {}, quality: {}, days: {}", regionCode, qualityGrade, days);
+
+        // Calculer la date de début
+        LocalDate startDate = LocalDate.now().minusDays(days);
+
+        // Récupérer les prix de la région et qualité spécifiées
+        List<Price> prices = priceRepository.findByRegionCodeAndQualityGradeAndRecordedDateAfterOrderByRecordedDateAsc(
+                regionCode, qualityGrade, startDate);
+
+        if (prices.isEmpty()) {
+            logger.debug("No price history found for region: {}, quality: {}", regionCode, qualityGrade);
+            return Collections.emptyList();
+        }
+
+        // Grouper les prix par date et calculer la moyenne quotidienne
+        Map<LocalDate, List<Price>> pricesByDate = prices.stream()
+                .collect(Collectors.groupingBy(Price::getRecordedDate));
+
+        List<PriceDTO> history = new ArrayList<>();
+
+        for (Map.Entry<LocalDate, List<Price>> entry : pricesByDate.entrySet()) {
+            LocalDate date = entry.getKey();
+            List<Price> dayPrices = entry.getValue();
+
+            // Calculer la moyenne des prix pour cette date
+            double averagePrice = dayPrices.stream()
+                    .mapToDouble(p -> p.getPriceFcfa().doubleValue())
+                    .average()
+                    .orElse(0.0);
+
+            // Créer un DTO pour cette date
+            PriceDTO priceDTO = new PriceDTO();
+            priceDTO.setId(dayPrices.get(0).getId());
+            priceDTO.setRegion(regionCode);
+            priceDTO.setRegionName(dayPrices.get(0).getRegion().getNamePt()); // Utiliser le nom de la région
+            priceDTO.setQuality(qualityGrade);
+            priceDTO.setQualityName(dayPrices.get(0).getQualityGrade().getNamePt()); // Utiliser le nom de la qualité
+            priceDTO.setPriceFcfa(BigDecimal.valueOf(averagePrice));
+            priceDTO.setUnit("kg");
+            priceDTO.setRecordedDate(date);
+            priceDTO.setVerified(dayPrices.stream().anyMatch(p -> Boolean.TRUE.equals(p.getVerified())));
+            priceDTO.setCreatedAt(dayPrices.get(0).getCreatedAt());
+
+            history.add(priceDTO);
+        }
+
+        // Trier par date
+        history.sort(Comparator.comparing(PriceDTO::getRecordedDate));
+
+        logger.debug("Retrieved {} price history entries for region: {}, quality: {}",
+                history.size(), regionCode, qualityGrade);
+
+        return history;
+    }
 }

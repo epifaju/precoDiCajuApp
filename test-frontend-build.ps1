@@ -140,3 +140,4 @@ Write-Host "`n✨ Frontend prêt pour les tests de géolocalisation !" -Foregrou
 
 # Retourner au répertoire racine
 Set-Location ..
+

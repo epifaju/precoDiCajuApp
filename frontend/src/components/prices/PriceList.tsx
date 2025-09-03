@@ -279,9 +279,9 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
 
           {/* Price List/Grid */}
           {isLoading ? (
-            <div className={`space-y-4 ${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6' : ''}`}>
+            <div className={`space-y-6 ${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8' : ''}`}>
               {[...Array(6)].map((_, i) => (
-                <div key={i} className={`border border-gray-200 dark:border-gray-700 rounded-lg p-4 animate-pulse ${viewMode === 'grid' ? 'h-48' : ''}`}>
+                <div key={i} className={`border border-gray-200 dark:border-gray-700 rounded-lg p-5 sm:p-6 animate-pulse ${viewMode === 'grid' ? 'h-56' : ''}`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="h-12 w-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
@@ -308,7 +308,7 @@ export const PriceList: React.FC<PriceListProps> = ({ className }) => {
               </p>
             </div>
           ) : (
-            <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6' : 'space-y-4 sm:space-y-6'}`}>
+            <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8' : 'space-y-6 sm:space-y-8'}`}>
               {prices.map((price: any) => (
                 <PriceCard
                   key={price.id}

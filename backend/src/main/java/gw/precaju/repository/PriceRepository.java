@@ -166,4 +166,15 @@ public interface PriceRepository extends JpaRepository<Price, UUID> {
         @Query("SELECT p.qualityGrade.code, COUNT(p) FROM Price p WHERE p.active = true " +
                         "AND p.recordedDate >= :fromDate GROUP BY p.qualityGrade.code")
         List<Object[]> countPricesByQuality(@Param("fromDate") LocalDate fromDate);
+
+        // Method for price history (sparklines)
+        @Query("SELECT p FROM Price p WHERE p.active = true " +
+                        "AND p.region.code = :regionCode " +
+                        "AND p.qualityGrade.code = :qualityGrade " +
+                        "AND p.recordedDate >= :fromDate " +
+                        "ORDER BY p.recordedDate ASC")
+        List<Price> findByRegionCodeAndQualityGradeAndRecordedDateAfterOrderByRecordedDateAsc(
+                        @Param("regionCode") String regionCode,
+                        @Param("qualityGrade") String qualityGrade,
+                        @Param("fromDate") LocalDate fromDate);
 }

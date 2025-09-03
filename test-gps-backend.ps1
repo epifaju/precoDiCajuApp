@@ -232,3 +232,4 @@ Write-Host "Requêtes réussies: $successfulLoadTests/$loadTests" -ForegroundCol
 Write-Host "Débit: $([math]::Round($loadTests / ($loadDuration / 1000), 2)) requêtes/seconde" -ForegroundColor Cyan
 
 Write-Host "`n=== Tests GPS Backend Terminés ===" -ForegroundColor Green
+

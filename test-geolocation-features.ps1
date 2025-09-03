@@ -466,3 +466,4 @@ Write-Host "3. Signalez tout problème rencontré" -ForegroundColor White
 Write-Host "4. Une fois les tests validés, nous pourrons passer à l'étape suivante" -ForegroundColor White
 
 Write-Host "`n✨ Test des fonctionnalités de géolocalisation GPS prêt !" -ForegroundColor Green
+

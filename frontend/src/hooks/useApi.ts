@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthInterceptor } from '../store/authStore';
 import { useAppStore } from '../store/appStore';
 import { queryKeys } from '../lib/queryClient';
-import type { Price, PriceStats } from '../store/appStore';
+import type { Price } from '../store/appStore';
 
 const API_BASE_URL = import.meta.env['VITE_API_URL'] || 'http://localhost:8080';
 
@@ -389,7 +389,7 @@ export const useUpdatePrice = () => {
       
       return handleApiResponse<any>(response);
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.prices });
       queryClient.invalidateQueries({ queryKey: queryKeys.price(variables.id) });
       queryClient.invalidateQueries({ queryKey: ['prices', 'stats'] });
@@ -430,7 +430,7 @@ export const useVerifyPrice = () => {
       
       return handleApiResponse<any>(response);
     },
-    onSuccess: (data, priceId) => {
+    onSuccess: (_, priceId) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.prices });
       queryClient.invalidateQueries({ queryKey: queryKeys.price(priceId) });
       queryClient.invalidateQueries({ queryKey: ['prices', 'stats'] });
@@ -522,6 +522,33 @@ export const useFileInfo = () => {
       return handleApiResponse<any>(response);
     },
     staleTime: 60 * 60 * 1000, // 1 hour (file info doesn't change)
+  });
+};
+
+// Hook pour récupérer l'historique des prix (pour les sparklines)
+export const usePriceHistory = (regionCode: string, qualityGrade: string, days: number = 30) => {
+  const { language } = useAppStore();
+  
+  return useQuery({
+    queryKey: ['priceHistory', regionCode, qualityGrade, days, language],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        regionCode,
+        qualityGrade,
+        days: days.toString(),
+      });
+      
+      const response = await fetch(`${API_BASE_URL}/api/v1/prices/history?${params}`, {
+        headers: {
+          'Accept-Language': language,
+        },
+      });
+      
+      return handleApiResponse<Price[]>(response);
+    },
+    enabled: !!regionCode && !!qualityGrade, // Only fetch if both parameters are provided
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 

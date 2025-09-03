@@ -189,3 +189,4 @@ export const useGeolocationPermission = (): GeolocationPermissionState & Geoloca
     resetPermission,
   };
 };
+

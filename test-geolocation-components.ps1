@@ -633,3 +633,4 @@ Write-Host "3. Testez également les fonctionnalités GPS avec le premier script
 Write-Host "4. Une fois tous les tests validés, nous pourrons passer à l'étape suivante" -ForegroundColor White
 
 Write-Host "`n✨ Tests des composants de géolocalisation prêts !" -ForegroundColor Green
+

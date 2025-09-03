@@ -199,3 +199,4 @@ public class GpsGeocodingDTO {
         this.importance = importance;
     }
 }
+

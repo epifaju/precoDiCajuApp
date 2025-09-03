@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/Button';
+import { SparklineChart, SparklineDataPoint } from '../charts/SparklineChart';
+import { usePriceHistory } from '../../hooks/useApi';
 
 interface PriceCardProps {
   price: any;
@@ -10,6 +12,19 @@ interface PriceCardProps {
 
 export const PriceCard: React.FC<PriceCardProps> = ({ price, viewMode, onLocationClick }) => {
   const { t } = useTranslation();
+  
+  // Récupérer l'historique des prix pour les sparklines
+  const { data: priceHistory, isLoading: historyLoading } = usePriceHistory(
+    price.region, 
+    price.quality, 
+    30 // 30 derniers jours
+  );
+
+  // Transformer les données pour le graphique sparkline
+  const sparklineData: SparklineDataPoint[] = priceHistory?.map(p => ({
+    date: p.recordedDate,
+    price: p.priceFcfa
+  })) || [];
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-GW', {
@@ -30,7 +45,7 @@ export const PriceCard: React.FC<PriceCardProps> = ({ price, viewMode, onLocatio
 
   return (
     <div
-      className={`border border-gray-200 dark:border-gray-700 rounded-lg p-4 sm:p-5 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-md dark:hover:shadow-lg ${
+      className={`border border-gray-200 dark:border-gray-700 rounded-lg p-5 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-md dark:hover:shadow-lg ${
         viewMode === 'grid' ? 'h-full flex flex-col' : ''
       }`}
     >
@@ -84,6 +99,36 @@ export const PriceCard: React.FC<PriceCardProps> = ({ price, viewMode, onLocatio
               <span className="text-gray-400 dark:text-gray-600"> • </span>
               <span className="font-medium">{t('prices.by', 'by')}</span> {price.createdBy.fullName}
             </div>
+            
+            {/* Sparkline Chart */}
+            {sparklineData.length > 0 && (
+              <div className={`mt-4 ${viewMode === 'grid' ? 'flex justify-center' : ''}`}>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                    {t('prices.trend30Days', '30-day trend')}:
+                  </span>
+                  <SparklineChart 
+                    data={sparklineData}
+                    width={viewMode === 'grid' ? 140 : 120}
+                    height={viewMode === 'grid' ? 40 : 35}
+                    showTrend={true}
+                    className="flex-shrink-0"
+                  />
+                </div>
+              </div>
+            )}
+            
+            {/* Loading state for sparkline */}
+            {historyLoading && (
+              <div className={`mt-4 ${viewMode === 'grid' ? 'flex justify-center' : ''}`}>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                    {t('prices.trend30Days', '30-day trend')}:
+                  </span>
+                  <div className={`${viewMode === 'grid' ? 'w-32 h-8' : 'w-28 h-7'} bg-gray-200 dark:bg-gray-700 rounded animate-pulse`}></div>
+                </div>
+              </div>
+            )}
             
             {price.notes && (
               <div className={`mt-3 text-sm text-gray-600 dark:text-gray-400 italic ${

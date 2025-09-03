@@ -285,3 +285,4 @@ export const OfflineStatus: React.FC<OfflineStatusProps> = ({
 };
 
 export default OfflineStatus;
+

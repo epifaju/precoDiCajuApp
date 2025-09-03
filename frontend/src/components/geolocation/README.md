@@ -397,3 +397,4 @@ All components use TailwindCSS classes and support dark mode through the `dark:`
 - Leaflet.js for cross-browser compatibility
 - Responsive map tiles
 - Touch support for mobile devices
+

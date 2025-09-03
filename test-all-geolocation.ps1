@@ -108,3 +108,4 @@ Write-Host "4. Une fois les tests validés, nous pourrons passer à l'étape sui
 
 Write-Host "`n✨ Tests de géolocalisation GPS lancés avec succès !" -ForegroundColor Green
 Write-Host "Vérifiez les résultats dans les fichiers de test ouverts dans votre navigateur." -ForegroundColor White
+

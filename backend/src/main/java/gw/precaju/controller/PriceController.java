@@ -21,6 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -331,6 +333,42 @@ public class PriceController {
 
         } catch (Exception e) {
             logger.error("Error retrieving unverified prices", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<PriceDTO>> getPriceHistory(
+            @RequestParam String regionCode,
+            @RequestParam String qualityGrade,
+            @RequestParam(defaultValue = "30") int days,
+            @RequestHeader(name = "Accept-Language", defaultValue = "pt") String language) {
+
+        logger.info("Received request for price history - region: {}, quality: {}, days: {}, language: {}",
+                regionCode, qualityGrade, days, language);
+
+        try {
+            // Validate days parameter
+            if (days < 1) {
+                logger.warn("Invalid days parameter: {}, setting to 1", days);
+                days = 1;
+            }
+            if (days > 365) {
+                logger.warn("Days parameter too large: {}, limiting to 365", days);
+                days = 365;
+            }
+
+            List<PriceDTO> history = priceService.getPriceHistory(regionCode, qualityGrade, days, language);
+            logger.info("Successfully retrieved {} price history entries", history.size());
+            return ResponseEntity.ok(history);
+
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid argument in price history request - region: {}, quality: {}, days: {}",
+                    regionCode, qualityGrade, days, e);
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            logger.error("Unexpected error in price history request - region: {}, quality: {}, days: {}",
+                    regionCode, qualityGrade, days, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

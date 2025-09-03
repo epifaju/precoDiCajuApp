@@ -368,3 +368,4 @@ export function improveAccuracy(coordinates: GpsCoordinates[]): GpsCoordinates[]
   
   return filteredCoords.length > 0 ? filteredCoords : coordinates;
 }
+

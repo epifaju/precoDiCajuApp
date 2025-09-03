@@ -444,3 +444,4 @@ Tous les composants respectent les standards d'accessibilité :
 - Mise en cache des données
 - Optimisation des re-renders
 - Gestion mémoire appropriée
+

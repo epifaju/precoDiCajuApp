@@ -539,3 +539,4 @@ Write-Host "• Les statistiques sont mises à jour automatiquement" -Foreground
 
 Write-Host "`n✨ Tests offline GPS lancés avec succès !" -ForegroundColor Green
 Write-Host "Vérifiez les résultats dans le fichier de test ouvert dans votre navigateur." -ForegroundColor White
+
