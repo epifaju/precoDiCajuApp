@@ -304,6 +304,14 @@ public class Price {
         return gpsLat != null && gpsLng != null;
     }
 
+    public String getRegionCode() {
+        return region != null ? region.getCode() : null;
+    }
+
+    public String getQualityGradeCode() {
+        return qualityGrade != null ? qualityGrade.getCode() : null;
+    }
+
     public void verify(User verifier) {
         this.verified = true;
         this.verifiedBy = verifier;

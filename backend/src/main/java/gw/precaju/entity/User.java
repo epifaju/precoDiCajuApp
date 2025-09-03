@@ -47,6 +47,12 @@ public class User implements UserDetails {
     @Column(name = "notification_preferences", columnDefinition = "TEXT")
     private String notificationPreferences = "{}";
 
+    @Column(name = "push_subscription", columnDefinition = "TEXT")
+    private String pushSubscription;
+
+    @Column(name = "abonnement_notifications")
+    private Boolean abonnementNotifications = false;
+
     @Column(name = "email_verified")
     private Boolean emailVerified = false;
 
@@ -193,6 +199,22 @@ public class User implements UserDetails {
         this.notificationPreferences = notificationPreferences;
     }
 
+    public String getPushSubscription() {
+        return pushSubscription;
+    }
+
+    public void setPushSubscription(String pushSubscription) {
+        this.pushSubscription = pushSubscription;
+    }
+
+    public Boolean getAbonnementNotifications() {
+        return abonnementNotifications;
+    }
+
+    public void setAbonnementNotifications(Boolean abonnementNotifications) {
+        this.abonnementNotifications = abonnementNotifications;
+    }
+
     public Boolean getEmailVerified() {
         return emailVerified;
     }
@@ -288,4 +310,3 @@ public class User implements UserDetails {
                 '}';
     }
 }
-

@@ -1,16 +1,19 @@
 import { useTranslation } from 'react-i18next';
-import { User, Mail, Phone, Calendar, Star, Settings } from 'lucide-react';
+import { User, Mail, Phone, Calendar, Star, Settings, Cog } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { EditProfileFormWorking } from '../components/profile/EditProfileFormWorking';
 import ChangePasswordForm from '../components/profile/ChangePasswordForm';
+import { NotificationSettings } from '../components/notifications/NotificationSettings';
+import { UserConfigSettings } from '../components/config';
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
   const { user, isAuthenticated, logout } = useAuthStore();
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [isChangePasswordFormOpen, setIsChangePasswordFormOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'profile' | 'config'>('profile');
   
   // État pour les préférences
   const [preferences, setPreferences] = useState({
@@ -132,7 +135,7 @@ export default function ProfilePage() {
   console.log('Translation function result:', t('profile.actions.editProfile'));
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           {t('profile.title')}
@@ -141,6 +144,37 @@ export default function ProfilePage() {
           {t('profile.subtitle')}
         </p>
       </div>
+
+      {/* Tab Navigation */}
+      <div className="mb-8">
+        <nav className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => setActiveTab('profile')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+              activeTab === 'profile'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+            }`}
+          >
+            <User className="h-4 w-4 inline mr-2" />
+            Perfil
+          </button>
+          <button
+            onClick={() => setActiveTab('config')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+              activeTab === 'config'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+            }`}
+          >
+            <Cog className="h-4 w-4 inline mr-2" />
+            Configurações
+          </button>
+        </nav>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'profile' && (
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Profile Info */}
@@ -309,6 +343,9 @@ export default function ProfilePage() {
               </button>
             </div>
           </div>
+
+          {/* Notification Settings */}
+          <NotificationSettings className="mt-6" />
         </div>
 
         {/* Stats Sidebar */}
@@ -382,6 +419,12 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      )}
+
+      {/* Configuration Tab */}
+      {activeTab === 'config' && (
+        <UserConfigSettings />
+      )}
 
       {/* Edit Profile Form Modal */}
       {isEditFormOpen && (

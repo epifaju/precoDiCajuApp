@@ -77,6 +77,13 @@ cors:
   allow-credentials: true
   max-age: 3600
 
+# VAPID Configuration for Push Notifications
+app:
+  vapid:
+    public-key: ${VAPID_PUBLIC_KEY:}
+    private-key: ${VAPID_PRIVATE_KEY:}
+    subject: ${VAPID_SUBJECT:mailto:admin@precaju.gw}
+
 ---
 spring:
   config:

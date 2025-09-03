@@ -2,7 +2,10 @@ package gw.precaju.controller;
 
 import gw.precaju.dto.PageResponse;
 import gw.precaju.dto.UserDTO;
+import gw.precaju.dto.UserConfigDTO;
+
 import gw.precaju.dto.request.UpdateUserRequest;
+import gw.precaju.dto.request.UpdateUserConfigRequest;
 import gw.precaju.entity.User;
 import gw.precaju.mapper.UserMapper;
 import gw.precaju.service.AuthService;
@@ -237,6 +240,138 @@ public class UserController {
         } catch (Exception e) {
             logger.error("Error deleting user with ID: {}", id, e);
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Get current user's complete configuration
+     */
+    @GetMapping("/me/config")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
+    public ResponseEntity<UserConfigDTO> getCurrentUserConfig() {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            UserConfigDTO configDTO = userService.getUserConfig(currentUser);
+            return ResponseEntity.ok(configDTO);
+
+        } catch (Exception e) {
+            logger.error("Error retrieving current user configuration", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Update current user's configuration
+     */
+    @PutMapping("/me/config")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
+    public ResponseEntity<UserConfigDTO> updateCurrentUserConfig(@Valid @RequestBody UpdateUserConfigRequest request) {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            UserConfigDTO updatedConfig = userService.updateUserConfig(currentUser, request);
+            return ResponseEntity.ok(updatedConfig);
+
+        } catch (Exception e) {
+            logger.error("Error updating current user configuration", e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Get current user's preferences
+     */
+    @GetMapping("/me/preferences")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
+    public ResponseEntity<UserConfigDTO.UserPreferencesDTO> getCurrentUserPreferences() {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            UserConfigDTO.UserPreferencesDTO preferences = userService.getUserPreferences(currentUser);
+            return ResponseEntity.ok(preferences);
+
+        } catch (Exception e) {
+            logger.error("Error retrieving current user preferences", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Update current user's preferences
+     */
+    @PutMapping("/me/preferences")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
+    public ResponseEntity<UserConfigDTO.UserPreferencesDTO> updateCurrentUserPreferences(
+            @Valid @RequestBody UpdateUserConfigRequest.UserPreferencesRequest request) {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            UserConfigDTO.UserPreferencesDTO updatedPreferences = userService.updateUserPreferences(currentUser,
+                    request);
+            return ResponseEntity.ok(updatedPreferences);
+
+        } catch (Exception e) {
+            logger.error("Error updating current user preferences", e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Get current user's notification preferences
+     */
+    @GetMapping("/me/notification-preferences")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
+    public ResponseEntity<UserConfigDTO.NotificationPreferencesDTO> getCurrentUserNotificationPreferences() {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            UserConfigDTO.NotificationPreferencesDTO preferences = userService
+                    .getUserNotificationPreferences(currentUser);
+            return ResponseEntity.ok(preferences);
+
+        } catch (Exception e) {
+            logger.error("Error retrieving current user notification preferences", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * Update current user's notification preferences
+     */
+    @PutMapping("/me/notification-preferences")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
+    public ResponseEntity<UserConfigDTO.NotificationPreferencesDTO> updateCurrentUserNotificationPreferences(
+            @Valid @RequestBody UpdateUserConfigRequest.NotificationPreferencesRequest request) {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            UserConfigDTO.NotificationPreferencesDTO updatedPreferences = userService.updateUserNotificationPreferences(
+                    currentUser,
+                    request);
+            return ResponseEntity.ok(updatedPreferences);
+
+        } catch (Exception e) {
+            logger.error("Error updating current user notification preferences", e);
+            return ResponseEntity.badRequest().build();
         }
     }
 

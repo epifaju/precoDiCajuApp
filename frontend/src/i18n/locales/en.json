@@ -953,6 +953,121 @@
     "copyright": "© 2024 Preço di Cajú. Made with",
     "forGuineaBissau": "for Guinea-Bissau",
     "version": "Version 1.0.0"
+  },
+  "config": {
+    "title": "Settings",
+    "subtitle": "Manage your preferences and application settings",
+    "sections": {
+      "profile": "Profile",
+      "preferences": "Preferences",
+      "notifications": "Notifications"
+    },
+    "profile": {
+      "title": "Profile Information",
+      "subtitle": "Update your personal information",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "phone": "Phone",
+      "phonePlaceholder": "+245 XXX XXX XXX"
+    },
+    "preferences": {
+      "title": "General Preferences",
+      "subtitle": "Configure the appearance and behavior of the application",
+      "language": "Language",
+      "languageDescription": "Interface language",
+      "theme": "Theme",
+      "themeDescription": "Interface appearance",
+      "timezone": "Timezone",
+      "timezoneDescription": "Your local timezone",
+      "offlineMode": "Offline Mode",
+      "offlineModeDescription": "Allow use without internet connection",
+      "autoSync": "Auto Sync",
+      "autoSyncDescription": "Automatically sync data",
+      "themes": {
+        "light": "Light",
+        "lightDescription": "Light theme",
+        "dark": "Dark",
+        "darkDescription": "Dark theme",
+        "system": "System",
+        "systemDescription": "Follow system configuration"
+      },
+      "languages": {
+        "pt": "Português",
+        "ptDescription": "Português (Guiné-Bissau)",
+        "fr": "Français",
+        "frDescription": "Français",
+        "en": "English",
+        "enDescription": "English"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Configure how and when to receive notifications",
+      "types": "Notification Types",
+      "priceAlerts": "Price Alerts",
+      "priceAlertsDescription": "Price variations",
+      "verificationNotifications": "Verifications",
+      "verificationNotificationsDescription": "Verification status",
+      "systemNotifications": "System",
+      "systemNotificationsDescription": "Important system notifications",
+      "emailNotifications": "Email",
+      "emailNotificationsDescription": "Email notifications",
+      "pushNotifications": "Push",
+      "pushNotificationsDescription": "Push notifications",
+      "alertSettings": "Alert Settings",
+      "alertThreshold": "Alert Threshold (%)",
+      "alertThresholdDescription": "Minimum percentage variation to generate alert",
+      "frequency": "Frequency",
+      "frequencyDescription": "Notification sending frequency",
+      "frequencies": {
+        "immediate": "Immediate",
+        "immediateDescription": "Receive notifications immediately",
+        "daily": "Daily",
+        "dailyDescription": "Daily notification summary",
+        "weekly": "Weekly",
+        "weeklyDescription": "Weekly notification summary"
+      },
+      "quietHours": "Quiet Hours",
+      "quietHoursDescription": "Disable notifications at specific times",
+      "quietStartTime": "Quiet hours start",
+      "quietStartTimeDescription": "Start time to not receive notifications",
+      "quietEndTime": "Quiet hours end",
+      "quietEndTimeDescription": "End time to not receive notifications"
+    },
+    "actions": {
+      "save": "Save",
+      "reset": "Reset",
+      "resetConfirm": "Are you sure you want to reset all settings to default values?",
+      "export": "Export",
+      "import": "Import",
+      "loading": "Loading settings...",
+      "saving": "Saving...",
+      "unsavedChanges": "Unsaved changes"
+    },
+    "messages": {
+      "saveSuccess": "Settings saved successfully!",
+      "saveError": "Error saving settings",
+      "resetSuccess": "Settings reset to default values!",
+      "loadError": "Error loading settings",
+      "validationErrors": "Validation errors",
+      "noDataToSave": "No data to save",
+      "invalidData": "Invalid data",
+      "connectionError": "Connection error. Check your internet.",
+      "unknownError": "Unknown error"
+    },
+    "validation": {
+      "fullNameRequired": "Name is required",
+      "fullNameMinLength": "Name must be at least 2 characters",
+      "fullNameMaxLength": "Name must be at most 100 characters",
+      "phoneInvalid": "Invalid phone number",
+      "languageInvalid": "Language must be pt, fr or en",
+      "themeInvalid": "Theme must be light, dark or system",
+      "timezoneInvalid": "Invalid timezone",
+      "alertThresholdMin": "Alert threshold must be at least 1%",
+      "alertThresholdMax": "Alert threshold must be at most 100%",
+      "frequencyInvalid": "Frequency must be immediate, daily or weekly",
+      "timeFormatInvalid": "Time must be in HH:MM format"
+    }
   }
 }
 

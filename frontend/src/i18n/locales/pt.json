@@ -948,5 +948,120 @@
     "copyright": "© 2024 Preço di Cajú. Feito com",
     "forGuineaBissau": "para a Guiné-Bissau",
     "version": "Versão 1.0.0"
+  },
+  "config": {
+    "title": "Configurações",
+    "subtitle": "Gerencie suas preferências e configurações da aplicação",
+    "sections": {
+      "profile": "Perfil",
+      "preferences": "Preferências",
+      "notifications": "Notificações"
+    },
+    "profile": {
+      "title": "Informações do Perfil",
+      "subtitle": "Atualize suas informações pessoais",
+      "fullName": "Nome Completo",
+      "fullNamePlaceholder": "Digite seu nome completo",
+      "phone": "Telefone",
+      "phonePlaceholder": "+245 XXX XXX XXX"
+    },
+    "preferences": {
+      "title": "Preferências Gerais",
+      "subtitle": "Configure a aparência e comportamento da aplicação",
+      "language": "Idioma",
+      "languageDescription": "Idioma da interface",
+      "theme": "Tema",
+      "themeDescription": "Aparência da interface",
+      "timezone": "Fuso Horário",
+      "timezoneDescription": "Seu fuso horário local",
+      "offlineMode": "Modo Offline",
+      "offlineModeDescription": "Permitir uso sem conexão à internet",
+      "autoSync": "Sincronização Automática",
+      "autoSyncDescription": "Sincronizar dados automaticamente",
+      "themes": {
+        "light": "Claro",
+        "lightDescription": "Tema claro",
+        "dark": "Escuro",
+        "darkDescription": "Tema escuro",
+        "system": "Sistema",
+        "systemDescription": "Seguir configuração do sistema"
+      },
+      "languages": {
+        "pt": "Português",
+        "ptDescription": "Português (Guiné-Bissau)",
+        "fr": "Français",
+        "frDescription": "Français",
+        "en": "English",
+        "enDescription": "English"
+      }
+    },
+    "notifications": {
+      "title": "Notificações",
+      "subtitle": "Configure como e quando receber notificações",
+      "types": "Tipos de Notificação",
+      "priceAlerts": "Alertas de Preço",
+      "priceAlertsDescription": "Variações de preço",
+      "verificationNotifications": "Verificações",
+      "verificationNotificationsDescription": "Status de verificação",
+      "systemNotifications": "Sistema",
+      "systemNotificationsDescription": "Notificações importantes",
+      "emailNotifications": "Email",
+      "emailNotificationsDescription": "Notificações por email",
+      "pushNotifications": "Push",
+      "pushNotificationsDescription": "Notificações push",
+      "alertSettings": "Configurações de Alerta",
+      "alertThreshold": "Limiar de Alerta (%)",
+      "alertThresholdDescription": "Percentual mínimo de variação para gerar alerta",
+      "frequency": "Frequência",
+      "frequencyDescription": "Frequência de envio de notificações",
+      "frequencies": {
+        "immediate": "Imediato",
+        "immediateDescription": "Receber notificações imediatamente",
+        "daily": "Diário",
+        "dailyDescription": "Resumo diário de notificações",
+        "weekly": "Semanal",
+        "weeklyDescription": "Resumo semanal de notificações"
+      },
+      "quietHours": "Horário Silencioso",
+      "quietHoursDescription": "Desativar notificações em horários específicos",
+      "quietStartTime": "Início do horário silencioso",
+      "quietStartTimeDescription": "Hora de início para não receber notificações",
+      "quietEndTime": "Fim do horário silencioso",
+      "quietEndTimeDescription": "Hora de fim para não receber notificações"
+    },
+    "actions": {
+      "save": "Salvar",
+      "reset": "Redefinir",
+      "resetConfirm": "Tem certeza que deseja redefinir todas as configurações para os valores padrão?",
+      "export": "Exportar",
+      "import": "Importar",
+      "loading": "Carregando configurações...",
+      "saving": "Salvando...",
+      "unsavedChanges": "Alterações não salvas"
+    },
+    "messages": {
+      "saveSuccess": "Configurações salvas com sucesso!",
+      "saveError": "Erro ao salvar configurações",
+      "resetSuccess": "Configurações redefinidas para os valores padrão!",
+      "loadError": "Erro ao carregar configurações",
+      "validationErrors": "Erros de validação",
+      "noDataToSave": "Nenhum dado para salvar",
+      "invalidData": "Dados inválidos",
+      "connectionError": "Erro de conexão. Verifique sua internet.",
+      "unknownError": "Erro desconhecido"
+    },
+    "validation": {
+      "fullNameRequired": "Nome é obrigatório",
+      "fullNameMinLength": "Nome deve ter pelo menos 2 caracteres",
+      "fullNameMaxLength": "Nome deve ter no máximo 100 caracteres",
+      "phoneInvalid": "Número de telefone inválido",
+      "languageInvalid": "Idioma deve ser pt, fr ou en",
+      "themeInvalid": "Tema deve ser light, dark ou system",
+      "timezoneInvalid": "Fuso horário inválido",
+      "alertThresholdMin": "Limiar de alerta deve ser pelo menos 1%",
+      "alertThresholdMax": "Limiar de alerta deve ser no máximo 100%",
+      "frequencyInvalid": "Frequência deve ser immediate, daily ou weekly",
+      "timeFormatInvalid": "Hora deve estar no formato HH:MM"
+    }
   }
 }

@@ -114,4 +114,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
                         @Param("search") String search,
                         @Param("searchPattern") String searchPattern,
                         Pageable pageable);
+
+        // Notification-related queries
+        List<User> findByAbonnementNotificationsTrueAndPushSubscriptionIsNotNull();
+
+        @Query("SELECT u FROM User u WHERE u.abonnementNotifications = true AND u.pushSubscription IS NOT NULL")
+        List<User> findSubscribedUsers();
 }
