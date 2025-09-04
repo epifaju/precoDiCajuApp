@@ -153,14 +153,14 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
             </Link>
 
             {/* Settings Link */}
-            <a
-              href="/settings"
+            <Link
+              to="/profile?tab=config"
               className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <Settings className="w-4 h-4 mr-3" />
               {t('user.settings', 'Paramètres')}
-            </a>
+            </Link>
 
             {/* Divider */}
             <div className="border-t border-gray-200 dark:border-gray-700 my-1" />

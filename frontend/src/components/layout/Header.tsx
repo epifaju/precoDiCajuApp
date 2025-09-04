@@ -9,7 +9,7 @@ import { cn } from '../../utils/cn';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { theme, setTheme } = useAppStore();
+  const { theme, setTheme, setLanguage } = useAppStore();
   const { t, i18n } = useTranslation();
   const { isAuthenticated, user } = useAuthStore();
   const location = useLocation();
@@ -29,6 +29,8 @@ export default function Header() {
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    // Also update the app store language
+    setLanguage(lng as 'pt' | 'fr' | 'en');
   };
 
   return (

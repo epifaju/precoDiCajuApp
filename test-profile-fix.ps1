@@ -1,46 +1,31 @@
-# Test Profile Module Fix
-Write-Host "Testing Profile Module Fix..." -ForegroundColor Green
+# Test script to verify ProfilePage fix
+Write-Host "Testing ProfilePage Fix..." -ForegroundColor Green
 
-# Check if frontend is running
-Write-Host "Checking if frontend is running..." -ForegroundColor Yellow
+# Wait for frontend to start
+Write-Host "Waiting for frontend to start..." -ForegroundColor Yellow
+Start-Sleep -Seconds 15
+
+# Test if frontend is accessible
 try {
-    $response = Invoke-WebRequest -Uri "http://localhost:5173" -TimeoutSec 5 -ErrorAction Stop
-    Write-Host "Frontend is running on port 5173" -ForegroundColor Green
+    $response = Invoke-WebRequest -Uri "http://localhost:5173" -Method GET -TimeoutSec 10
+    Write-Host "✅ Frontend is accessible at http://localhost:5173" -ForegroundColor Green
 } catch {
-    Write-Host "Frontend is not running on port 5173" -ForegroundColor Red
-    Write-Host "Please start the frontend first with: npm run dev" -ForegroundColor Yellow
+    Write-Host "❌ Frontend not accessible yet. Please check if it's running." -ForegroundColor Red
+    Write-Host "Try running: cd frontend && npm run dev" -ForegroundColor Yellow
     exit 1
 }
 
-# Check if backend is running
-Write-Host "Checking if backend is running..." -ForegroundColor Yellow
-try {
-    $response = Invoke-WebRequest -Uri "http://localhost:8080/api/v1/health" -TimeoutSec 5 -ErrorAction Stop
-    Write-Host "Backend is running on port 8080" -ForegroundColor Green
-} catch {
-    Write-Host "Backend is not running on port 8080" -ForegroundColor Red
-    Write-Host "Please start the backend first" -ForegroundColor Yellow
-    exit 1
-}
+Write-Host "`nFixes Applied:" -ForegroundColor Cyan
+Write-Host "1. Fixed syntax error in ProfilePage.tsx (removed empty line in JSX)" -ForegroundColor White
+Write-Host "2. Fixed UserMenu.tsx routing (changed /settings to /profile?tab=config)" -ForegroundColor White
+Write-Host "3. Added URL parameter detection in ProfilePage.tsx" -ForegroundColor White
+Write-Host "4. Added missing translation keys in pt.json" -ForegroundColor White
 
-Write-Host "`nProfile Module Fix Summary:" -ForegroundColor Cyan
-Write-Host "✅ ProfilePage.tsx now uses useAuthStore to get user data" -ForegroundColor Green
-Write-Host "✅ Hardcoded 'João Produtor' data replaced with dynamic user data" -ForegroundColor Green
-Write-Host "✅ UserMenu now uses React Router Link for profile navigation" -ForegroundColor Green
-Write-Host "✅ Profile page shows actual logged-in user information" -ForegroundColor Green
+Write-Host "`nTest Instructions:" -ForegroundColor Yellow
+Write-Host "1. Go to http://localhost:5173" -ForegroundColor White
+Write-Host "2. Login to your account" -ForegroundColor White
+Write-Host "3. Click on your avatar in the top-right corner" -ForegroundColor White
+Write-Host "4. Click on 'Configurations' (or 'Paramètres')" -ForegroundColor White
+Write-Host "5. Verify that the configuration page loads without errors" -ForegroundColor White
 
-Write-Host "`nTo test the fix:" -ForegroundColor Yellow
-Write-Host "1. Open http://localhost:5173 in your browser" -ForegroundColor White
-Write-Host "2. Login with any test account (e.g., produtor@test.gw / produtor123)" -ForegroundColor White
-Write-Host "3. Click on 'Meu perfil' button in the user menu" -ForegroundColor White
-Write-Host "4. Verify that the profile shows your actual user data, not João Produtor" -ForegroundColor White
-
-Write-Host "`nThe profile should now display:" -ForegroundColor Cyan
-Write-Host "- Your actual full name instead of 'João Produtor'" -ForegroundColor White
-Write-Host "- Your actual email instead of 'produtor@test.gw'" -ForegroundColor White
-Write-Host "- Your actual role (Contribuidor, Moderador, or Administrador)" -ForegroundColor White
-Write-Host "- Your actual reputation score instead of '85 pontos'" -ForegroundColor White
-Write-Host "- Your actual registration date instead of 'Janeiro 2024'" -ForegroundColor White
-Write-Host "- Your actual last login time instead of 'Hoje às 14:30'" -ForegroundColor White
-
-Write-Host "`nProfile module fix completed successfully!" -ForegroundColor Green
+Write-Host "`nThe ProfilePage should now load correctly!" -ForegroundColor Green

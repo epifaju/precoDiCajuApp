@@ -16,3 +16,4 @@ public interface NotificationConfigRepository extends JpaRepository<Notification
 
     Optional<NotificationConfig> findByActifTrue();
 }
+

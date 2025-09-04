@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Profile Translations</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .language-selector { margin-bottom: 20px; }
+        .language-selector button { margin-right: 10px; padding: 8px 16px; border: 1px solid #ddd; background: white; cursor: pointer; }
+        .language-selector button.active { background: #007bff; color: white; }
+        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; }
+        .translation-test { margin: 5px 0; padding: 5px; background: #f8f9fa; }
+        .key { font-weight: bold; color: #666; }
+        .value { color: #333; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Test des Traductions du Module Profil</h1>
+    
+    <div class="language-selector">
+        <button onclick="testLanguage('pt')" id="btn-pt">Português</button>
+        <button onclick="testLanguage('fr')" id="btn-fr">Français</button>
+        <button onclick="testLanguage('en')" id="btn-en">English</button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        const translations = {
+            pt: {
+                'profile.title': 'Meu Perfil',
+                'config.title': 'Configurações',
+                'profile.actions.title': 'Ações Rápidas',
+                'config.notifications.title': 'Notificações',
+                'common.save': 'Salvar',
+                'common.reset': 'Redefinir'
+            },
+            fr: {
+                'profile.title': 'Mon Profil',
+                'config.title': 'Configuration',
+                'profile.actions.title': 'Actions Rapides',
+                'config.notifications.title': 'Notifications',
+                'common.save': 'Enregistrer',
+                'common.reset': 'Réinitialiser'
+            },
+            en: {
+                'profile.title': 'My Profile',
+                'config.title': 'Settings',
+                'profile.actions.title': 'Quick Actions',
+                'config.notifications.title': 'Notifications',
+                'common.save': 'Save',
+                'common.reset': 'Reset'
+            }
+        };
+
+        function testLanguage(lang) {
+            document.querySelectorAll('.language-selector button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`btn-${lang}`).classList.add('active');
+
+            const t = translations[lang];
+            const results = document.getElementById('results');
+            
+            results.innerHTML = `
+                <h2>Test des traductions - ${lang.toUpperCase()}</h2>
+                <div class="section">
+                    <h3>Clés principales</h3>
+                    <div class="translation-test">
+                        <span class="key">profile.title:</span>
+                        <span class="value">${t['profile.title']}</span>
+                    </div>
+                    <div class="translation-test">
+                        <span class="key">config.title:</span>
+                        <span class="value">${t['config.title']}</span>
+                    </div>
+                    <div class="translation-test">
+                        <span class="key">profile.actions.title:</span>
+                        <span class="value">${t['profile.actions.title']}</span>
+                    </div>
+                    <div class="translation-test">
+                        <span class="key">config.notifications.title:</span>
+                        <span class="value">${t['config.notifications.title']}</span>
+                    </div>
+                    <div class="translation-test">
+                        <span class="key">common.save:</span>
+                        <span class="value">${t['common.save']}</span>
+                    </div>
+                    <div class="translation-test">
+                        <span class="key">common.reset:</span>
+                        <span class="value">${t['common.reset']}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        testLanguage('pt');
+    </script>
+</body>
+</html>

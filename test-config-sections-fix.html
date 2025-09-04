@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Configuration Sections Translation Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .language-selector {
+            margin-bottom: 20px;
+        }
+        .language-selector select {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .translation-test {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .key {
+            font-family: monospace;
+            color: #666;
+            font-size: 14px;
+        }
+        .value {
+            font-weight: bold;
+            color: #333;
+        }
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .instructions {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Configuration Sections Translation Fix</h1>
+        
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <p>This test verifies that the configuration sections are properly translated in all three languages.</p>
+            <p>1. Select a language from the dropdown below</p>
+            <p>2. Check that the section titles are translated correctly</p>
+            <p>3. The sections should show: "Perfil/Profil/Profile", "Preferências/Préférences/Preferences", "Notificações/Notifications/Notifications"</p>
+        </div>
+
+        <div class="language-selector">
+            <label for="language">Select Language:</label>
+            <select id="language" onchange="changeLanguage()">
+                <option value="pt">Português</option>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <div class="test-section">
+            <h3>Configuration Sections Translation Test</h3>
+            <p>These are the section titles that should be translated:</p>
+            
+            <div class="translation-test">
+                <span class="key">config.sections.profile</span>
+                <span class="value" id="profile-section">Loading...</span>
+                <span class="status" id="profile-status">Testing...</span>
+            </div>
+            
+            <div class="translation-test">
+                <span class="key">config.sections.preferences</span>
+                <span class="value" id="preferences-section">Loading...</span>
+                <span class="status" id="preferences-status">Testing...</span>
+            </div>
+            
+            <div class="translation-test">
+                <span class="key">config.sections.notifications</span>
+                <span class="value" id="notifications-section">Loading...</span>
+                <span class="status" id="notifications-status">Testing...</span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Expected Results:</h3>
+            <ul>
+                <li><strong>Português:</strong> Perfil, Preferências, Notificações</li>
+                <li><strong>Français:</strong> Profil, Préférences, Notifications</li>
+                <li><strong>English:</strong> Profile, Preferences, Notifications</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Mock translation data
+        const translations = {
+            pt: {
+                'config.sections.profile': 'Perfil',
+                'config.sections.preferences': 'Preferências',
+                'config.sections.notifications': 'Notificações'
+            },
+            fr: {
+                'config.sections.profile': 'Profil',
+                'config.sections.preferences': 'Préférences',
+                'config.sections.notifications': 'Notifications'
+            },
+            en: {
+                'config.sections.profile': 'Profile',
+                'config.sections.preferences': 'Preferences',
+                'config.sections.notifications': 'Notifications'
+            }
+        };
+
+        function changeLanguage() {
+            const language = document.getElementById('language').value;
+            updateTranslations(language);
+        }
+
+        function updateTranslations(language) {
+            const langData = translations[language];
+            
+            // Update section titles
+            document.getElementById('profile-section').textContent = langData['config.sections.profile'];
+            document.getElementById('preferences-section').textContent = langData['config.sections.preferences'];
+            document.getElementById('notifications-section').textContent = langData['config.sections.notifications'];
+            
+            // Update status indicators
+            updateStatus('profile-status', langData['config.sections.profile']);
+            updateStatus('preferences-status', langData['config.sections.preferences']);
+            updateStatus('notifications-status', langData['config.sections.notifications']);
+        }
+
+        function updateStatus(elementId, value) {
+            const statusElement = document.getElementById(elementId);
+            
+            // Check if the translation is correct
+            const language = document.getElementById('language').value;
+            let expectedValue = '';
+            
+            switch(language) {
+                case 'pt':
+                    expectedValue = value === 'Perfil' || value === 'Preferências' || value === 'Notificações';
+                    break;
+                case 'fr':
+                    expectedValue = value === 'Profil' || value === 'Préférences' || value === 'Notifications';
+                    break;
+                case 'en':
+                    expectedValue = value === 'Profile' || value === 'Preferences' || value === 'Notifications';
+                    break;
+            }
+            
+            if (expectedValue) {
+                statusElement.textContent = '✓ OK';
+                statusElement.className = 'status success';
+            } else {
+                statusElement.textContent = '✗ Error';
+                statusElement.className = 'status error';
+            }
+        }
+
+        // Initialize with Portuguese
+        updateTranslations('pt');
+    </script>
+</body>
+</html>

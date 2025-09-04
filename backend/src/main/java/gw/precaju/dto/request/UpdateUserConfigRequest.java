@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,8 @@ import java.util.Map;
 public class UpdateUserConfigRequest {
 
     // Basic Profile Information
-    @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
     private String fullName;
 
-    @Pattern(regexp = "^\\+?[0-9]{8,15}$", message = "Phone number should be valid")
     private String phone;
 
     // User Preferences
@@ -70,15 +69,12 @@ public class UpdateUserConfigRequest {
      * Nested request DTO for user preferences
      */
     public static class UserPreferencesRequest {
-        @Pattern(regexp = "^(pt|fr|en)$", message = "Language must be pt, fr, or en")
         private String language;
 
-        @Pattern(regexp = "^(light|dark|system)$", message = "Theme must be light, dark, or system")
         private String theme;
 
         private List<String> preferredRegions;
 
-        @Pattern(regexp = "^[A-Za-z_/]+$", message = "Timezone must be a valid timezone identifier")
         private String timezone;
 
         private Boolean offlineMode;
@@ -157,22 +153,17 @@ public class UpdateUserConfigRequest {
         private Boolean emailNotifications;
         private Boolean pushNotifications;
 
-        @Min(value = 1, message = "Alert threshold must be at least 1%")
-        @Max(value = 100, message = "Alert threshold must be at most 100%")
         private Integer alertThreshold;
 
         private List<String> alertRegions;
         private List<String> alertQualities;
 
-        @Pattern(regexp = "^(immediate|daily|weekly)$", message = "Frequency must be immediate, daily, or weekly")
         private String frequency;
 
         private Boolean quietHours;
 
-        @Pattern(regexp = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Time must be in HH:MM format")
         private String quietStartTime;
 
-        @Pattern(regexp = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Time must be in HH:MM format")
         private String quietEndTime;
 
         // Constructors

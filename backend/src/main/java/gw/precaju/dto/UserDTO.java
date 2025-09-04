@@ -16,6 +16,7 @@ public class UserDTO {
     private UserRole role;
     private Integer reputationScore;
     private List<String> preferredRegions;
+    private String preferredLanguage;
     private Boolean emailVerified;
     private Boolean active;
 
@@ -26,7 +27,8 @@ public class UserDTO {
     private Instant lastLoginAt;
 
     // Constructors
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public UserDTO(UUID id, String email, String fullName, UserRole role) {
         this.id = id;
@@ -92,6 +94,14 @@ public class UserDTO {
         this.preferredRegions = preferredRegions;
     }
 
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
+
     public Boolean getEmailVerified() {
         return emailVerified;
     }
@@ -124,9 +134,3 @@ public class UserDTO {
         this.lastLoginAt = lastLoginAt;
     }
 }
-
-
-
-
-
-

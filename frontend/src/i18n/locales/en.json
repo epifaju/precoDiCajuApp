@@ -432,7 +432,14 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "total": "Total",
+    "verified": "Verified",
+    "pending": "Pending",
+    "prices": "prices",
+    "notAvailable": "Not available",
+    "noRegionsSelected": "No regions selected",
+    "tryAgain": "Try again"
   },
   "dashboard": {
     "goodMorning": "Good morning",
@@ -758,6 +765,7 @@
       }
     },
     "actions": {
+      "title": "Quick Actions",
       "edit": "Edit profile",
       "changePassword": "Change password",
       "logout": "Logout"
@@ -958,6 +966,7 @@
     "title": "Settings",
     "subtitle": "Manage your preferences and application settings",
     "sections": {
+      "title": "Sections",
       "profile": "Profile",
       "preferences": "Preferences",
       "notifications": "Notifications"
@@ -1032,7 +1041,26 @@
       "quietStartTime": "Quiet hours start",
       "quietStartTimeDescription": "Start time to not receive notifications",
       "quietEndTime": "Quiet hours end",
-      "quietEndTimeDescription": "End time to not receive notifications"
+      "quietEndTimeDescription": "End time to not receive notifications",
+      "permission": "Permission",
+      "permissionGranted": "Granted",
+      "permissionDenied": "Denied",
+      "permissionNotRequested": "Not requested",
+      "notSupported": "Notifications not supported",
+      "notSupportedDescription": "Your browser does not support push notifications",
+      "priceNotifications": "Price Notifications",
+      "priceNotificationsDescription": "Receive real-time alerts about price variations",
+      "subscribing": "Subscribing",
+      "unsubscribing": "Unsubscribing",
+      "enableNotifications": "Enable notifications",
+      "disableNotifications": "Disable notifications",
+      "aboutNotifications": "About notifications",
+      "notificationRule1": "You will receive a notification when cashew prices vary by more than 10%",
+      "notificationRule2": "Notifications include the new price and percentage variation",
+      "notificationRule3": "You can disable notifications at any time",
+      "notificationRule4": "Notifications work even when the app is closed",
+      "notificationsBlocked": "Notifications blocked",
+      "notificationsBlockedDescription": "To enable notifications, allow notifications in your browser settings and refresh the page"
     },
     "actions": {
       "save": "Save",

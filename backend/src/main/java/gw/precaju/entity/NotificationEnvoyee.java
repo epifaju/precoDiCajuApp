@@ -53,3 +53,4 @@ public class NotificationEnvoyee {
         ENVOYEE, ECHEC, EN_ATTENTE
     }
 }
+

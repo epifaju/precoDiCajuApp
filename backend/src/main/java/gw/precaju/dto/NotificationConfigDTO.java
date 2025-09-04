@@ -27,3 +27,4 @@ public class NotificationConfigDTO {
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }
+

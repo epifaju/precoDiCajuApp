@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { User, Mail, Phone, Calendar, Star, Settings, Cog } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { EditProfileFormWorking } from '../components/profile/EditProfileFormWorking';
 import ChangePasswordForm from '../components/profile/ChangePasswordForm';
@@ -10,7 +10,8 @@ import { UserConfigSettings } from '../components/config';
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, logout, updateUser } = useAuthStore();
+  const [searchParams] = useSearchParams();
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [isChangePasswordFormOpen, setIsChangePasswordFormOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'profile' | 'config'>('profile');
@@ -32,12 +33,20 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user) {
       setPreferences({
-        language: i18n.language || 'pt',
+        language: user.preferredLanguage || i18n.language || 'pt',
         regions: user.preferredRegions || [],
         theme: 'system'
       });
     }
   }, [user, i18n.language]);
+
+  // Détecter le paramètre d'URL pour l'onglet de configuration
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'config') {
+      setActiveTab('config');
+    }
+  }, [searchParams]);
 
   // Fonction pour sauvegarder les préférences
   const handleSavePreferences = async () => {
@@ -47,9 +56,27 @@ export default function ProfilePage() {
     setPreferencesMessage(null);
     
     try {
-      // Simuler la sauvegarde des préférences
-      // Ici vous pourriez appeler une API pour sauvegarder les préférences
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Appeler l'API pour sauvegarder les préférences
+      const response = await fetch(`${import.meta.env['VITE_API_URL'] || 'http://localhost:8080'}/api/v1/users/me`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('precaju-auth-storage') ? JSON.parse(localStorage.getItem('precaju-auth-storage')!).state.accessToken : ''}`
+        },
+        body: JSON.stringify({
+          preferredLanguage: preferences.language,
+          preferredRegions: preferences.regions
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao salvar preferências');
+      }
+
+      const updatedUser = await response.json();
+      
+      // Mettre à jour l'utilisateur dans le store
+      updateUser(updatedUser);
       
       // Mettre à jour la langue si elle a changé
       if (preferences.language !== i18n.language) {
@@ -65,6 +92,7 @@ export default function ProfilePage() {
       setTimeout(() => setPreferencesMessage(null), 3000);
       
     } catch (error) {
+      console.error('Erro ao salvar preferências:', error);
       setPreferencesMessage({
         type: 'error',
         text: 'Erro ao salvar preferências. Tente novamente.'
@@ -157,7 +185,7 @@ export default function ProfilePage() {
             }`}
           >
             <User className="h-4 w-4 inline mr-2" />
-            Perfil
+            {t('profile.title')}
           </button>
           <button
             onClick={() => setActiveTab('config')}
@@ -168,15 +196,14 @@ export default function ProfilePage() {
             }`}
           >
             <Cog className="h-4 w-4 inline mr-2" />
-            Configurações
+            {t('config.title')}
           </button>
         </nav>
       </div>
 
       {/* Tab Content */}
       {activeTab === 'profile' && (
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Profile Info */}
         <div className="lg:col-span-2">
           <div className="card p-6 mb-6">
@@ -205,7 +232,7 @@ export default function ProfilePage() {
                 <div className="flex items-center">
                   <Mail className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('profile.info.email')}</p>
                     <p className="text-gray-900 dark:text-white">{user.email}</p>
                   </div>
                 </div>
@@ -213,9 +240,9 @@ export default function ProfilePage() {
                 <div className="flex items-center">
                   <Phone className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Telefone</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('profile.info.phone')}</p>
                     <p className="text-gray-900 dark:text-white">
-                      {user.phone || 'Não informado'}
+                      {user.phone || t('common.notAvailable')}
                     </p>
                   </div>
                 </div>
@@ -225,7 +252,7 @@ export default function ProfilePage() {
                 <div className="flex items-center">
                   <Calendar className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Membro desde</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('profile.info.joinDate')}</p>
                     <p className="text-gray-900 dark:text-white">
                       {formatDate(user.createdAt)}
                     </p>
@@ -235,7 +262,7 @@ export default function ProfilePage() {
                 <div className="flex items-center">
                   <Settings className="w-5 h-5 text-gray-400 mr-3" />
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Último acesso</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('profile.info.lastActive')}</p>
                     <p className="text-gray-900 dark:text-white">
                       {formatLastLogin(user.lastLoginAt)}
                     </p>
@@ -356,15 +383,15 @@ export default function ProfilePage() {
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Total</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('common.total')}</span>
                 <span className="font-semibold text-gray-900 dark:text-white">12</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Verificados</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('common.verified')}</span>
                 <span className="font-semibold text-green-600">8</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600 dark:text-gray-400">Pendentes</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('common.pending')}</span>
                 <span className="font-semibold text-yellow-600">4</span>
               </div>
             </div>
@@ -372,7 +399,7 @@ export default function ProfilePage() {
 
           <div className="card p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Regiões Activas
+              {t('profile.preferences.regions')}
             </h3>
             <div className="space-y-2">
               {user.preferredRegions && user.preferredRegions.length > 0 ? (
@@ -380,13 +407,13 @@ export default function ProfilePage() {
                   <div key={region} className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-gray-400">{region}</span>
                     <span className="text-sm font-medium text-gray-900 dark:text-white">
-                      {Math.floor(Math.random() * 10) + 1} preços
+                      {Math.floor(Math.random() * 10) + 1} {t('common.prices')}
                     </span>
                   </div>
                 ))
               ) : (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Nenhuma região selecionada
+                  {t('common.noRegionsSelected')}
                 </p>
               )}
             </div>
@@ -394,7 +421,7 @@ export default function ProfilePage() {
 
           <div className="card p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Acções Rápidas
+              {t('profile.actions.title')}
             </h3>
             <div className="space-y-2">
               <button 
@@ -450,6 +477,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-
-

@@ -15,8 +15,12 @@ public class UpdateUserRequest {
 
     private List<String> preferredRegions;
 
+    @Pattern(regexp = "^(pt|fr|en)$", message = "Preferred language must be pt, fr, or en")
+    private String preferredLanguage;
+
     // Constructors
-    public UpdateUserRequest() {}
+    public UpdateUserRequest() {
+    }
 
     // Getters and Setters
     public String getFullName() {
@@ -42,10 +46,12 @@ public class UpdateUserRequest {
     public void setPreferredRegions(List<String> preferredRegions) {
         this.preferredRegions = preferredRegions;
     }
+
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
+    }
 }
-
-
-
-
-
-

@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Map;
+import java.util.HashMap;
+import java.time.Instant;
 import gw.precaju.dto.request.ChangePasswordRequest;
 
 @RestController
@@ -74,6 +77,9 @@ public class UserController {
             }
             if (request.getPhone() != null) {
                 currentUser.setPhone(request.getPhone());
+            }
+            if (request.getPreferredLanguage() != null) {
+                currentUser.setPreferredLanguage(request.getPreferredLanguage());
             }
             if (request.getPreferredRegions() != null) {
                 // Convert list to JSON and update
@@ -269,7 +275,7 @@ public class UserController {
      */
     @PutMapping("/me/config")
     @PreAuthorize("hasAnyRole('ADMIN', 'MODERATOR', 'CONTRIBUTOR')")
-    public ResponseEntity<UserConfigDTO> updateCurrentUserConfig(@Valid @RequestBody UpdateUserConfigRequest request) {
+    public ResponseEntity<?> updateCurrentUserConfig(@Valid @RequestBody UpdateUserConfigRequest request) {
         try {
             User currentUser = authService.getCurrentUser();
             if (currentUser == null) {
@@ -281,7 +287,15 @@ public class UserController {
 
         } catch (Exception e) {
             logger.error("Error updating current user configuration", e);
-            return ResponseEntity.badRequest().build();
+
+            // Return detailed error information
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 400);
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", "Erreur lors de la mise à jour de la configuration: " + e.getMessage());
+            errorResponse.put("timestamp", Instant.now());
+
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 
@@ -380,6 +394,7 @@ public class UserController {
         dto.setFullName(request.getFullName());
         dto.setPhone(request.getPhone());
         dto.setPreferredRegions(request.getPreferredRegions());
+        dto.setPreferredLanguage(request.getPreferredLanguage());
         return dto;
     }
 }

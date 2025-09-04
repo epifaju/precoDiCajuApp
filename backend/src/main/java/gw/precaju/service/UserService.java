@@ -326,22 +326,28 @@ public class UserService implements UserDetailsService {
      */
     public UserConfigDTO updateUserConfig(User user, UpdateUserConfigRequest request) {
         try {
-            // Update basic profile information
+            // Validate and update basic profile information
             if (request.getFullName() != null) {
+                if (request.getFullName().trim().length() < 2 || request.getFullName().length() > 100) {
+                    throw new IllegalArgumentException("Full name must be between 2 and 100 characters");
+                }
                 user.setFullName(request.getFullName());
             }
             if (request.getPhone() != null) {
+                if (!request.getPhone().matches("^\\+?[0-9]{8,15}$")) {
+                    throw new IllegalArgumentException("Phone number should be valid");
+                }
                 user.setPhone(request.getPhone());
             }
 
             // Update preferences
             if (request.getPreferences() != null) {
-                updateUserPreferences(user, request.getPreferences());
+                validateAndUpdateUserPreferences(user, request.getPreferences());
             }
 
             // Update notification preferences
             if (request.getNotificationPreferences() != null) {
-                updateUserNotificationPreferences(user, request.getNotificationPreferences());
+                validateAndUpdateUserNotificationPreferences(user, request.getNotificationPreferences());
             }
 
             // Save user
@@ -389,6 +395,29 @@ public class UserService implements UserDetailsService {
             logger.error("Error getting user preferences for user: {}", user.getEmail(), e);
             throw new RuntimeException("Failed to get user preferences", e);
         }
+    }
+
+    /**
+     * Validate and update user preferences
+     */
+    private void validateAndUpdateUserPreferences(User user, UpdateUserConfigRequest.UserPreferencesRequest request) {
+        // Validate language
+        if (request.getLanguage() != null && !request.getLanguage().matches("^(pt|fr|en)$")) {
+            throw new IllegalArgumentException("Language must be pt, fr, or en");
+        }
+
+        // Validate theme
+        if (request.getTheme() != null && !request.getTheme().matches("^(light|dark|system)$")) {
+            throw new IllegalArgumentException("Theme must be light, dark, or system");
+        }
+
+        // Validate timezone
+        if (request.getTimezone() != null && !request.getTimezone().matches("^[A-Za-z_/]+$")) {
+            throw new IllegalArgumentException("Timezone must be a valid timezone identifier");
+        }
+
+        // Update preferences
+        updateUserPreferences(user, request);
     }
 
     /**
@@ -479,6 +508,37 @@ public class UserService implements UserDetailsService {
             logger.error("Error getting user notification preferences for user: {}", user.getEmail(), e);
             throw new RuntimeException("Failed to get user notification preferences", e);
         }
+    }
+
+    /**
+     * Validate and update user notification preferences
+     */
+    private void validateAndUpdateUserNotificationPreferences(User user,
+            UpdateUserConfigRequest.NotificationPreferencesRequest request) {
+        // Validate alert threshold
+        if (request.getAlertThreshold() != null
+                && (request.getAlertThreshold() < 1 || request.getAlertThreshold() > 100)) {
+            throw new IllegalArgumentException("Alert threshold must be at least 1% and at most 100%");
+        }
+
+        // Validate frequency
+        if (request.getFrequency() != null && !request.getFrequency().matches("^(immediate|daily|weekly)$")) {
+            throw new IllegalArgumentException("Frequency must be immediate, daily, or weekly");
+        }
+
+        // Validate time formats
+        if (request.getQuietStartTime() != null
+                && !request.getQuietStartTime().matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+            throw new IllegalArgumentException("Quiet start time must be in HH:MM format");
+        }
+
+        if (request.getQuietEndTime() != null
+                && !request.getQuietEndTime().matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+            throw new IllegalArgumentException("Quiet end time must be in HH:MM format");
+        }
+
+        // Update notification preferences
+        updateUserNotificationPreferences(user, request);
     }
 
     /**

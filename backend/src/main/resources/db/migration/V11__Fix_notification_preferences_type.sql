@@ -59,3 +59,4 @@ BEGIN
         RAISE NOTICE 'Colonne push_subscription déjà de type TEXT ou n''existe pas';
     END IF;
 END $$;
+

@@ -9,6 +9,7 @@ export interface User {
   role: 'ADMIN' | 'MODERATOR' | 'CONTRIBUTOR';
   reputationScore: number;
   preferredRegions: string[];
+  preferredLanguage?: string;
   emailVerified: boolean;
   active: boolean;
   createdAt: string;
@@ -82,7 +83,7 @@ export const useAuthStore = create<AuthStore>()(
             logoutReason: null,
           });
 
-          // Update last login time
+          // Update last login time and apply user's preferred language
           if (data.user) {
             set({
               user: {
@@ -90,6 +91,16 @@ export const useAuthStore = create<AuthStore>()(
                 lastLoginAt: new Date().toISOString(),
               },
             });
+            
+            // Apply user's preferred language if available
+            if (data.user.preferredLanguage) {
+              // Import i18n dynamically to avoid circular dependency
+              import('../i18n').then(({ default: i18n }) => {
+                if (i18n.language !== data.user.preferredLanguage) {
+                  i18n.changeLanguage(data.user.preferredLanguage);
+                }
+              });
+            }
           }
         } catch (error) {
           set({
@@ -128,6 +139,16 @@ export const useAuthStore = create<AuthStore>()(
             error: null,
             logoutReason: null,
           });
+          
+          // Apply user's preferred language if available
+          if (data.user.preferredLanguage) {
+            // Import i18n dynamically to avoid circular dependency
+            import('../i18n').then(({ default: i18n }) => {
+              if (i18n.language !== data.user.preferredLanguage) {
+                i18n.changeLanguage(data.user.preferredLanguage);
+              }
+            });
+          }
         } catch (error) {
           set({
             isLoading: false,
@@ -228,6 +249,16 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: true,
             error: null,
           });
+          
+          // Apply user's preferred language if available
+          if (data.user.preferredLanguage) {
+            // Import i18n dynamically to avoid circular dependency
+            import('../i18n').then(({ default: i18n }) => {
+              if (i18n.language !== data.user.preferredLanguage) {
+                i18n.changeLanguage(data.user.preferredLanguage);
+              }
+            });
+          }
         } catch (error) {
           // If refresh fails, force logout user
           get().forceLogout('token_expired');

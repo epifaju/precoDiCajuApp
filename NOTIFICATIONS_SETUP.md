@@ -227,3 +227,4 @@ Pour toute question ou problème :
 2. Consultez les logs
 3. Testez avec un navigateur moderne
 4. Vérifiez la configuration VAPID
+

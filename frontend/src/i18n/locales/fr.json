@@ -435,7 +435,14 @@
     "light": "Clair",
     "dark": "Sombre",
     "system": "Système",
-    "saving": "Enregistrement..."
+    "saving": "Enregistrement...",
+    "total": "Total",
+    "verified": "Vérifié",
+    "pending": "En attente",
+    "prices": "prix",
+    "notAvailable": "Non renseigné",
+    "noRegionsSelected": "Aucune région sélectionnée",
+    "tryAgain": "Réessayer"
   },
   "dashboard": {
     "goodMorning": "Bonjour",
@@ -761,6 +768,7 @@
       }
     },
     "actions": {
+      "title": "Actions Rapides",
       "edit": "Modifier le profil",
       "changePassword": "Changer le mot de passe",
       "logout": "Se déconnecter"
@@ -961,6 +969,7 @@
     "title": "Configuration",
     "subtitle": "Gérez vos préférences et paramètres de l'application",
     "sections": {
+      "title": "Sections",
       "profile": "Profil",
       "preferences": "Préférences",
       "notifications": "Notifications"
@@ -1035,7 +1044,26 @@
       "quietStartTime": "Début des heures silencieuses",
       "quietStartTimeDescription": "Heure de début pour ne pas recevoir de notifications",
       "quietEndTime": "Fin des heures silencieuses",
-      "quietEndTimeDescription": "Heure de fin pour ne pas recevoir de notifications"
+      "quietEndTimeDescription": "Heure de fin pour ne pas recevoir de notifications",
+      "permission": "Permission",
+      "permissionGranted": "Autorisé",
+      "permissionDenied": "Refusé",
+      "permissionNotRequested": "Non demandé",
+      "notSupported": "Notifications non supportées",
+      "notSupportedDescription": "Votre navigateur ne supporte pas les notifications push",
+      "priceNotifications": "Notifications de Prix",
+      "priceNotificationsDescription": "Recevez des alertes en temps réel sur les variations de prix",
+      "subscribing": "Abonnement",
+      "unsubscribing": "Désabonnement",
+      "enableNotifications": "Activer les notifications",
+      "disableNotifications": "Désactiver les notifications",
+      "aboutNotifications": "À propos des notifications",
+      "notificationRule1": "Vous recevrez une notification quand le prix du cajou varie de plus de 10%",
+      "notificationRule2": "Les notifications incluent le nouveau prix et le pourcentage de variation",
+      "notificationRule3": "Vous pouvez désactiver les notifications à tout moment",
+      "notificationRule4": "Les notifications fonctionnent même quand l'application est fermée",
+      "notificationsBlocked": "Notifications bloquées",
+      "notificationsBlockedDescription": "Pour activer les notifications, autorisez les notifications dans les paramètres de votre navigateur et actualisez la page"
     },
     "actions": {
       "save": "Enregistrer",

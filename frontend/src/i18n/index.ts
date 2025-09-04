@@ -15,13 +15,47 @@ const resources = {
 
 // Initialize i18n
 const initI18n = async () => {
+  // Get user preferred language from auth store if available
+  const getInitialLanguage = () => {
+    try {
+      // Check if user is logged in and has preferred language
+      const authStorage = localStorage.getItem('precaju-auth-storage');
+      if (authStorage) {
+        const authData = JSON.parse(authStorage);
+        if (authData.state?.user?.preferredLanguage) {
+          return authData.state.user.preferredLanguage;
+        }
+      }
+      
+      // Fallback to localStorage
+      const storedLanguage = localStorage.getItem('precaju-language');
+      if (storedLanguage && ['pt', 'fr', 'en'].includes(storedLanguage)) {
+        return storedLanguage;
+      }
+      
+      // Fallback to browser language
+      const browserLang = navigator.language.split('-')[0];
+      if (['pt', 'fr', 'en'].includes(browserLang)) {
+        return browserLang;
+      }
+      
+      // Default to Portuguese
+      return 'pt';
+    } catch (error) {
+      console.warn('Error getting initial language:', error);
+      return 'pt';
+    }
+  };
+
+  const initialLanguage = getInitialLanguage();
+
   await i18n
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
       resources,
       fallbackLng: 'pt',
-      lng: 'pt', // Force Portuguese as default
+      lng: initialLanguage,
       debug: import.meta.env.DEV,
       
       interpolation: {
@@ -29,7 +63,7 @@ const initI18n = async () => {
       },
 
       detection: {
-        // Simple detection order
+        // Custom detection order: user preference > localStorage > navigator
         order: ['localStorage', 'navigator'],
         caches: ['localStorage'],
         lookupLocalStorage: 'i18nextLng',
@@ -40,17 +74,7 @@ const initI18n = async () => {
       },
     });
 
-  // Force Portuguese language after initialization
-  if (i18n.language !== 'pt') {
-    await i18n.changeLanguage('pt');
-  }
-  
-  // Clear any cached language that isn't Portuguese
-  const storedLang = localStorage.getItem('i18nextLng');
-  if (storedLang && storedLang !== 'pt') {
-    localStorage.setItem('i18nextLng', 'pt');
-    await i18n.changeLanguage('pt');
-  }
+  // Language is now set based on user preference or fallbacks
 };
 
 // Initialize immediately

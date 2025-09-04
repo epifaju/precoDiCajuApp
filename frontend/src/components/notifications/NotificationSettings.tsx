@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNotifications } from '../../hooks/useNotifications';
 import { Bell, BellOff, Settings, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -9,6 +10,7 @@ interface NotificationSettingsProps {
 }
 
 export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ className }) => {
+  const { t } = useTranslation();
   const {
     isSupported,
     isSubscribed,
@@ -38,11 +40,11 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
   const getPermissionStatus = () => {
     switch (permission) {
       case 'granted':
-        return { text: 'Autorisé', color: 'text-green-600', icon: CheckCircle };
+        return { text: t('config.notifications.permissionGranted'), color: 'text-green-600', icon: CheckCircle };
       case 'denied':
-        return { text: 'Refusé', color: 'text-red-600', icon: AlertCircle };
+        return { text: t('config.notifications.permissionDenied'), color: 'text-red-600', icon: AlertCircle };
       default:
-        return { text: 'Non demandé', color: 'text-gray-600', icon: AlertCircle };
+        return { text: t('config.notifications.permissionNotRequested'), color: 'text-gray-600', icon: AlertCircle };
     }
   };
 
@@ -56,10 +58,10 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
           <AlertCircle className="h-5 w-5 text-yellow-500" />
           <div>
             <h3 className="text-sm font-medium text-gray-900">
-              Notifications non supportées
+              {t('config.notifications.notSupported')}
             </h3>
             <p className="text-sm text-gray-500">
-              Votre navigateur ne supporte pas les notifications push.
+              {t('config.notifications.notSupportedDescription')}
             </p>
           </div>
         </div>
@@ -77,10 +79,10 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900">
-                Notifications de prix
+                {t('config.notifications.priceNotifications')}
               </h3>
               <p className="text-sm text-gray-500">
-                Recevez des alertes en temps réel sur les variations de prix
+                {t('config.notifications.priceNotificationsDescription')}
               </p>
             </div>
           </div>
@@ -102,7 +104,7 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
             <div className="flex items-center space-x-2">
               <PermissionIcon className={`h-4 w-4 ${permissionStatus.color}`} />
               <span className="text-sm font-medium text-gray-700">
-                Permission: {permissionStatus.text}
+                {t('config.notifications.permission')}: {permissionStatus.text}
               </span>
             </div>
           </div>
@@ -127,12 +129,12 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Désabonnement...
+                    {t('config.notifications.unsubscribing')}...
                   </>
                 ) : (
                   <>
                     <BellOff className="h-4 w-4 mr-2" />
-                    Désactiver les notifications
+                    {t('config.notifications.disableNotifications')}
                   </>
                 )}
               </Button>
@@ -145,12 +147,12 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Abonnement...
+                    {t('config.notifications.subscribing')}...
                   </>
                 ) : (
                   <>
                     <Bell className="h-4 w-4 mr-2" />
-                    Activer les notifications
+                    {t('config.notifications.enableNotifications')}
                   </>
                 )}
               </Button>
@@ -161,13 +163,13 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
           {showDetails && (
             <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <h4 className="text-sm font-medium text-blue-900 mb-2">
-                À propos des notifications
+                {t('config.notifications.aboutNotifications')}
               </h4>
               <ul className="text-sm text-blue-800 space-y-1">
-                <li>• Vous recevrez une notification quand le prix du cajou varie de plus de 10%</li>
-                <li>• Les notifications incluent le nouveau prix et le pourcentage de variation</li>
-                <li>• Vous pouvez désactiver les notifications à tout moment</li>
-                <li>• Les notifications fonctionnent même quand l'application est fermée</li>
+                <li>• {t('config.notifications.notificationRule1')}</li>
+                <li>• {t('config.notifications.notificationRule2')}</li>
+                <li>• {t('config.notifications.notificationRule3')}</li>
+                <li>• {t('config.notifications.notificationRule4')}</li>
               </ul>
             </div>
           )}
@@ -178,10 +180,9 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
               <div className="flex items-start space-x-2">
                 <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
                 <div className="text-sm text-yellow-800">
-                  <p className="font-medium">Notifications bloquées</p>
+                  <p className="font-medium">{t('config.notifications.notificationsBlocked')}</p>
                   <p>
-                    Pour activer les notifications, veuillez autoriser les notifications 
-                    dans les paramètres de votre navigateur et actualiser la page.
+                    {t('config.notifications.notificationsBlockedDescription')}
                   </p>
                 </div>
               </div>
@@ -192,3 +193,4 @@ export const NotificationSettings: React.FC<NotificationSettingsProps> = ({ clas
     </Card>
   );
 };
+

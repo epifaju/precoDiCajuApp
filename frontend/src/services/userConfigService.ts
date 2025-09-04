@@ -21,7 +21,7 @@ export class UserConfigService {
   static async getConfig(): Promise<UserConfigDTO> {
     try {
       const response = await apiClient.get<UserConfigDTO>(`${this.BASE_URL}/config`);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error fetching user configuration:', error);
       throw this.handleError(error);
@@ -34,7 +34,7 @@ export class UserConfigService {
   static async updateConfig(config: UpdateUserConfigRequest): Promise<UserConfigDTO> {
     try {
       const response = await apiClient.put<UserConfigDTO>(`${this.BASE_URL}/config`, config);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error updating user configuration:', error);
       throw this.handleError(error);
@@ -47,7 +47,7 @@ export class UserConfigService {
   static async getPreferences(): Promise<UserPreferencesDTO> {
     try {
       const response = await apiClient.get<UserPreferencesDTO>(`${this.BASE_URL}/preferences`);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error fetching user preferences:', error);
       throw this.handleError(error);
@@ -60,7 +60,7 @@ export class UserConfigService {
   static async updatePreferences(preferences: UserPreferencesRequest): Promise<UserPreferencesDTO> {
     try {
       const response = await apiClient.put<UserPreferencesDTO>(`${this.BASE_URL}/preferences`, preferences);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error updating user preferences:', error);
       throw this.handleError(error);
@@ -73,7 +73,7 @@ export class UserConfigService {
   static async getNotificationPreferences(): Promise<NotificationPreferencesDTO> {
     try {
       const response = await apiClient.get<NotificationPreferencesDTO>(`${this.BASE_URL}/notification-preferences`);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error fetching notification preferences:', error);
       throw this.handleError(error);
@@ -91,7 +91,7 @@ export class UserConfigService {
         `${this.BASE_URL}/notification-preferences`,
         preferences
       );
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error updating notification preferences:', error);
       throw this.handleError(error);
@@ -104,6 +104,20 @@ export class UserConfigService {
   static async saveConfig(config: UpdateUserConfigRequest): Promise<ConfigSaveResult> {
     try {
       const updatedConfig = await this.updateConfig(config);
+      
+      // If language changed in preferences, also update the user's preferredLanguage field
+      if (config.preferences?.language) {
+        try {
+          await apiClient.put('/api/v1/users/me', {
+            preferredLanguage: config.preferences.language,
+            preferredRegions: config.preferences.preferredRegions || []
+          });
+        } catch (error) {
+          console.warn('Failed to update user preferredLanguage:', error);
+          // Don't fail the whole operation if this fails
+        }
+      }
+      
       return {
         success: true,
         message: 'Configurações salvas com sucesso!',
@@ -124,6 +138,20 @@ export class UserConfigService {
   static async savePreferences(preferences: UserPreferencesRequest): Promise<ConfigSaveResult> {
     try {
       const updatedPreferences = await this.updatePreferences(preferences);
+      
+      // If language changed, also update the user's preferredLanguage field
+      if (preferences.language) {
+        try {
+          await apiClient.put('/api/v1/users/me', {
+            preferredLanguage: preferences.language,
+            preferredRegions: preferences.preferredRegions || []
+          });
+        } catch (error) {
+          console.warn('Failed to update user preferredLanguage:', error);
+          // Don't fail the whole operation if this fails
+        }
+      }
+      
       return {
         success: true,
         message: 'Preferências salvas com sucesso!',
@@ -265,11 +293,20 @@ export class UserConfigService {
    * Handle API errors
    */
   private static handleError(error: any): Error {
-    if (error.response) {
+    if (error.isApiError) {
+      // API error with structured data
+      const message = error.data?.message || error.message || 'Erro da API';
+      const errors = error.data?.details || error.data?.errors || {};
+      
+      const customError = new Error(message);
+      (customError as any).status = error.status;
+      (customError as any).errors = errors;
+      return customError;
+    } else if (error.response) {
       // Server responded with error status
       const { status, data } = error.response;
       const message = data?.message || data?.error || `Erro do servidor (${status})`;
-      const errors = data?.errors || {};
+      const errors = data?.details || data?.errors || {};
       
       const customError = new Error(message);
       (customError as any).status = status;
@@ -360,3 +397,4 @@ export class UserConfigService {
 
 // Export default instance
 export const userConfigService = UserConfigService;
+

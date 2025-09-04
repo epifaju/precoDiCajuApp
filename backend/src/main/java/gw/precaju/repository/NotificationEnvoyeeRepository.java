@@ -29,3 +29,4 @@ public interface NotificationEnvoyeeRepository extends JpaRepository<Notificatio
     @Query("SELECT COUNT(ne) FROM NotificationEnvoyee ne WHERE ne.utilisateur = :user AND ne.createdAt >= :since")
     long countNotificationsSince(@Param("user") User user, @Param("since") ZonedDateTime since);
 }
+

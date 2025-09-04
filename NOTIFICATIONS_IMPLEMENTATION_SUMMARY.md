@@ -200,3 +200,4 @@ L'implémentation respecte toutes les spécifications du PRD et suit les meilleu
 - 🧪 Script de test : `test-notifications.ps1`
 - 🔧 Installation : `scripts/install-notification-deps.sh`
 - 🐛 Dépannage : Vérifiez les logs et la configuration VAPID
+

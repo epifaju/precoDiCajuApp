@@ -39,6 +39,7 @@ export interface UserDTO {
   role: UserRole;
   reputationScore: number;
   preferredRegions: string[];
+  preferredLanguage?: string;
   emailVerified: boolean;
   active: boolean;
   createdAt: string;

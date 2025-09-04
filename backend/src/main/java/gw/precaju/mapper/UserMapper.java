@@ -33,6 +33,7 @@ public class UserMapper {
         dto.setReputationScore(user.getReputationScore());
         dto.setEmailVerified(user.getEmailVerified());
         dto.setActive(user.getActive());
+        dto.setPreferredLanguage(user.getPreferredLanguage());
         dto.setCreatedAt(user.getCreatedAt());
         dto.setLastLoginAt(user.getLastLoginAt());
 
@@ -40,9 +41,9 @@ public class UserMapper {
         try {
             if (user.getPreferredRegions() != null) {
                 List<String> regions = objectMapper.readValue(
-                    user.getPreferredRegions(), 
-                    new TypeReference<List<String>>() {}
-                );
+                        user.getPreferredRegions(),
+                        new TypeReference<List<String>>() {
+                        });
                 dto.setPreferredRegions(regions);
             } else {
                 dto.setPreferredRegions(new ArrayList<>());
@@ -68,6 +69,7 @@ public class UserMapper {
         user.setReputationScore(dto.getReputationScore());
         user.setEmailVerified(dto.getEmailVerified());
         user.setActive(dto.getActive());
+        user.setPreferredLanguage(dto.getPreferredLanguage());
         user.setCreatedAt(dto.getCreatedAt());
         user.setLastLoginAt(dto.getLastLoginAt());
 
@@ -105,11 +107,8 @@ public class UserMapper {
                 // Keep existing value
             }
         }
+        if (dto.getPreferredLanguage() != null) {
+            user.setPreferredLanguage(dto.getPreferredLanguage());
+        }
     }
 }
-
-
-
-
-
-

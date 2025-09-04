@@ -392,6 +392,7 @@
       "pricesSubmitted": "Preços Submetidos"
     },
     "actions": {
+      "title": "Ações Rápidas",
       "editProfile": "Editar perfil",
       "changePassword": "Alterar palavra-passe",
       "logout": "Sair da conta"
@@ -471,7 +472,14 @@
     "light": "Claro",
     "dark": "Escuro",
     "system": "Sistema",
-    "saving": "Salvando..."
+    "saving": "Salvando...",
+    "total": "Total",
+    "verified": "Verificado",
+    "pending": "Pendente",
+    "prices": "preços",
+    "notAvailable": "Não informado",
+    "noRegionsSelected": "Nenhuma região selecionada",
+    "tryAgain": "Tentar novamente"
   },
   "dashboard": {
     "goodMorning": "Bom dia",
@@ -786,6 +794,9 @@
     "updatedAt": "Atualizada em"
   },
   "errors": {
+    "pageNotFound": "Página não encontrada",
+    "pageNotFoundDesc": "A página que você está procurando não existe.",
+    "goHome": "Ir para o início",
     "general": "Ocorreu um erro",
     "network": "Erro de rede",
     "unauthorized": "Não autorizado",
@@ -795,8 +806,7 @@
     "validation": "Erro de validação",
     "timeout": "Tempo limite excedido",
     "retry": "Tentar novamente",
-    "goBack": "Voltar",
-    "goHome": "Ir para o início"
+    "goBack": "Voltar"
   },
   "loading": {
     "general": "Carregando...",
@@ -953,6 +963,7 @@
     "title": "Configurações",
     "subtitle": "Gerencie suas preferências e configurações da aplicação",
     "sections": {
+      "title": "Seções",
       "profile": "Perfil",
       "preferences": "Preferências",
       "notifications": "Notificações"
@@ -1027,7 +1038,26 @@
       "quietStartTime": "Início do horário silencioso",
       "quietStartTimeDescription": "Hora de início para não receber notificações",
       "quietEndTime": "Fim do horário silencioso",
-      "quietEndTimeDescription": "Hora de fim para não receber notificações"
+      "quietEndTimeDescription": "Hora de fim para não receber notificações",
+      "permission": "Permissão",
+      "permissionGranted": "Autorizado",
+      "permissionDenied": "Negado",
+      "permissionNotRequested": "Não solicitado",
+      "notSupported": "Notificações não suportadas",
+      "notSupportedDescription": "Seu navegador não suporta notificações push",
+      "priceNotifications": "Notificações de Preço",
+      "priceNotificationsDescription": "Receba alertas em tempo real sobre variações de preço",
+      "subscribing": "Inscrevendo",
+      "unsubscribing": "Desinscrevendo",
+      "enableNotifications": "Ativar notificações",
+      "disableNotifications": "Desativar notificações",
+      "aboutNotifications": "Sobre as notificações",
+      "notificationRule1": "Você receberá uma notificação quando o preço do caju variar mais de 10%",
+      "notificationRule2": "As notificações incluem o novo preço e o percentual de variação",
+      "notificationRule3": "Você pode desativar as notificações a qualquer momento",
+      "notificationRule4": "As notificações funcionam mesmo quando o aplicativo está fechado",
+      "notificationsBlocked": "Notificações bloqueadas",
+      "notificationsBlockedDescription": "Para ativar as notificações, autorize as notificações nas configurações do seu navegador e atualize a página"
     },
     "actions": {
       "save": "Salvar",

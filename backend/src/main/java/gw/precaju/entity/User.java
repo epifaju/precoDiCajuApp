@@ -62,6 +62,9 @@ public class User implements UserDetails {
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
 
+    @Column(name = "preferred_language", length = 5)
+    private String preferredLanguage = "pt";
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
@@ -237,6 +240,14 @@ public class User implements UserDetails {
 
     public void setLastLoginAt(Instant lastLoginAt) {
         this.lastLoginAt = lastLoginAt;
+    }
+
+    public String getPreferredLanguage() {
+        return preferredLanguage;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        this.preferredLanguage = preferredLanguage;
     }
 
     public Instant getCreatedAt() {

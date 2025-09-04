@@ -24,3 +24,4 @@ public class NotificationHistoryDTO {
     private String statut;
     private ZonedDateTime createdAt;
 }
+

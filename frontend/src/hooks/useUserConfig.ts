@@ -74,6 +74,39 @@ export function useUserConfig() {
   }, [user]);
 
   /**
+   * Deep comparison function that ignores non-serializable properties
+   */
+  const deepEqual = useCallback((obj1: any, obj2: any): boolean => {
+    if (obj1 === obj2) return true;
+    if (obj1 == null || obj2 == null) return obj1 === obj2;
+    if (typeof obj1 !== typeof obj2) return false;
+    
+    if (typeof obj1 === 'object') {
+      const keys1 = Object.keys(obj1).filter(key => 
+        typeof obj1[key] !== 'function' && 
+        !key.startsWith('_') && 
+        obj1[key] !== undefined
+      );
+      const keys2 = Object.keys(obj2).filter(key => 
+        typeof obj2[key] !== 'function' && 
+        !key.startsWith('_') && 
+        obj2[key] !== undefined
+      );
+      
+      if (keys1.length !== keys2.length) return false;
+      
+      for (const key of keys1) {
+        if (!keys2.includes(key)) return false;
+        if (!deepEqual(obj1[key], obj2[key])) return false;
+      }
+      
+      return true;
+    }
+    
+    return obj1 === obj2;
+  }, []);
+
+  /**
    * Update form data
    */
   const updateFormData = useCallback((updates: Partial<UserConfigFormData>) => {
@@ -82,15 +115,15 @@ export function useUserConfig() {
       
       const newFormData = { ...prev, ...updates };
       
-      // Mark as dirty if data has changed
+      // Mark as dirty if data has changed (using deep comparison instead of JSON.stringify)
       setFormState(prevState => ({
         ...prevState,
-        isDirty: JSON.stringify(newFormData) !== JSON.stringify(prev),
+        isDirty: !deepEqual(newFormData, prev),
       }));
       
       return newFormData;
     });
-  }, []);
+  }, [deepEqual]);
 
   /**
    * Save configuration
@@ -108,13 +141,16 @@ export function useUserConfig() {
       setFormState(prev => ({ ...prev, isLoading: true, errors: {} }));
       
       // Prepare update request
+      console.log('FormData being sent:', formData);
+      console.log('Language value:', formData.language, 'Type:', typeof formData.language);
+      
       const updateRequest: UpdateUserConfigRequest = {
-        fullName: formData.fullName,
-        phone: formData.phone,
+        fullName: formData.fullName || undefined,
+        phone: formData.phone || undefined,
         preferences: {
           language: formData.language,
           theme: formData.theme,
-          preferredRegions: formData.preferredRegions,
+          preferredRegions: formData.preferredRegions || [],
           timezone: formData.timezone,
           offlineMode: formData.offlineMode,
           autoSync: formData.autoSync,
@@ -126,14 +162,17 @@ export function useUserConfig() {
           emailNotifications: formData.emailNotifications,
           pushNotifications: formData.pushNotifications,
           alertThreshold: formData.alertThreshold,
-          alertRegions: formData.alertRegions,
-          alertQualities: formData.alertQualities,
+          alertRegions: formData.alertRegions || [],
+          alertQualities: formData.alertQualities || [],
           frequency: formData.frequency,
           quietHours: formData.quietHours,
           quietStartTime: formData.quietStartTime,
           quietEndTime: formData.quietEndTime,
         },
       };
+      
+      console.log('Update request being sent:', JSON.stringify(updateRequest, null, 2));
+      console.log('Auth token:', localStorage.getItem('token'));
 
       // Validate configuration
       const validation = userConfigService.validateConfig(updateRequest);
@@ -383,3 +422,4 @@ export function useUserConfig() {
     hasErrors: Object.keys(formState.errors).length > 0,
   };
 }
+

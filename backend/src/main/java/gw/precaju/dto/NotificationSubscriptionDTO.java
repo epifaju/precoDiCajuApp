@@ -22,3 +22,4 @@ public class NotificationSubscriptionDTO {
         return prixVariations != null && prixVariations;
     }
 }
+

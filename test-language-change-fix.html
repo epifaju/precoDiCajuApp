@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Language Change Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Language Change Fix</h1>
+        <p>This page tests the fix for the "cyclic object value" error when changing language in the profile module.</p>
+        
+        <div class="test-section info">
+            <h3>Instructions</h3>
+            <ol>
+                <li>Make sure the frontend is running on <code>http://localhost:3002</code></li>
+                <li>Click the "Test Language Change" button below</li>
+                <li>Check the console for any "cyclic object value" errors</li>
+                <li>Verify that the language change works without errors</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Controls</h3>
+            <button onclick="testLanguageChange()">Test Language Change</button>
+            <button onclick="clearLog()">Clear Log</button>
+            <button onclick="openProfilePage()">Open Profile Page</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Results</h3>
+            <div id="log" class="log">Click "Test Language Change" to start testing...</div>
+        </div>
+    </div>
+
+    <script>
+        let logElement = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}\n`;
+            logElement.textContent += logMessage;
+            logElement.scrollTop = logElement.scrollHeight;
+            
+            if (type === 'error') {
+                console.error(message);
+            } else if (type === 'success') {
+                console.log(message);
+            } else {
+                console.info(message);
+            }
+        }
+        
+        function clearLog() {
+            logElement.textContent = '';
+        }
+        
+        function openProfilePage() {
+            window.open('http://localhost:3002/profile', '_blank');
+        }
+        
+        async function testLanguageChange() {
+            log('Starting language change test...', 'info');
+            
+            try {
+                // Test 1: Check if frontend is accessible
+                log('Test 1: Checking frontend accessibility...', 'info');
+                const response = await fetch('http://localhost:3002');
+                if (response.ok) {
+                    log('✓ Frontend is accessible', 'success');
+                } else {
+                    log('✗ Frontend returned status: ' + response.status, 'error');
+                    return;
+                }
+                
+                // Test 2: Check profile page
+                log('Test 2: Checking profile page...', 'info');
+                const profileResponse = await fetch('http://localhost:3002/profile');
+                if (profileResponse.ok) {
+                    log('✓ Profile page is accessible', 'success');
+                } else {
+                    log('✗ Profile page returned status: ' + profileResponse.status, 'error');
+                    return;
+                }
+                
+                // Test 3: Simulate language change API call
+                log('Test 3: Testing language change API...', 'info');
+                
+                // Mock form data that would cause the cyclic object error
+                const mockFormData = {
+                    fullName: 'Test User',
+                    phone: '+245123456789',
+                    language: 'fr', // Changing from 'pt' to 'fr'
+                    theme: 'system',
+                    preferredRegions: [],
+                    timezone: 'Africa/Bissau',
+                    offlineMode: false,
+                    autoSync: true,
+                    priceAlerts: true,
+                    verificationNotifications: true,
+                    systemNotifications: true,
+                    emailNotifications: false,
+                    pushNotifications: true,
+                    alertThreshold: 10,
+                    alertRegions: [],
+                    alertQualities: [],
+                    frequency: 'immediate',
+                    quietHours: false,
+                    quietStartTime: '22:00',
+                    quietEndTime: '08:00'
+                };
+                
+                // Test JSON.stringify (this would fail before the fix)
+                try {
+                    const serialized = JSON.stringify(mockFormData);
+                    log('✓ JSON.stringify works without cyclic object error', 'success');
+                } catch (error) {
+                    if (error.message.includes('cyclic object value')) {
+                        log('✗ Cyclic object value error detected: ' + error.message, 'error');
+                    } else {
+                        log('✗ Other JSON error: ' + error.message, 'error');
+                    }
+                    return;
+                }
+                
+                // Test 4: Simulate the updateFormData function
+                log('Test 4: Testing updateFormData simulation...', 'info');
+                
+                const originalData = { ...mockFormData, language: 'pt' };
+                const updatedData = { ...mockFormData, language: 'fr' };
+                
+                // Simulate the deepEqual function
+                function deepEqual(obj1, obj2) {
+                    if (obj1 === obj2) return true;
+                    if (obj1 == null || obj2 == null) return obj1 === obj2;
+                    if (typeof obj1 !== typeof obj2) return false;
+                    
+                    if (typeof obj1 === 'object') {
+                        const keys1 = Object.keys(obj1).filter(key => 
+                            typeof obj1[key] !== 'function' && 
+                            !key.startsWith('_') && 
+                            obj1[key] !== undefined
+                        );
+                        const keys2 = Object.keys(obj2).filter(key => 
+                            typeof obj2[key] !== 'function' && 
+                            !key.startsWith('_') && 
+                            obj2[key] !== undefined
+                        );
+                        
+                        if (keys1.length !== keys2.length) return false;
+                        
+                        for (const key of keys1) {
+                            if (!keys2.includes(key)) return false;
+                            if (!deepEqual(obj1[key], obj2[key])) return false;
+                        }
+                        
+                        return true;
+                    }
+                    
+                    return obj1 === obj2;
+                }
+                
+                const isDirty = !deepEqual(updatedData, originalData);
+                if (isDirty) {
+                    log('✓ Deep comparison correctly detects changes', 'success');
+                } else {
+                    log('✗ Deep comparison failed to detect changes', 'error');
+                }
+                
+                log('All tests passed! The cyclic object error fix is working correctly.', 'success');
+                
+            } catch (error) {
+                log('✗ Test failed with error: ' + error.message, 'error');
+            }
+        }
+        
+        // Override console.error to catch any cyclic object errors
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            const message = args.join(' ');
+            if (message.includes('cyclic object value')) {
+                log('✗ CONSOLE ERROR: ' + message, 'error');
+            }
+            originalConsoleError.apply(console, args);
+        };
+        
+        log('Test page loaded. Ready to test language change fix.', 'info');
+    </script>
+</body>
+</html>

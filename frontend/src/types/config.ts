@@ -426,3 +426,4 @@ export const CONFIG_SECTIONS: ConfigSection[] = [
     ],
   },
 ];
+

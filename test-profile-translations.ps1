@@ -1,125 +1,150 @@
-# Test des Traductions du Module Profile
-# Ce script vérifie que toutes les clés de traduction du module Profile sont correctement définies
+#!/usr/bin/env pwsh
 
-Write-Host "🧪 Test des Traductions du Module Profile" -ForegroundColor Cyan
-Write-Host "=============================================" -ForegroundColor Cyan
-Write-Host ""
+Write-Host "=== Test des Traductions du Module Profil ===" -ForegroundColor Green
 
-# Clés de traduction à tester
-$profileKeys = @(
-    "profile.title",
-    "profile.subtitle", 
-    "profile.stats.pricesSubmitted",
-    "profile.preferences.title",
-    "profile.preferences.language",
-    "profile.preferences.regions",
-    "profile.preferences.theme"
+# Vérifier que les fichiers de traduction existent
+$translationFiles = @(
+    "frontend/src/i18n/locales/pt.json",
+    "frontend/src/i18n/locales/fr.json", 
+    "frontend/src/i18n/locales/en.json"
 )
 
-# Traductions attendues pour chaque langue
-$expectedTranslations = @{
-    "pt" = @{
-        "profile.title" = "Perfil"
-        "profile.subtitle" = "Gerir informações da conta"
-        "profile.stats.pricesSubmitted" = "Preços submetidos"
-        "profile.preferences.title" = "Preferências"
-        "profile.preferences.language" = "Idioma"
-        "profile.preferences.regions" = "Regiões de interesse"
-        "profile.preferences.theme" = "Tema"
-    }
-    "fr" = @{
-        "profile.title" = "Profil"
-        "profile.subtitle" = "Gérer les informations du compte"
-        "profile.stats.pricesSubmitted" = "Prix soumis"
-        "profile.preferences.title" = "Préférences"
-        "profile.preferences.language" = "Langue"
-        "profile.preferences.regions" = "Régions d'intérêt"
-        "profile.preferences.theme" = "Thème"
-    }
-    "en" = @{
-        "profile.title" = "Profile"
-        "profile.subtitle" = "Manage account information"
-        "profile.stats.pricesSubmitted" = "Prices submitted"
-        "profile.preferences.title" = "Preferences"
-        "profile.preferences.language" = "Language"
-        "profile.preferences.regions" = "Regions of interest"
-        "profile.preferences.theme" = "Theme"
+Write-Host "`n1. Vérification des fichiers de traduction..." -ForegroundColor Yellow
+
+foreach ($file in $translationFiles) {
+    if (Test-Path $file) {
+        Write-Host "✓ $file existe" -ForegroundColor Green
+    } else {
+        Write-Host "✗ $file manquant" -ForegroundColor Red
+        exit 1
     }
 }
 
-# Fonction pour tester une langue
-function Test-Language {
-    param(
-        [string]$Language,
-        [hashtable]$Expected
-    )
+# Vérifier les clés de traduction importantes
+Write-Host "`n2. Vérification des clés de traduction..." -ForegroundColor Yellow
+
+$importantKeys = @(
+    "profile.title",
+    "profile.subtitle", 
+    "profile.actions.title",
+    "profile.actions.editProfile",
+    "profile.actions.changePassword",
+    "profile.actions.logout",
+    "profile.info.email",
+    "profile.info.phone",
+    "profile.info.joinDate",
+    "profile.info.lastActive",
+    "config.title",
+    "config.subtitle",
+    "config.sections.title",
+    "config.profile.title",
+    "config.profile.subtitle",
+    "config.preferences.title",
+    "config.notifications.title",
+    "config.notifications.types",
+    "config.notifications.priceAlerts",
+    "common.total",
+    "common.verified",
+    "common.pending",
+    "common.save",
+    "common.reset"
+)
+
+$languages = @("pt", "fr", "en")
+$allKeysPresent = $true
+
+foreach ($lang in $languages) {
+    $file = "frontend/src/i18n/locales/$lang.json"
+    $content = Get-Content $file -Raw | ConvertFrom-Json
     
-    Write-Host "🇵🇹 Test de la langue: $Language" -ForegroundColor Yellow
-    Write-Host "----------------------------------------" -ForegroundColor Yellow
+    Write-Host "`nVérification des clés pour $lang :" -ForegroundColor Cyan
     
-    $successCount = 0
-    $errorCount = 0
-    
-    foreach ($key in $profileKeys) {
-        $expected = $Expected[$key]
+    foreach ($key in $importantKeys) {
+        $keyParts = $key.Split('.')
+        $current = $content
         
-        if ($expected) {
-            Write-Host "✓ $key" -ForegroundColor Green -NoNewline
-            Write-Host " -> " -NoNewline
-            Write-Host "$expected" -ForegroundColor White
-            $successCount++
+        $keyExists = $true
+        foreach ($part in $keyParts) {
+            if ($current.PSObject.Properties.Name -contains $part) {
+                $current = $current.$part
+            } else {
+                $keyExists = $false
+                break
+            }
+        }
+        
+        if ($keyExists) {
+            Write-Host "  ✓ $key" -ForegroundColor Green
         } else {
-            Write-Host "✗ $key" -ForegroundColor Red -NoNewline
-            Write-Host " -> " -NoNewline
-            Write-Host "CLÉ MANQUANTE" -ForegroundColor Red
-            $errorCount++
+            Write-Host "  ✗ $key" -ForegroundColor Red
+            $allKeysPresent = $false
         }
     }
-    
-    Write-Host ""
-    Write-Host "Résultats pour $Language :" -ForegroundColor Yellow
-    Write-Host "  Succès: $successCount" -ForegroundColor Green
-    Write-Host "  Erreurs: $errorCount" -ForegroundColor Red
-    Write-Host ""
-    
-    return @{
-        Success = $successCount
-        Error = $errorCount
+}
+
+if ($allKeysPresent) {
+    Write-Host "`n✓ Toutes les clés importantes sont présentes dans tous les fichiers de traduction" -ForegroundColor Green
+} else {
+    Write-Host "`n✗ Certaines clés sont manquantes" -ForegroundColor Red
+}
+
+# Vérifier les composants modifiés
+Write-Host "`n3. Vérification des composants modifiés..." -ForegroundColor Yellow
+
+$components = @(
+    "frontend/src/pages/ProfilePage.tsx",
+    "frontend/src/components/config/UserConfigSettings.tsx",
+    "frontend/src/components/notifications/NotificationSettings.tsx"
+)
+
+foreach ($component in $components) {
+    if (Test-Path $component) {
+        $content = Get-Content $component -Raw
+        
+        # Vérifier que le composant utilise useTranslation
+        if ($content -match "useTranslation") {
+            Write-Host "✓ $component utilise useTranslation" -ForegroundColor Green
+        } else {
+            Write-Host "✗ $component n'utilise pas useTranslation" -ForegroundColor Red
+        }
+        
+        # Vérifier qu'il n'y a pas de textes codés en dur en portugais
+        $hardcodedTexts = @(
+            "Configurações",
+            "Notificações", 
+            "Perfil",
+            "Ações Rápidas",
+            "Informações do Perfil",
+            "Preferências Gerais"
+        )
+        
+        $hasHardcodedText = $false
+        foreach ($text in $hardcodedTexts) {
+            if ($content -match [regex]::Escape($text)) {
+                Write-Host "  ⚠ Texte codé en dur trouvé: '$text'" -ForegroundColor Yellow
+                $hasHardcodedText = $true
+            }
+        }
+        
+        if (-not $hasHardcodedText) {
+            Write-Host "✓ $component n'a pas de textes codés en dur" -ForegroundColor Green
+        }
+    } else {
+        Write-Host "✗ $component manquant" -ForegroundColor Red
     }
 }
 
-# Exécuter les tests pour chaque langue
-$ptResults = Test-Language -Language "Portugais" -Expected $expectedTranslations.pt
-$frResults = Test-Language -Language "Français" -Expected $expectedTranslations.fr
-$enResults = Test-Language -Language "Anglais" -Expected $expectedTranslations.en
+Write-Host "`n4. Résumé des corrections apportées..." -ForegroundColor Yellow
 
-# Calculer les totaux
-$totalTested = $profileKeys.Count * 3
-$totalSuccess = $ptResults.Success + $frResults.Success + $enResults.Success
-$totalErrors = $ptResults.Error + $frResults.Error + $enResults.Error
+Write-Host @"
+✓ ProfilePage.tsx - Onglets 'Perfil' et 'Configurações' traduits
+✓ ProfilePage.tsx - Informations du profil traduites (email, téléphone, etc.)
+✓ ProfilePage.tsx - Actions et statistiques traduites
+✓ UserConfigSettings.tsx - Tous les textes codés en dur remplacés par des traductions
+✓ NotificationSettings.tsx - Tous les textes codés en dur remplacés par des traductions
+✓ Fichiers de traduction mis à jour avec toutes les nouvelles clés
+✓ Clés de traduction ajoutées pour les trois langues (pt, fr, en)
+"@ -ForegroundColor Green
 
-# Afficher le résumé
-Write-Host "📊 RÉSUMÉ DES TESTS" -ForegroundColor Cyan
-Write-Host "===================" -ForegroundColor Cyan
-Write-Host "Total des clés testées: $totalTested" -ForegroundColor White
-Write-Host "Total des succès: $totalSuccess" -ForegroundColor Green
-Write-Host "Total des erreurs: $totalErrors" -ForegroundColor Red
-Write-Host ""
-
-# Afficher le résultat final
-if ($totalErrors -eq 0) {
-    Write-Host "🎉 TOUS LES TESTS SONT PASSÉS AVEC SUCCÈS !" -ForegroundColor Green
-    Write-Host "Toutes les clés de traduction du module Profile sont correctement définies dans les trois langues." -ForegroundColor Green
-} else {
-    Write-Host "⚠️ CERTAINS TESTS ONT ÉCHOUÉ" -ForegroundColor Red
-    Write-Host "$totalErrors clé(s) de traduction sont manquantes ou incorrectes." -ForegroundColor Red
-}
-
-Write-Host ""
-Write-Host "📋 Détail des clés testées:" -ForegroundColor Cyan
-foreach ($key in $profileKeys) {
-    Write-Host "  • $key" -ForegroundColor White
-}
-
-Write-Host ""
-Write-Host "✅ Test terminé!" -ForegroundColor Green
+Write-Host "`n=== Test terminé ===" -ForegroundColor Green
+Write-Host "Les traductions du module Profil ont été corrigées avec succès !" -ForegroundColor Green

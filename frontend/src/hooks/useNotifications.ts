@@ -219,3 +219,4 @@ export const useNotifications = (): UseNotificationsReturn => {
     permission
   };
 };
+

@@ -56,3 +56,4 @@ try {
   console.log("Installez web-push avec : npm install web-push");
   process.exit(1);
 }
+

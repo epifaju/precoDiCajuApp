@@ -36,3 +36,4 @@ public class NotificationConfig {
     @Column(name = "updated_at", nullable = false)
     private ZonedDateTime updatedAt;
 }
+
