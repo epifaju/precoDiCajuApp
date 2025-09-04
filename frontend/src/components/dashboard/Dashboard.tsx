@@ -85,55 +85,70 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
 
   return (
     <div className={className}>
-      {/* WebSocket Connection Status */}
-      <div className="mb-4 flex justify-end">
-        <div className="flex items-center space-x-2 text-sm">
+      {/* WebSocket Connection Status - Mobile Optimized */}
+      <div className="mb-4 sm:mb-6 flex justify-center sm:justify-end">
+        <div className="flex items-center space-x-2 text-xs sm:text-sm px-3 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           {isConnected ? (
             <div className="flex items-center text-green-600 dark:text-green-400">
-              <Wifi className="h-4 w-4 mr-1" />
-              <span>{t('websocket.connected', 'Temps réel actif')}</span>
+              <Wifi className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline">{t('websocket.connected', 'Temps réel actif')}</span>
+              <span className="sm:hidden">En ligne</span>
             </div>
           ) : isConnecting ? (
             <div className="flex items-center text-yellow-600 dark:text-yellow-400">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600 mr-2"></div>
-              <span>{t('websocket.connecting', 'Connexion...')}</span>
+              <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-yellow-600 mr-1 sm:mr-2 flex-shrink-0"></div>
+              <span className="hidden sm:inline">{t('websocket.connecting', 'Connexion...')}</span>
+              <span className="sm:hidden">Connexion...</span>
             </div>
           ) : (
             <div className="flex items-center text-red-600 dark:text-red-400">
-              <WifiOff className="h-4 w-4 mr-1" />
-              <span>{t('websocket.disconnected', 'Hors ligne')}</span>
+              <WifiOff className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline">{t('websocket.disconnected', 'Hors ligne')}</span>
+              <span className="sm:hidden">Hors ligne</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Welcome Section */}
-      <div className="mb-8">
-        {/* Mobile Layout: Stacked vertically */}
+      {/* Welcome Section - Enhanced Mobile Responsiveness */}
+      <div className="mb-6 sm:mb-8">
+        {/* Mobile Layout: Enhanced stacked layout */}
         <div className="block md:hidden">
-          <div className="text-center space-y-4">
-            <div className="space-y-2">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
-                {getGreeting()}, {user?.fullName?.split(' ')[0] || 'User'}! 👋
-              </h1>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-md mx-auto">
-                {t('dashboard.welcome', 'Here\'s what\'s happening with cashew prices today.')}
-              </p>
+          <div className="text-center space-y-4 sm:space-y-6">
+            {/* Greeting Card */}
+            <div className="dashboard-greeting-card bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 sm:p-6 mx-2 sm:mx-4 shadow-sm border border-blue-100 dark:border-gray-600">
+              <div className="space-y-3 sm:space-y-4">
+                <h1 className="dashboard-greeting-text text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+                  <span className="block sm:inline">
+                    {getGreeting()}, 
+                  </span>
+                  <span className="block sm:inline sm:ml-1 text-blue-600 dark:text-blue-400">
+                    {user?.fullName?.split(' ')[0] || 'User'}! 👋
+                  </span>
+                </h1>
+                <p className="dashboard-greeting-text text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-sm sm:max-w-md mx-auto">
+                  {t('dashboard.welcome', 'Here\'s what\'s happening with cashew prices today.')}
+                </p>
+              </div>
             </div>
             
-            {/* Period Selector - Mobile */}
-            <div className="flex flex-col items-center space-y-3">
+            {/* Period Selector - Enhanced Mobile */}
+            <div className="dashboard-period-selector flex flex-col items-center space-y-3 px-4">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('dashboard.period', 'Period')}:
               </span>
-              <div className="flex items-center justify-center space-x-2">
+              <div className="flex items-center justify-center space-x-2 w-full max-w-sm bg-white dark:bg-gray-800 rounded-xl p-2 shadow-sm border border-gray-200 dark:border-gray-700">
                 {[7, 30, 90].map((days) => (
                   <Button
                     key={days}
-                    variant={statsPeriod === days ? 'primary' : 'outline'}
+                    variant={statsPeriod === days ? 'primary' : 'ghost'}
                     size="sm"
                     onClick={() => setStatsPeriod(days)}
-                    className="min-w-[60px] h-9 text-sm font-medium transition-all duration-200 hover:scale-105"
+                    className={`dashboard-period-button flex-1 min-w-[60px] h-10 text-sm font-medium transition-all duration-200 hover:scale-105 touch-manipulation ${
+                      statsPeriod === days 
+                        ? 'bg-blue-600 text-white shadow-md' 
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
                   >
                     {days}d
                   </Button>
@@ -143,34 +158,48 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
           </div>
         </div>
 
-        {/* Tablet/Desktop Layout: Side by side */}
+        {/* Tablet/Desktop Layout: Enhanced side by side */}
         <div className="hidden md:flex items-start justify-between">
           <div className="flex-1 max-w-2xl">
-            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
-              {getGreeting()}, {user?.fullName?.split(' ')[0] || 'User'}! 👋
-            </h1>
-            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
-              {t('dashboard.welcome', 'Here\'s what\'s happening with cashew prices today.')}
-            </p>
+            {/* Greeting Card for Tablet/Desktop */}
+            <div className="dashboard-greeting-card bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 lg:p-8 shadow-sm border border-blue-100 dark:border-gray-600">
+              <h1 className="dashboard-greeting-text text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
+                <span className="block lg:inline">
+                  {getGreeting()}, 
+                </span>
+                <span className="block lg:inline lg:ml-1 text-blue-600 dark:text-blue-400">
+                  {user?.fullName?.split(' ')[0] || 'User'}! 👋
+                </span>
+              </h1>
+              <p className="dashboard-greeting-text text-base lg:text-lg xl:text-xl text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
+                {t('dashboard.welcome', 'Here\'s what\'s happening with cashew prices today.')}
+              </p>
+            </div>
           </div>
           
-          {/* Period Selector - Desktop */}
-          <div className="flex flex-col items-end space-y-3 ml-8">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {t('dashboard.period', 'Period')}:
-            </span>
-            <div className="flex items-center space-x-2">
-              {[7, 30, 90].map((days) => (
-                <Button
-                  key={days}
-                  variant={statsPeriod === days ? 'primary' : 'outline'}
-                  size="sm"
-                  onClick={() => setStatsPeriod(days)}
-                  className="min-w-[70px] h-10 text-sm font-medium transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-offset-2"
-                >
-                  {days}d
-                </Button>
-              ))}
+          {/* Period Selector - Enhanced Desktop */}
+          <div className="dashboard-period-selector flex flex-col items-end space-y-4 ml-6 lg:ml-8">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-3">
+                {t('dashboard.period', 'Period')}:
+              </span>
+              <div className="flex items-center space-x-2">
+                {[7, 30, 90].map((days) => (
+                  <Button
+                    key={days}
+                    variant={statsPeriod === days ? 'primary' : 'ghost'}
+                    size="sm"
+                    onClick={() => setStatsPeriod(days)}
+                    className={`dashboard-period-button min-w-[60px] lg:min-w-[70px] h-9 lg:h-10 text-sm font-medium transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-offset-2 touch-manipulation ${
+                      statsPeriod === days 
+                        ? 'bg-blue-600 text-white shadow-md' 
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {days}d
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -227,48 +256,129 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
         />
       </div>
 
-      {/* Charts Section */}
+      {/* Charts Section - Enhanced Mobile Responsiveness */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Price Trend Chart */}
         <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
+          <Card className="dashboard-trends-card">
+            <CardHeader className="pb-4 px-4 sm:px-6 lg:px-8">
+              {/* Mobile Layout */}
+              <div className="block md:hidden">
+                <div className="text-center space-y-4">
+                  {/* Title Card */}
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 mx-2 shadow-sm border border-green-100 dark:border-gray-600">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                      {t('dashboard.priceTrends', 'Tendances des Prix')}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {t('dashboard.recentPriceMovements', 'Mouvements récents des prix sur différentes périodes')}
+                    </p>
+                  </div>
+                  
+                  {/* Chart Controls - Mobile */}
+                  <div className="space-y-3">
+                    {/* Type Controls */}
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 block mb-2 text-center">
+                        {t('dashboard.chartType', 'Type de graphique')}:
+                      </span>
+                      <div className="flex items-center justify-center space-x-2">
+                        {(['line', 'bar'] as const).map((type) => (
+                          <Button
+                            key={type}
+                            variant={chartType === type ? 'primary' : 'ghost'}
+                            size="sm"
+                            onClick={() => setChartType(type)}
+                            className={`dashboard-chart-button flex-1 min-w-[60px] h-10 text-sm font-medium transition-all duration-200 hover:scale-105 touch-manipulation ${
+                              chartType === type 
+                                ? 'bg-green-600 text-white shadow-md' 
+                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            }`}
+                          >
+                            {type === 'line' ? t('dashboard.line', 'Ligne') : t('dashboard.bar', 'Barres')}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Group Controls */}
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm border border-gray-200 dark:border-gray-700">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300 block mb-2 text-center">
+                        {t('dashboard.groupBy', 'Grouper par')}:
+                      </span>
+                      <div className="flex items-center justify-center space-x-2">
+                        {(['date', 'region', 'quality'] as const).map((group) => (
+                          <Button
+                            key={group}
+                            variant={chartGroupBy === group ? 'primary' : 'ghost'}
+                            size="sm"
+                            onClick={() => setChartGroupBy(group)}
+                            className={`dashboard-chart-button flex-1 min-w-[60px] h-10 text-sm font-medium transition-all duration-200 hover:scale-105 touch-manipulation ${
+                              chartGroupBy === group 
+                                ? 'bg-blue-600 text-white shadow-md' 
+                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            }`}
+                          >
+                            {t(`dashboard.${group}`, group === 'date' ? 'Date' : group === 'region' ? 'Région' : 'Qualité')}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Layout */}
+              <div className="hidden md:flex items-center justify-between">
                 <div>
-                  <CardTitle>{t('dashboard.priceTrends', 'Price Trends')}</CardTitle>
-                  <CardDescription>
-                    {t('dashboard.recentPriceMovements', 'Recent price movements across different periods')}
+                  <CardTitle className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
+                    {t('dashboard.priceTrends', 'Tendances des Prix')}
+                  </CardTitle>
+                  <CardDescription className="text-sm lg:text-base text-gray-600 dark:text-gray-400 mt-1">
+                    {t('dashboard.recentPriceMovements', 'Mouvements récents des prix sur différentes périodes')}
                   </CardDescription>
                 </div>
                 
-                {/* Chart Controls */}
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center space-x-1">
-                    <span className="text-xs text-gray-600 dark:text-gray-400">Type:</span>
+                {/* Chart Controls - Desktop */}
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                      {t('dashboard.chartType', 'Type')}:
+                    </span>
                     {(['line', 'bar'] as const).map((type) => (
                       <Button
                         key={type}
                         variant={chartType === type ? 'primary' : 'ghost'}
                         size="sm"
                         onClick={() => setChartType(type)}
-                        className="text-xs px-2 py-1"
+                        className={`dashboard-chart-button min-w-[60px] h-9 text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                          chartType === type 
+                            ? 'bg-green-600 text-white shadow-md' 
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
                       >
-                        {type}
+                        {type === 'line' ? t('dashboard.line', 'Ligne') : t('dashboard.bar', 'Barres')}
                       </Button>
                     ))}
                   </div>
                   
-                  <div className="flex items-center space-x-1">
-                    <span className="text-xs text-gray-600 dark:text-gray-400">Group:</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                      {t('dashboard.groupBy', 'Grouper')}:
+                    </span>
                     {(['date', 'region', 'quality'] as const).map((group) => (
                       <Button
                         key={group}
                         variant={chartGroupBy === group ? 'primary' : 'ghost'}
                         size="sm"
                         onClick={() => setChartGroupBy(group)}
-                        className="text-xs px-2 py-1"
+                        className={`dashboard-chart-button min-w-[60px] h-9 text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                          chartGroupBy === group 
+                            ? 'bg-blue-600 text-white shadow-md' 
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
                       >
-                        {t(`dashboard.${group}`, group)}
+                        {t(`dashboard.${group}`, group === 'date' ? 'Date' : group === 'region' ? 'Région' : 'Qualité')}
                       </Button>
                     ))}
                   </div>
@@ -276,53 +386,142 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
               </div>
             </CardHeader>
             <CardContent className="p-0">
-              <PriceChart
-                data={chartData}
-                type={chartType}
-                title=""
-                groupBy={chartGroupBy}
-                loading={pricesLoading}
-                className="border-0 shadow-none"
-              />
+              <div className="dashboard-chart-container">
+                <PriceChart
+                  data={chartData}
+                  type={chartType}
+                  title=""
+                  groupBy={chartGroupBy}
+                  loading={pricesLoading}
+                  className="border-0 shadow-none"
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {/* Regional Distribution */}
+      {/* Regional Distribution - Enhanced Mobile Responsiveness */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <PriceChart
-          data={chartData}
-          type="doughnut"
-          title={t('dashboard.regionalDistribution', 'Regional Distribution')}
-          description={t('dashboard.pricesByRegion', 'Average prices by region')}
-          groupBy="region"
-          loading={pricesLoading}
-        />
+        {/* Regional Distribution Chart */}
+        <div className="dashboard-distribution-card">
+          <Card className="h-full">
+            <CardHeader className="pb-4 px-4 sm:px-6 lg:px-8">
+              {/* Mobile Layout */}
+              <div className="block md:hidden">
+                <div className="text-center space-y-3">
+                  <div className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 mx-2 shadow-sm border border-purple-100 dark:border-gray-600">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                      {t('dashboard.regionalDistribution', 'Distribution Régionale')}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {t('dashboard.pricesByRegion', 'Prix moyens par région')}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-        <PriceChart
-          data={chartData}
-          type="bar"
-          title={t('dashboard.qualityComparison', 'Quality Comparison')}
-          description={t('dashboard.pricesByQuality', 'Average prices by quality grade')}
-          groupBy="quality"
-          loading={pricesLoading}
-        />
+              {/* Desktop Layout */}
+              <div className="hidden md:block">
+                <CardTitle className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
+                  {t('dashboard.regionalDistribution', 'Distribution Régionale')}
+                </CardTitle>
+                <CardDescription className="text-sm lg:text-base text-gray-600 dark:text-gray-400 mt-1">
+                  {t('dashboard.pricesByRegion', 'Prix moyens par région')}
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="dashboard-chart-container">
+                <PriceChart
+                  data={chartData}
+                  type="doughnut"
+                  title=""
+                  groupBy="region"
+                  loading={pricesLoading}
+                  className="border-0 shadow-none"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quality Comparison Chart */}
+        <div className="dashboard-quality-card">
+          <Card className="h-full">
+            <CardHeader className="pb-4 px-4 sm:px-6 lg:px-8">
+              {/* Mobile Layout */}
+              <div className="block md:hidden">
+                <div className="text-center space-y-3">
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 mx-2 shadow-sm border border-orange-100 dark:border-gray-600">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                      {t('dashboard.qualityComparison', 'Comparaison Qualité')}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {t('dashboard.pricesByQuality', 'Prix moyens par grade de qualité')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Layout */}
+              <div className="hidden md:block">
+                <CardTitle className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
+                  {t('dashboard.qualityComparison', 'Comparaison Qualité')}
+                </CardTitle>
+                <CardDescription className="text-sm lg:text-base text-gray-600 dark:text-gray-400 mt-1">
+                  {t('dashboard.pricesByQuality', 'Prix moyens par grade de qualité')}
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="dashboard-chart-container">
+                <PriceChart
+                  data={chartData}
+                  type="bar"
+                  title=""
+                  groupBy="quality"
+                  loading={pricesLoading}
+                  className="border-0 shadow-none"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      {/* Recent Activity */}
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>{t('dashboard.recentActivity', 'Recent Price Updates')}</CardTitle>
-          <CardDescription>
-            {t('dashboard.latestPriceUpdates', 'Latest price updates from the community')}
-          </CardDescription>
+      {/* Recent Activity - Enhanced Mobile Responsiveness */}
+      <Card className="mt-8 dashboard-activity-card">
+        <CardHeader className="pb-4 px-4 sm:px-6 lg:px-8">
+          {/* Mobile Layout */}
+          <div className="block md:hidden">
+            <div className="text-center space-y-3">
+              <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 mx-2 shadow-sm border border-gray-200 dark:border-gray-600">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                  {t('dashboard.recentActivity', 'Activité Récente')}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {t('dashboard.latestPriceUpdates', 'Dernières mises à jour de prix de la communauté')}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden md:block">
+            <CardTitle className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
+              {t('dashboard.recentActivity', 'Activité Récente')}
+            </CardTitle>
+            <CardDescription className="text-sm lg:text-base text-gray-600 dark:text-gray-400 mt-1">
+              {t('dashboard.latestPriceUpdates', 'Dernières mises à jour de prix de la communauté')}
+            </CardDescription>
+          </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6 lg:px-8">
           {pricesLoading ? (
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg animate-pulse">
+                <div key={i} className="flex items-center justify-between p-3 sm:p-4 border border-gray-200 dark:border-gray-700 rounded-xl animate-pulse bg-white dark:bg-gray-800 shadow-sm">
                   <div className="flex items-center space-x-3">
                     <div className="h-10 w-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
                     <div className="space-y-1">
@@ -339,28 +538,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
               {prices.slice(0, 5).map((price) => (
                 <div 
                   key={price.id} 
-                  className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="dashboard-activity-item flex items-center justify-between p-3 sm:p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md"
                 >
-                  <div className="flex items-center space-x-3">
-                    <div className="h-10 w-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  <div className="flex items-center space-x-3 min-w-0 flex-1">
+                    <div className="h-10 w-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
                       {price.regionName.charAt(0)}
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-gray-900 dark:text-white text-sm sm:text-base truncate">
                         {price.regionName} - {price.qualityName}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t('dashboard.by', 'by')} {price.createdBy.fullName} • {new Date(price.recordedDate).toLocaleDateString()}
+                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">
+                        {t('dashboard.by', 'par')} {price.createdBy.fullName} • {new Date(price.recordedDate).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-lg text-gray-900 dark:text-white">
+                  <div className="text-right flex-shrink-0 ml-3">
+                    <p className="font-bold text-sm sm:text-lg text-gray-900 dark:text-white">
                       {formatCurrency(price.priceFcfa)}
                     </p>
                     {price.verified && (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-                        ✓ {t('dashboard.verified', 'Verified')}
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 mt-1">
+                        ✓ {t('dashboard.verified', 'Vérifié')}
                       </span>
                     )}
                   </div>
@@ -369,12 +568,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ className }) => {
               
               {prices.length === 0 && (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  <p className="mt-2">
-                    {t('dashboard.noPricesYet', 'No price data available yet')}
-                  </p>
+                  <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 mx-2 shadow-sm border border-gray-200 dark:border-gray-600">
+                    <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <p className="mt-2 text-sm sm:text-base">
+                      {t('dashboard.noPricesYet', 'Aucune donnée de prix disponible pour le moment')}
+                    </p>
+                  </div>
                 </div>
               )}
             </div>

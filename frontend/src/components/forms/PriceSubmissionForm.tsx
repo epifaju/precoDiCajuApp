@@ -165,16 +165,16 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
 
   return (
     <div className={className}>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('forms.submitPriceTitle', 'Submit Cashew Price')}</CardTitle>
-          <CardDescription>
+      <Card className="price-submission-card mx-2 sm:mx-4 md:mx-0">
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-xl sm:text-2xl">{t('forms.submitPriceTitle', 'Submit Cashew Price')}</CardTitle>
+          <CardDescription className="text-sm sm:text-base">
             {t('forms.submitPriceDescription', 'Share current cashew prices with the community to help everyone stay informed about market conditions.')}
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <CardContent className="p-4 sm:p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
             {/* Global error */}
             {errors.root && (
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-3">
@@ -185,7 +185,7 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
             )}
 
             {/* Basic Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Region */}
               <Controller
                 name="regionCode"
@@ -231,7 +231,7 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
             </div>
 
             {/* Price and Date */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Price */}
               <Input
                 label={t('forms.price', 'Price (FCFA)')}
@@ -264,7 +264,7 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
             </div>
 
             {/* Source Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Source Name */}
               <Input
                 label={t('forms.sourceName', 'Source Name (Optional)')}
@@ -301,8 +301,8 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
 
             {/* GPS Location */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <h3 className="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
                   {t('forms.location', 'Location Information')}
                 </h3>
                 <Button
@@ -311,6 +311,7 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
                   size="sm"
                   onClick={getCurrentLocation}
                   loading={locationLoading}
+                  className="price-form-button w-full sm:w-auto"
                   leftIcon={
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -322,7 +323,7 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <Input
                   label={t('forms.latitude', 'Latitude (Optional)')}
                   type="number"
@@ -369,11 +370,12 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
             />
 
             {/* Submit Button */}
-            <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 sm:gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => navigate('/prices')}
+                className="price-form-button w-full sm:w-auto order-2 sm:order-1"
               >
                 {t('forms.cancel', 'Cancel')}
               </Button>
@@ -382,6 +384,7 @@ export const PriceSubmissionForm: React.FC<PriceSubmissionFormProps> = ({
                 type="submit"
                 loading={isSubmitting || createPriceMutation.isPending}
                 disabled={isSubmitting || createPriceMutation.isPending}
+                className="price-form-button w-full sm:w-auto order-1 sm:order-2"
                 leftIcon={
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

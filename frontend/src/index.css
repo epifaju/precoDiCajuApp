@@ -152,9 +152,783 @@
   @apply fixed top-0 left-0 right-0 bg-yellow-500 text-white text-center py-2 z-50;
 }
 
+/* Mobile-specific improvements for configuration */
+@media (max-width: 640px) {
+  .config-mobile-nav {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .config-mobile-nav::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .config-mobile-toggle {
+    min-height: 44px; /* iOS touch target minimum */
+    min-width: 44px;
+  }
+  
+  .config-mobile-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .config-mobile-card {
+    margin: 0 -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .config-mobile-section {
+    padding: 1rem;
+  }
+}
+
+/* Tablet-specific improvements */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .config-tablet-grid {
+    grid-template-columns: 1fr 2fr;
+  }
+  
+  .config-tablet-nav {
+    position: sticky;
+    top: 1rem;
+    height: fit-content;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .config-touch-toggle {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  .config-touch-button {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+  
+  .config-touch-input {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+}
+
+/* Dashboard greeting section mobile improvements */
+@media (max-width: 768px) {
+  .dashboard-greeting-card {
+    animation: slideInUp 0.6s ease-out;
+  }
+  
+  .dashboard-period-selector {
+    animation: slideInUp 0.8s ease-out;
+  }
+  
+  .dashboard-greeting-text {
+    animation: fadeIn 0.4s ease-out;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-greeting-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .dashboard-period-selector {
+    animation: slideInRight 0.8s ease-out;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1025px) {
+  .dashboard-greeting-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .dashboard-period-selector {
+    animation: slideInRight 0.8s ease-out;
+  }
+}
+
+/* Keyframe animations */
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Enhanced button hover effects */
+.dashboard-period-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.dashboard-period-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-period-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Mobile-specific touch improvements */
+@media (max-width: 640px) {
+  .dashboard-greeting-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .dashboard-period-selector {
+    margin: 0 8px;
+  }
+  
+  .dashboard-period-button {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+/* Price submission form mobile improvements */
+@media (max-width: 768px) {
+  .price-submission-card {
+    animation: slideInUp 0.6s ease-out;
+  }
+  
+  .price-submission-header {
+    animation: slideInUp 0.4s ease-out;
+  }
+  
+  .price-submission-form {
+    animation: slideInUp 0.8s ease-out;
+  }
+  
+  .price-submission-tips {
+    animation: slideInUp 1s ease-out;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .price-submission-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .price-submission-header {
+    animation: slideInLeft 0.4s ease-out;
+  }
+  
+  .price-submission-form {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .price-submission-tips {
+    animation: slideInLeft 1s ease-out;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1025px) {
+  .price-submission-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .price-submission-header {
+    animation: slideInLeft 0.4s ease-out;
+  }
+  
+  .price-submission-form {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .price-submission-tips {
+    animation: slideInLeft 1s ease-out;
+  }
+}
+
+/* Enhanced form interactions */
+.price-form-input {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.price-form-input:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.price-form-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.price-form-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.price-form-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Mobile-specific form improvements */
+@media (max-width: 640px) {
+  .price-submission-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .price-form-input {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .price-form-button {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .price-form-select {
+    min-height: 44px;
+  }
+}
+
 /* Loading states */
 .skeleton {
   @apply bg-gray-200 dark:bg-gray-700 animate-pulse rounded;
+}
+
+/* Admin users page mobile improvements */
+@media (max-width: 768px) {
+  .admin-header-card {
+    animation: slideInUp 0.6s ease-out;
+  }
+  
+  .admin-stats-card {
+    animation: slideInUp 0.8s ease-out;
+  }
+  
+  .admin-filters-card {
+    animation: slideInUp 1s ease-out;
+  }
+  
+  .admin-users-card {
+    animation: slideInUp 1.2s ease-out;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .admin-header-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .admin-stats-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .admin-filters-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .admin-users-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1025px) {
+  .admin-header-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .admin-stats-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .admin-filters-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .admin-users-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Enhanced admin interactions */
+.admin-user-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.admin-user-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.admin-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.admin-button:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.admin-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Mobile-specific admin improvements */
+@media (max-width: 640px) {
+  .admin-header-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .admin-stats-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .admin-filters-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .admin-users-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .admin-button {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+/* Footer mobile improvements */
+@media (max-width: 768px) {
+  .footer-brand-card {
+    animation: slideInUp 0.6s ease-out;
+  }
+  
+  .footer-links-card {
+    animation: slideInUp 0.8s ease-out;
+  }
+  
+  .footer-support-card {
+    animation: slideInUp 1s ease-out;
+  }
+  
+  .footer-contact-card {
+    animation: slideInUp 1.2s ease-out;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .footer-brand-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .footer-links-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .footer-support-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .footer-contact-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1025px) {
+  .footer-brand-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .footer-links-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .footer-support-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .footer-contact-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Enhanced footer interactions */
+.footer-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.footer-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.footer-link {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.footer-link:hover {
+  transform: translateX(4px) scale(1.05);
+}
+
+.footer-icon {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-icon:hover {
+  transform: scale(1.2) rotate(5deg);
+}
+
+/* Mobile-specific footer improvements */
+@media (max-width: 640px) {
+  .footer-brand-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .footer-links-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .footer-support-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .footer-contact-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .footer-link {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+/* Prices page mobile improvements */
+@media (max-width: 768px) {
+  .prices-header-card {
+    animation: slideInUp 0.6s ease-out;
+  }
+  
+  .prices-overview-card {
+    animation: slideInUp 0.8s ease-out;
+  }
+  
+  .prices-stats-card {
+    animation: slideInUp 1s ease-out;
+  }
+  
+  .prices-list-card {
+    animation: slideInUp 1.2s ease-out;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .prices-header-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .prices-overview-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .prices-stats-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .prices-list-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1025px) {
+  .prices-header-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .prices-overview-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .prices-stats-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .prices-list-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Enhanced prices interactions */
+.prices-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.prices-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.prices-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.prices-button:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.prices-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.prices-link {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.prices-link:hover {
+  transform: translateX(4px) scale(1.05);
+}
+
+.prices-icon {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prices-icon:hover {
+  transform: scale(1.2) rotate(5deg);
+}
+
+/* Mobile-specific prices improvements */
+@media (max-width: 640px) {
+  .prices-header-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .prices-overview-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .prices-stats-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .prices-list-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .prices-button {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+/* Dashboard trends mobile improvements */
+@media (max-width: 768px) {
+  .dashboard-trends-card {
+    animation: slideInUp 0.6s ease-out;
+  }
+  
+  .dashboard-distribution-card {
+    animation: slideInUp 0.8s ease-out;
+  }
+  
+  .dashboard-quality-card {
+    animation: slideInUp 1s ease-out;
+  }
+  
+  .dashboard-activity-card {
+    animation: slideInUp 1.2s ease-out;
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-trends-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .dashboard-distribution-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .dashboard-quality-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .dashboard-activity-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Desktop improvements */
+@media (min-width: 1025px) {
+  .dashboard-trends-card {
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .dashboard-distribution-card {
+    animation: slideInLeft 0.8s ease-out;
+  }
+  
+  .dashboard-quality-card {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .dashboard-activity-card {
+    animation: slideInLeft 1.2s ease-out;
+  }
+}
+
+/* Enhanced dashboard trends interactions */
+.dashboard-trends-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.dashboard-trends-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-chart-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.dashboard-chart-button:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-chart-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.dashboard-chart-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-chart-container:hover {
+  transform: scale(1.02);
+}
+
+.dashboard-activity-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.dashboard-activity-item:hover {
+  transform: translateX(4px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-distribution-card,
+.dashboard-quality-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.dashboard-distribution-card:hover,
+.dashboard-quality-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile-specific dashboard trends improvements */
+@media (max-width: 640px) {
+  .dashboard-trends-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .dashboard-distribution-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .dashboard-quality-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .dashboard-activity-card {
+    margin: 0 8px;
+    border-radius: 16px;
+  }
+  
+  .dashboard-chart-button {
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+  }
 }
 
 .shimmer {

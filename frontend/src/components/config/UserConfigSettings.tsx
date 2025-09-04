@@ -181,7 +181,7 @@ export const UserConfigSettings: React.FC<UserConfigSettingsProps> = ({ classNam
               variant="outline"
               onClick={handleReset}
               disabled={isSaving}
-              className="flex-1 sm:flex-none text-xs sm:text-sm"
+              className="config-touch-button flex-1 sm:flex-none text-xs sm:text-sm"
             >
               <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">{t('config.actions.reset')}</span>
@@ -192,7 +192,7 @@ export const UserConfigSettings: React.FC<UserConfigSettingsProps> = ({ classNam
               onClick={handleSave}
               loading={isSaving}
               disabled={!hasChanges}
-              className="flex-1 sm:flex-none text-xs sm:text-sm"
+              className="config-touch-button flex-1 sm:flex-none text-xs sm:text-sm"
             >
               <Save className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">{t('config.actions.save')}</span>
@@ -248,7 +248,7 @@ export const UserConfigSettings: React.FC<UserConfigSettingsProps> = ({ classNam
                 {t('config.sections.title')}
               </h3>
               {/* Mobile: Horizontal scroll navigation */}
-              <nav className="flex xl:flex-col space-x-2 xl:space-x-0 xl:space-y-2 overflow-x-auto xl:overflow-x-visible pb-2 xl:pb-0">
+              <nav className="config-mobile-nav flex xl:flex-col space-x-2 xl:space-x-0 xl:space-y-2 overflow-x-auto xl:overflow-x-visible pb-2 xl:pb-0">
                 {CONFIG_SECTIONS.map((section) => (
                   <button
                     key={section.id}
@@ -298,7 +298,7 @@ export const UserConfigSettings: React.FC<UserConfigSettingsProps> = ({ classNam
                       onChange={(e) => updateFormData({ fullName: e.target.value })}
                       placeholder={t('config.profile.fullNamePlaceholder')}
                       error={formState.errors.fullName}
-                      className="w-full"
+                      className="w-full config-mobile-input config-touch-input"
                     />
                   </div>
 
@@ -312,7 +312,7 @@ export const UserConfigSettings: React.FC<UserConfigSettingsProps> = ({ classNam
                       onChange={(e) => updateFormData({ phone: e.target.value })}
                       placeholder={t('config.profile.phonePlaceholder')}
                       error={formState.errors.phone}
-                      className="w-full"
+                      className="w-full config-mobile-input config-touch-input"
                     />
                   </div>
                 </div>
@@ -399,7 +399,7 @@ export const UserConfigSettings: React.FC<UserConfigSettingsProps> = ({ classNam
                       </div>
                       <button
                         onClick={() => updateFormData({ offlineMode: !formData.offlineMode })}
-                        className={`relative inline-flex h-5 w-9 sm:h-6 sm:w-11 items-center rounded-full transition-colors flex-shrink-0 ${
+                        className={`config-mobile-toggle config-touch-toggle relative inline-flex h-5 w-9 sm:h-6 sm:w-11 items-center rounded-full transition-colors flex-shrink-0 ${
                           formData.offlineMode ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
                         }`}
                       >
@@ -425,7 +425,7 @@ export const UserConfigSettings: React.FC<UserConfigSettingsProps> = ({ classNam
                       </div>
                       <button
                         onClick={() => updateFormData({ autoSync: !formData.autoSync })}
-                        className={`relative inline-flex h-5 w-9 sm:h-6 sm:w-11 items-center rounded-full transition-colors flex-shrink-0 ${
+                        className={`config-mobile-toggle config-touch-toggle relative inline-flex h-5 w-9 sm:h-6 sm:w-11 items-center rounded-full transition-colors flex-shrink-0 ${
                           formData.autoSync ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
                         }`}
                       >

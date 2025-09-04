@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { Select, type SelectOption } from '../components/ui/Select';
+import { Select } from '../components/ui/Select';
 import { useApi } from '../hooks/useApi';
 import { UserDTO, UserRole } from '../types/api';
 import { useAuthStore } from '../store/authStore';
@@ -80,7 +80,7 @@ const AdminPage: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
 
   // Form errors
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [formErrors] = useState<Record<string, string>>({});
 
   // Vérifier les permissions
   useEffect(() => {
@@ -228,97 +228,183 @@ const AdminPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          {t('admin.title', 'Administration des Utilisateurs')}
-        </h1>
-        <p className="text-gray-600">
-          {t('admin.description', 'Gérez les utilisateurs de la plateforme')}
-        </p>
+    <div className="container mx-auto px-4 py-6 sm:py-8">
+      {/* Header - Enhanced Mobile Responsiveness */}
+      <div className="mb-6 sm:mb-8">
+        {/* Mobile Layout */}
+        <div className="block md:hidden">
+          <div className="text-center space-y-4 sm:space-y-6">
+            {/* Title Card */}
+            <div className="admin-header-card bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 sm:p-6 mx-2 sm:mx-4 shadow-sm border border-purple-100 dark:border-gray-600">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white leading-tight">
+                {t('admin.title', 'Administration des Utilisateurs')}
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
+                {t('admin.description', 'Gérez les utilisateurs de la plateforme')}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden md:block">
+          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+            {t('admin.title', 'Administration des Utilisateurs')}
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400 mt-3 max-w-3xl">
+            {t('admin.description', 'Gérez les utilisateurs de la plateforme')}
+          </p>
+        </div>
       </div>
 
-      {/* Statistiques */}
+      {/* Statistiques - Enhanced Mobile Responsiveness */}
       {stats && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 sm:p-5 shadow-sm mb-8">
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <svg className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            {t('admin.stats.overview', 'Vue d\'ensemble des utilisateurs')}
-          </h3>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
-            {/* Total Users */}
-            <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800/30">
-              <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                {stats.totalUsers}
-              </div>
-              <div className="text-xs sm:text-sm text-blue-700 dark:text-blue-300 font-medium">
-                {t('admin.stats.total', 'Total')}
+        <div className="mb-6 sm:mb-8">
+          {/* Mobile Layout */}
+          <div className="block md:hidden">
+            <div className="admin-stats-card bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-4 sm:p-6 mx-2 sm:mx-4 shadow-sm border border-blue-100 dark:border-gray-600">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4 text-center flex items-center justify-center">
+                <svg className="w-5 h-5 mr-2 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {t('admin.stats.overview', 'Vue d\'ensemble des utilisateurs')}
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {/* Total Users */}
+                <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800/30">
+                  <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                    {stats.totalUsers}
+                  </div>
+                  <div className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                    {t('admin.stats.total', 'Total')}
+                  </div>
+                </div>
+
+                {/* Active Users */}
+                <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800/30">
+                  <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
+                    {stats.activeUsers}
+                  </div>
+                  <div className="text-xs text-green-700 dark:text-green-300 font-medium">
+                    {t('admin.stats.active', 'Actifs')}
+                  </div>
+                </div>
+
+                {/* Admin Users */}
+                <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800/30">
+                  <div className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+                    {stats.adminUsers}
+                  </div>
+                  <div className="text-xs text-purple-700 dark:text-purple-300 font-medium">
+                    {t('admin.stats.admins', 'Admins')}
+                  </div>
+                </div>
+
+                {/* Moderator Users */}
+                <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800/30">
+                  <div className="text-xl sm:text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">
+                    {stats.moderatorUsers}
+                  </div>
+                  <div className="text-xs text-orange-700 dark:text-orange-300 font-medium">
+                    {t('admin.stats.moderators', 'Modérateurs')}
+                  </div>
+                </div>
+
+                {/* Contributor Users */}
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg border border-gray-200 dark:border-gray-800/30">
+                  <div className="text-xl sm:text-2xl font-bold text-gray-600 dark:text-gray-400 mb-1">
+                    {stats.contributorUsers}
+                  </div>
+                  <div className="text-xs text-gray-700 dark:text-gray-300 font-medium">
+                    {t('admin.stats.contributors', 'Contributeurs')}
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* Active Users */}
-            <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800/30">
-              <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mb-1">
-                {stats.activeUsers}
+          {/* Desktop Layout */}
+          <div className="hidden md:block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+              <svg className="w-5 h-5 mr-3 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              {t('admin.stats.overview', 'Vue d\'ensemble des utilisateurs')}
+            </h3>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+              {/* Total Users */}
+              <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800/30">
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                  {stats.totalUsers}
+                </div>
+                <div className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+                  {t('admin.stats.total', 'Total')}
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-green-700 dark:text-green-300 font-medium">
-                {t('admin.stats.active', 'Actifs')}
-              </div>
-            </div>
 
-            {/* Admin Users */}
-            <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800/30">
-              <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-                {stats.adminUsers}
+              {/* Active Users */}
+              <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800/30">
+                <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
+                  {stats.activeUsers}
+                </div>
+                <div className="text-sm text-green-700 dark:text-green-300 font-medium">
+                  {t('admin.stats.active', 'Actifs')}
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium">
-                {t('admin.stats.admins', 'Admins')}
-              </div>
-            </div>
 
-            {/* Moderator Users */}
-            <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800/30">
-              <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mb-1">
-                {stats.moderatorUsers}
+              {/* Admin Users */}
+              <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800/30">
+                <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+                  {stats.adminUsers}
+                </div>
+                <div className="text-sm text-purple-700 dark:text-purple-300 font-medium">
+                  {t('admin.stats.admins', 'Admins')}
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-orange-700 dark:text-orange-300 font-medium">
-                {t('admin.stats.moderators', 'Modérateurs')}
-              </div>
-            </div>
 
-            {/* Contributor Users */}
-            <div className="text-center p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg border border-gray-200 dark:border-gray-800/30">
-              <div className="text-2xl sm:text-3xl font-bold text-gray-600 dark:text-gray-400 mb-1">
-                {stats.contributorUsers}
+              {/* Moderator Users */}
+              <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800/30">
+                <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">
+                  {stats.moderatorUsers}
+                </div>
+                <div className="text-sm text-orange-700 dark:text-orange-300 font-medium">
+                  {t('admin.stats.moderators', 'Modérateurs')}
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">
-                {t('admin.stats.contributors', 'Contributeurs')}
+
+              {/* Contributor Users */}
+              <div className="text-center p-4 bg-gray-50 dark:bg-gray-900/20 rounded-lg border border-gray-200 dark:border-gray-800/30">
+                <div className="text-2xl sm:text-3xl font-bold text-gray-600 dark:text-gray-400 mb-2">
+                  {stats.contributorUsers}
+                </div>
+                <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                  {t('admin.stats.contributors', 'Contributeurs')}
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Filtres et actions - Section Pesquisar améliorée */}
+      {/* Filtres et actions - Enhanced Mobile Responsiveness */}
       <div className="space-y-4 mb-6">
         {/* Mobile Filter Toggle */}
         <div className="sm:hidden">
           <Button
             variant="outline"
             onClick={() => setShowFilters(prev => !prev)}
-            className="w-full justify-between h-12 text-sm font-medium"
+            className="w-full justify-between h-12 text-sm font-medium mx-2 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 transition-colors"
           >
             <span className="flex items-center">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
               {t('admin.filters.title', 'Filtres et Recherche')}
             </span>
             <svg 
-              className={`w-4 h-4 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} 
+              className={`w-5 h-5 transition-transform duration-200 text-purple-600 dark:text-purple-400 ${showFilters ? 'rotate-180' : ''}`} 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -328,13 +414,13 @@ const AdminPage: React.FC = () => {
           </Button>
         </div>
 
-        {/* Filtres et recherche - Design moderne et responsive */}
-        <div className={`space-y-4 p-4 sm:p-5 lg:p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200 ${
+        {/* Filtres et recherche - Enhanced Mobile Design */}
+        <div className={`admin-filters-card space-y-4 p-4 sm:p-5 lg:p-6 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-200 mx-2 sm:mx-0 ${
           showFilters ? 'block opacity-100' : 'hidden sm:block opacity-100'
         }`}>
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white flex items-center">
-              <svg className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+              <svg className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               {t('admin.filters.title', 'Filtres et Recherche')}
@@ -343,7 +429,7 @@ const AdminPage: React.FC = () => {
               variant="ghost" 
               size="sm" 
               onClick={() => setFilters({ role: '', active: '', emailVerified: '', search: '' })} 
-              className="text-xs px-3 py-2 h-8 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
+              className="text-sm px-4 py-2 h-10 hover:bg-purple-100 dark:hover:bg-purple-900/20 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 rounded-lg"
             >
               {t('admin.filters.clearAll', 'Effacer tout')}
             </Button>
@@ -354,7 +440,7 @@ const AdminPage: React.FC = () => {
             {/* Recherche - Full width on mobile, spans 2 on small screens */}
             <div className="col-span-1 sm:col-span-2 lg:col-span-1">
               <Input
-                placeholder={t('admin.filters.searchPlaceholder', 'Email ou nom...')}
+                placeholder={String(t('admin.filters.searchPlaceholder', 'Email ou nom...'))}
                 value={filters.search}
                 onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
                 leftIcon={
@@ -396,13 +482,13 @@ const AdminPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Actions - Mobile optimized */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 border-t border-gray-200 dark:border-gray-700">
+          {/* Actions - Enhanced Mobile Design */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
             <Button 
               onClick={() => setShowCreateModal(true)}
-              className="w-full sm:w-auto justify-center h-11 px-4 sm:px-6 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
+              className="w-full sm:w-auto justify-center h-12 px-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-600 dark:to-emerald-600 dark:hover:from-green-700 dark:hover:to-emerald-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
               {t('admin.actions.create', 'Créer un utilisateur')}
@@ -411,10 +497,13 @@ const AdminPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Liste des utilisateurs - Design responsive amélioré */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
+      {/* Liste des utilisateurs - Enhanced Mobile Design */}
+      <Card className="admin-users-card mx-2 sm:mx-0">
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+            <svg className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+            </svg>
             {t('admin.users.title', 'Utilisateurs')}
           </CardTitle>
         </CardHeader>
@@ -431,10 +520,10 @@ const AdminPage: React.FC = () => {
             </div>
           ) : (
             <>
-              {/* Vue mobile : Cartes empilées */}
+              {/* Vue mobile : Enhanced Cards */}
               <div className="block lg:hidden space-y-4 p-4 sm:p-6">
                 {users.map((user) => (
-                  <div key={user.id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+                  <div key={user.id} className="admin-user-card bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 shadow-sm hover:shadow-lg transition-all duration-200">
                     {/* En-tête de la carte */}
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
@@ -489,13 +578,13 @@ const AdminPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Actions - Boutons empilés sur mobile */}
-                    <div className="flex flex-col space-y-2">
+                    {/* Actions - Enhanced Mobile Buttons */}
+                    <div className="flex flex-col space-y-3">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => openEditModal(user)}
-                        className="w-full justify-center h-10 text-sm font-medium"
+                        className="admin-button w-full justify-center h-11 text-sm font-medium rounded-lg border-2 border-blue-200 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-blue-700 dark:text-blue-300 transition-all duration-200"
                       >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -507,7 +596,7 @@ const AdminPage: React.FC = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => openPasswordModal(user)}
-                        className="w-full justify-center h-10 text-sm font-medium"
+                        className="admin-button w-full justify-center h-11 text-sm font-medium rounded-lg border-2 border-orange-200 dark:border-orange-800 hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-orange-700 dark:text-orange-300 transition-all duration-200"
                       >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
@@ -519,7 +608,11 @@ const AdminPage: React.FC = () => {
                         size="sm"
                         variant={user.active ? "destructive" : "outline"}
                         onClick={() => handleToggleUserStatus(user.id, user.active)}
-                        className="w-full justify-center h-10 text-sm font-medium"
+                        className={`admin-button w-full justify-center h-11 text-sm font-medium rounded-lg border-2 transition-all duration-200 ${
+                          user.active 
+                            ? 'border-red-200 dark:border-red-800 hover:border-red-300 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-700 dark:text-red-300' 
+                            : 'border-green-200 dark:border-green-800 hover:border-green-300 dark:hover:border-green-700 hover:bg-green-50 dark:hover:bg-green-900/20 text-green-700 dark:text-green-300'
+                        }`}
                       >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={user.active ? "M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L5.636 5.636" : "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"} />
