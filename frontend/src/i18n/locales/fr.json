@@ -31,6 +31,20 @@
     "verified": "Prix Vérifié",
     "verifiedMessage": "Le prix de {{price}} FCFA/kg pour {{quality}} a été vérifié"
   },
+  "user": {
+    "menu": "Menu utilisateur",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter",
+    "welcome": "Bienvenue",
+    "connected": "Connecté",
+    "lastLogin": "Dernière connexion",
+    "never": "Jamais",
+    "role": {
+      "admin": "Administrateur",
+      "moderator": "Modérateur",
+      "contributor": "Contributeur"
+    }
+  },
   "profile": {
     "title": "Mon Profil",
     "subtitle": "Gérez vos informations personnelles et préférences",

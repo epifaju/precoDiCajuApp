@@ -53,11 +53,11 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'ADMIN':
-        return t('user.role.admin', 'Administrateur');
+        return t('user.role.admin', 'Administrador');
       case 'MODERATOR':
-        return t('user.role.moderator', 'Modérateur');
+        return t('user.role.moderator', 'Moderador');
       case 'CONTRIBUTOR':
-        return t('user.role.contributor', 'Contributeur');
+        return t('user.role.contributor', 'Contribuidor');
       default:
         return role;
     }
@@ -86,7 +86,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
-        aria-label={t('user.menu', 'Menu utilisateur')}
+        aria-label={t('user.menu', 'Menu do usuário')}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -149,7 +149,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
               onClick={() => setIsOpen(false)}
             >
               <User className="w-4 h-4 mr-3" />
-              {t('user.profile', 'Mon profil')}
+              {t('nav.profile', 'Meu perfil')}
             </Link>
 
             {/* Settings Link */}
@@ -159,7 +159,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
               onClick={() => setIsOpen(false)}
             >
               <Settings className="w-4 h-4 mr-3" />
-              {t('user.settings', 'Paramètres')}
+              {t('user.settings', 'Configurações')}
             </Link>
 
             {/* Divider */}
@@ -171,14 +171,14 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
               className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
             >
               <LogOut className="w-4 h-4 mr-3" />
-              {t('user.logout', 'Se déconnecter')}
+              {t('user.logout', 'Sair')}
             </button>
           </div>
 
           {/* Footer */}
           <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {t('user.lastLogin', 'Dernière connexion')}: {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString() : t('user.never', 'Jamais')}
+              {t('user.lastLogin', 'Último login')}: {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString() : t('user.never', 'Nunca')}
             </p>
           </div>
         </div>

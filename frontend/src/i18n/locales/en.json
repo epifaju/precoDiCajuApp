@@ -30,6 +30,20 @@
     "verified": "Price Verified",
     "verifiedMessage": "The price of {{price}} FCFA/kg for {{quality}} has been verified"
   },
+  "user": {
+    "menu": "User menu",
+    "settings": "Settings",
+    "logout": "Logout",
+    "welcome": "Welcome",
+    "connected": "Connected",
+    "lastLogin": "Last login",
+    "never": "Never",
+    "role": {
+      "admin": "Administrator",
+      "moderator": "Moderator",
+      "contributor": "Contributor"
+    }
+  },
   "profile": {
     "title": "My Profile",
     "subtitle": "Manage your personal information and preferences",

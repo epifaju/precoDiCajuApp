@@ -124,8 +124,6 @@
       "title": "Selecionar Localização",
       "description": "Clique no mapa para selecionar uma localização ou use GPS para obter sua posição atual"
     },
-    "qualityScore": "Pontuação de Qualidade",
-    "validation": "Validação",
     "improvement": "Melhoria de Precisão",
     "original": "Original",
     "improved": "Melhorado",
@@ -195,7 +193,7 @@
       "noCachedGeocoding": "Nenhuma geocodificação em cache",
       "accuracy": "Precisão"
     },
-    "dashboard": {
+    "gpsDashboard": {
       "title": "Painel GPS",
       "subtitle": "Visão geral completa da geolocalização",
       "overview": "Visão Geral",
@@ -511,7 +509,11 @@
     "date": "data",
     "region": "região",
     "quality": "qualidade",
-    "price": "Preço"
+    "price": "Preço",
+    "chartType": "Tipo de Gráfico",
+    "line": "Linha",
+    "bar": "Barras",
+    "groupBy": "Agrupar por"
   },
   "submission": {
     "title": "Submeter Preço de Caju",
@@ -603,6 +605,7 @@
     "resultsSummary": "Resumo dos Resultados",
     "totalPrices": "Total de Preços",
     "filters": "Filtros",
+    "filterResults": "Preços filtrados e ordenados",
     "clearFilters": "Limpar Todos",
     "searchPlaceholder": "Pesquisar por nome da fonte...",
     "selectRegion": "Selecionar região",
