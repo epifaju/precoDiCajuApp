@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChevronDown, User, LogOut, Settings, Shield } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -11,8 +11,10 @@ interface UserMenuProps {
 
 export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
   const { t } = useTranslation();
-  const { user, logout, isAuthenticated } = useAuthStore();
+  const { user, logout, isAuthenticated, isLoggingOut } = useAuthStore();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggingOutLocal, setIsLoggingOutLocal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -40,13 +42,28 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
   }, []);
 
   const handleLogout = async () => {
+    // Prevent multiple logout calls
+    if (isLoggingOut || isLoggingOutLocal) {
+      console.warn('Logout already in progress, ignoring duplicate call');
+      return;
+    }
+
     try {
-      logout();
+      setIsLoggingOutLocal(true);
       setIsOpen(false);
-      // Optionally redirect to home page
-      window.location.href = '/';
+      
+      // Use setTimeout to avoid React DevTools overrideMethod issues
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      await logout();
+      
+      // Navigate to login page after successful logout
+      navigate('/login', { replace: true });
     } catch (error) {
       console.error('Logout error:', error);
+      // Show error to user if needed
+    } finally {
+      setIsLoggingOutLocal(false);
     }
   };
 
@@ -168,10 +185,11 @@ export const UserMenu: React.FC<UserMenuProps> = ({ className }) => {
             {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              disabled={isLoggingOut || isLoggingOutLocal}
+              className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <LogOut className="w-4 h-4 mr-3" />
-              {t('user.logout', 'Sair')}
+              {isLoggingOut || isLoggingOutLocal ? t('user.loggingOut', 'Saindo...') : t('user.logout', 'Sair')}
             </button>
           </div>
 

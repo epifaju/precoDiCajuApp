@@ -24,6 +24,7 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   logoutReason: string | null;
+  isLoggingOut: boolean;
 }
 
 interface AuthActions {
@@ -52,6 +53,7 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
       error: null,
       logoutReason: null,
+      isLoggingOut: false,
 
       // Actions
       login: async (email: string, password: string, rememberMe = false) => {
@@ -159,11 +161,20 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       logout: async (reason?: string) => {
-        const { refreshToken } = get();
+        const { refreshToken, isLoggingOut } = get();
         
-        set({ isLoading: true });
+        // Prevent multiple simultaneous logout calls
+        if (isLoggingOut) {
+          console.warn('Logout already in progress, ignoring duplicate call');
+          return;
+        }
+        
+        set({ isLoading: true, isLoggingOut: true });
         
         try {
+          // Use setTimeout to avoid React DevTools overrideMethod issues
+          await new Promise(resolve => setTimeout(resolve, 0));
+          
           // Call logout endpoint to invalidate tokens on server
           if (refreshToken) {
             await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
@@ -177,29 +188,37 @@ export const useAuthStore = create<AuthStore>()(
         } catch (error) {
           console.error('Logout API call failed:', error);
           // Continue with local logout even if API call fails
-        }
+        } finally {
+          // Use setTimeout to ensure state updates happen in the next tick
+          await new Promise(resolve => setTimeout(resolve, 0));
+          
+          // Clear all auth data in a batch to avoid state inconsistencies
+          set({
+            user: null,
+            accessToken: null,
+            refreshToken: null,
+            isAuthenticated: false,
+            isLoading: false,
+            error: null,
+            logoutReason: reason || 'user_logout',
+            isLoggingOut: false,
+          });
 
-        // Clear all auth data
-        set({
-          user: null,
-          accessToken: null,
-          refreshToken: null,
-          isAuthenticated: false,
-          isLoading: false,
-          error: null,
-          logoutReason: reason || 'user_logout',
-        });
+          // Clear any stored data
+          try {
+            localStorage.removeItem('precaju-auth-storage');
+            sessionStorage.clear();
+          } catch (storageError) {
+            console.warn('Failed to clear storage:', storageError);
+          }
 
-        // Clear any stored data
-        localStorage.removeItem('precaju-auth-storage');
-        sessionStorage.clear();
-
-        // Clear any cached data
-        if (window.location.hostname === 'localhost') {
-          // Clear React Query cache in development
-          const queryCache = (window as any).__REACT_QUERY_CACHE__;
-          if (queryCache) {
-            queryCache.clear();
+          // Clear any cached data
+          if (window.location.hostname === 'localhost') {
+            // Clear React Query cache in development
+            const queryCache = (window as any).__REACT_QUERY_CACHE__;
+            if (queryCache) {
+              queryCache.clear();
+            }
           }
         }
       },
@@ -214,6 +233,7 @@ export const useAuthStore = create<AuthStore>()(
           isLoading: false,
           error: null,
           logoutReason: reason,
+          isLoggingOut: false,
         });
 
         localStorage.removeItem('precaju-auth-storage');
