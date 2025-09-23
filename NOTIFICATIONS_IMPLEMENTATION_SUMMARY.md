@@ -201,3 +201,8 @@ L'implémentation respecte toutes les spécifications du PRD et suit les meilleu
 - 🔧 Installation : `scripts/install-notification-deps.sh`
 - 🐛 Dépannage : Vérifiez les logs et la configuration VAPID
 
+
+
+
+
+

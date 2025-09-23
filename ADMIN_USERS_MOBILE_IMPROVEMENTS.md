@@ -268,3 +268,5 @@ The Admin Users page is now fully responsive and optimized for mobile and tablet
 - `frontend/src/index.css`
 - `test-admin-users-mobile.ps1` (new)
 - `ADMIN_USERS_MOBILE_IMPROVEMENTS.md` (new)
+
+

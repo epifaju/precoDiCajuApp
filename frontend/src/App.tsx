@@ -15,6 +15,7 @@ const HomePage = lazy(() => import('@/pages/HomePage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const PricesPage = lazy(() => import('@/pages/PricesPage'));
 const PricesMapPage = lazy(() => import('@/pages/PricesMapPage'));
+const POIMapPage = lazy(() => import('@/pages/POIMapPage'));
 const SubmitPricePage = lazy(() => import('@/pages/SubmitPricePage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const AdminPage = lazy(() => import('@/pages/AdminPage'));
@@ -87,6 +88,14 @@ function App() {
               element={
                 <Suspense fallback={<LoadingSpinner />}>
                   <PricesMapPage />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="poi" 
+              element={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <POIMapPage />
                 </Suspense>
               } 
             />

@@ -51,13 +51,29 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Login failed';
       
+      // Translate common error messages
+      let translatedMessage = errorMessage;
+      if (errorMessage.toLowerCase().includes('bad credentials') || 
+          errorMessage.toLowerCase().includes('invalid credentials')) {
+        translatedMessage = t('auth.errors.invalidCredentials');
+      } else if (errorMessage.toLowerCase().includes('email')) {
+        translatedMessage = t('auth.validation.emailInvalid');
+      } else if (errorMessage.toLowerCase().includes('password')) {
+        translatedMessage = t('auth.validation.passwordRequired');
+      } else if (errorMessage.toLowerCase().includes('network') || 
+                 errorMessage.toLowerCase().includes('connection')) {
+        translatedMessage = t('auth.errors.networkError');
+      } else if (errorMessage.toLowerCase().includes('server')) {
+        translatedMessage = t('auth.errors.serverError');
+      }
+      
       // Map specific API errors to form fields
       if (errorMessage.toLowerCase().includes('email')) {
-        setError('email', { message: errorMessage });
+        setError('email', { message: translatedMessage });
       } else if (errorMessage.toLowerCase().includes('password')) {
-        setError('password', { message: errorMessage });
+        setError('password', { message: translatedMessage });
       } else {
-        setError('root', { message: errorMessage });
+        setError('root', { message: translatedMessage });
       }
     }
   };
@@ -180,6 +196,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     </div>
   );
 };
+
+
+
+
+
 
 
 

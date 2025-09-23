@@ -62,9 +62,18 @@ public class SecurityConfig {
 
                 // Set permissions on endpoints
                 .authorizeHttpRequests(auth -> auth
+                        // POI endpoints - MUST be FIRST to avoid conflicts with anyRequest()
+                        .requestMatchers("/api/v1/poi/health").permitAll()
+                        .requestMatchers("/api/v1/poi/stats").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/poi").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/poi/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/poi").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/poi/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/poi/**").authenticated()
+
                         // Public endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/error").permitAll()
 
                         // Public read-only endpoints
@@ -74,7 +83,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/prices/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/prices/stats").permitAll()
 
-                        // File uploads (public for now, but we might want to secure this later)
+                        // File uploads
                         .requestMatchers("/api/v1/files/upload").authenticated()
 
                         // WebSocket connections
@@ -89,10 +98,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
-
-
-
-
-
-

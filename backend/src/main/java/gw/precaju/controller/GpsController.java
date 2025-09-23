@@ -27,7 +27,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/gps")
-@CrossOrigin(origins = "*")
 public class GpsController {
 
     private static final Logger logger = LoggerFactory.getLogger(GpsController.class);

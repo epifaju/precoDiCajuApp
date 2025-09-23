@@ -299,3 +299,5 @@ The Footer section is now fully responsive and optimized for mobile and tablet d
 - `frontend/src/index.css`
 - `test-footer-mobile.ps1` (new)
 - `FOOTER_MOBILE_IMPROVEMENTS.md` (new)
+
+

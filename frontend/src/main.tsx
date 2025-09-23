@@ -8,6 +8,9 @@ import App from './App';
 import './index.css';
 import './i18n';
 
+// Import Leaflet CSS
+import 'leaflet/dist/leaflet.css';
+
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {

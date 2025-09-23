@@ -62,6 +62,9 @@ const initI18n = async () => {
         escapeValue: false, // React already does escaping
       },
 
+      // Disable returnObjects to ensure strings are returned for React rendering
+      returnObjects: false,
+
       detection: {
         // Custom detection order: user preference > localStorage > navigator
         order: ['localStorage', 'navigator'],

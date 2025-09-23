@@ -62,9 +62,7 @@ public class CorsConfig {
         // Max age for preflight requests
         configuration.setMaxAge(maxAge);
 
-        // Handle preflight requests properly
-        configuration.setAllowCredentials(true);
-
+        // Register the configuration for all endpoints
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login Frontend</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de Connexion Frontend</h1>
+    
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" value="admin@precaju.gw" placeholder="admin@precaju.gw">
+    </div>
+    
+    <div class="form-group">
+        <label for="password">Mot de passe:</label>
+        <input type="password" id="password" value="password" placeholder="password">
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" id="rememberMe"> Se souvenir de moi
+        </label>
+    </div>
+    
+    <button onclick="testLogin()">🔐 Tester la Connexion</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<div class="info">⏳ Test en cours...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        rememberMe: rememberMe
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Connexion réussie !</h3>
+                            <p><strong>Utilisateur:</strong> ${data.user.fullName} (${data.user.email})</p>
+                            <p><strong>Rôle:</strong> ${data.user.role}</p>
+                            <p><strong>Score réputation:</strong> ${data.user.reputationScore}</p>
+                            <p><strong>Token d'accès:</strong> ${data.access_token.substring(0, 50)}...</p>
+                            <p><strong>Type de token:</strong> ${data.token_type}</p>
+                            <p><strong>Dernière connexion:</strong> ${new Date(data.user.lastLoginAt).toLocaleString()}</p>
+                        </div>
+                    `;
+                    
+                    // Stocker le token pour les tests suivants
+                    localStorage.setItem('accessToken', data.access_token);
+                    localStorage.setItem('refreshToken', data.refresh_token);
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Erreur de connexion</h3>
+                            <p><strong>Status:</strong> ${response.status}</p>
+                            <p><strong>Message:</strong> ${data.message || 'Erreur inconnue'}</p>
+                            <p><strong>Type d'erreur:</strong> ${data.errorType || 'N/A'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Erreur réseau</h3>
+                        <p><strong>Message:</strong> ${error.message}</p>
+                        <p>Vérifiez que le backend est démarré sur http://localhost:8080</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Test automatique au chargement de la page
+        window.onload = function() {
+            console.log('Page chargée - prêt pour les tests');
+        }
+    </script>
+</body>
+</html>

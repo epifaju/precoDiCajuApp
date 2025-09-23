@@ -959,6 +959,113 @@
   }
 }
 
+/* POI Map specific styles */
+.poi-map-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.poi-map-container .leaflet-container {
+  border-radius: 12px;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* POI Marker styles */
+.custom-poi-marker {
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-poi-marker:hover {
+  transform: scale(1.1);
+  z-index: 1000 !important;
+}
+
+.custom-cluster-marker {
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-cluster-marker:hover {
+  transform: scale(1.1);
+  z-index: 1000 !important;
+}
+
+/* POI Popup styles */
+.poi-popup .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.poi-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+.poi-popup .leaflet-popup-tip {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* POI Cluster Popup styles */
+.poi-cluster-popup {
+  min-width: 300px;
+  max-width: 400px;
+}
+
+/* POI Legend styles */
+.poi-legend {
+  min-width: 200px;
+  max-width: 250px;
+}
+
+/* Dark mode support for POI map */
+@media (prefers-color-scheme: dark) {
+  .poi-popup .leaflet-popup-content-wrapper {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .poi-popup .leaflet-popup-tip {
+    background: #1f2937;
+  }
+  
+  .poi-legend {
+    background: #1f2937 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+  }
+}
+
+/* Mobile responsiveness for POI map */
+@media (max-width: 768px) {
+  .poi-map-container {
+    border-radius: 8px;
+  }
+  
+  .poi-map-container .leaflet-container {
+    border-radius: 8px;
+  }
+  
+  .poi-popup .leaflet-popup-content {
+    font-size: 14px;
+  }
+  
+  .poi-cluster-popup {
+    min-width: 250px;
+    max-width: 300px;
+  }
+  
+  .poi-legend {
+    min-width: 150px;
+    max-width: 200px;
+    font-size: 12px;
+  }
+}
+
 
 
 

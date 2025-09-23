@@ -129,3 +129,8 @@ COMMENT ON COLUMN users.push_subscription IS 'Abonnement Web Push de l''utilisat
 COMMENT ON COLUMN users.abonnement_notifications IS 'Indique si l''utilisateur souhaite recevoir des notifications';
 COMMENT ON FUNCTION notify_price_change() IS 'Trigger qui détecte les variations de prix et déclenche les notifications';
 
+
+
+
+
+

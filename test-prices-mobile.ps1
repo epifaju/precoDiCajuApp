@@ -263,3 +263,5 @@ Write-Host "4. Check both light and dark themes" -ForegroundColor White
 
 Write-Host ""
 Write-Host "Prices page mobile responsiveness improvements completed!" -ForegroundColor Green
+
+

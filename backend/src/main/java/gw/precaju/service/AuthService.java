@@ -55,13 +55,19 @@ public class AuthService {
     public AuthResponse login(LoginRequest loginRequest) {
         logger.info("Login attempt for email: {}", loginRequest.getEmail());
 
-        // Authenticate user
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()));
+        Authentication authentication;
+        try {
+            // Authenticate user
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (org.springframework.security.authentication.BadCredentialsException e) {
+            // Translate the French error message to English
+            throw new org.springframework.security.authentication.BadCredentialsException("Bad credentials");
+        }
 
         // Get user
         User user = userRepository.findByEmailAndActiveTrue(loginRequest.getEmail())

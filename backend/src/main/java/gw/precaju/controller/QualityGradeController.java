@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/qualities")
-@CrossOrigin(origins = "*")
 public class QualityGradeController {
 
     private static final Logger logger = LoggerFactory.getLogger(QualityGradeController.class);
@@ -46,6 +45,9 @@ public class QualityGradeController {
         }
     }
 }
+
+
+
 
 
 

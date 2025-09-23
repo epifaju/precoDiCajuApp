@@ -30,3 +30,8 @@ public interface NotificationEnvoyeeRepository extends JpaRepository<Notificatio
     long countNotificationsSince(@Param("user") User user, @Param("since") ZonedDateTime since);
 }
 
+
+
+
+
+

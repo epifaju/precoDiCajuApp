@@ -28,7 +28,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/prices")
-@CrossOrigin(origins = "*")
 public class PriceController {
 
     private static final Logger logger = LoggerFactory.getLogger(PriceController.class);
