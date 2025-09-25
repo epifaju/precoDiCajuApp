@@ -38,7 +38,9 @@ const getPOIIcon = (poi: POI): L.DivIcon => {
   const cacheKey = `${poi.type}-${poi.markerColor}`;
   
   if (!iconCache.has(cacheKey)) {
-    const config = POI_TYPE_CONFIG[poi.type];
+    // Normalize POI type from backend (uppercase) to frontend config keys (lowercase)
+    const poiTypeLower = poi.type.toLowerCase();
+    const config = POI_TYPE_CONFIG[poiTypeLower as keyof typeof POI_TYPE_CONFIG];
     const icon = createCustomIcon(
       poi.markerColor || config.color,
       poi.markerIcon || config.icon
@@ -116,8 +118,9 @@ export const POIClusterMarker: React.FC<POIClusterMarkerProps> = ({
     if (types.size > 1) {
       return '#6366f1'; // Mixed colors - purple
     }
-    const type = pois[0].type;
-    return POI_TYPE_CONFIG[type].color;
+    // Normalize POI type from backend (uppercase) to frontend config keys (lowercase)
+    const type = pois[0].type.toLowerCase();
+    return POI_TYPE_CONFIG[type as keyof typeof POI_TYPE_CONFIG].color;
   };
 
   const clusterIcon = L.divIcon({

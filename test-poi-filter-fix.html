@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Correction des Filtres POI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-step {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 4px solid #10b981;
+            border-radius: 4px;
+        }
+        .expected-result {
+            background: #ecfdf5;
+            border-left-color: #10b981;
+        }
+        .test-button {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #1d4ed8;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        .status.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .status.info {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test - Correction des Filtres POI</h1>
+    
+    <div class="test-section">
+        <h2 class="test-title">Problème Identifié</h2>
+        <p><strong>Problème :</strong> Les filtres "Acheteur Agréé", "Coopérative" et "Entrepôt d'Exportation" dans l'écran "Carte des Points d'Achat" fonctionnaient à l'inverse - quand on coche une case, les points correspondants disparaissaient au lieu d'apparaître.</p>
+        
+        <p><strong>Cause :</strong> Duplication de la logique de filtrage entre <code>POIMapPage.tsx</code> et <code>POIMapView.tsx</code>, causant des comportements incohérents.</p>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Solution Appliquée</h2>
+        <div class="test-step">
+            <h3>1. Modification de POIMapView.tsx</h3>
+            <ul>
+                <li>Ajout des props <code>pois</code>, <code>isLoading</code>, <code>error</code></li>
+                <li>Suppression de la logique de requête interne (<code>usePOIs</code>)</li>
+                <li>Utilisation des POI déjà filtrés passés en props</li>
+            </ul>
+        </div>
+        
+        <div class="test-step">
+            <h3>2. Modification de POIMapPage.tsx</h3>
+            <ul>
+                <li>Passage des POI filtrés à <code>POIMapView</code> via les props</li>
+                <li>Conservation de la logique de filtrage unique dans le composant parent</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Tests à Effectuer</h2>
+        
+        <div class="test-step">
+            <h3>Test 1: Filtre "Acheteur Agréé"</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Aller sur la page "Carte des Points d'Achat"</li>
+                <li>Vérifier que tous les POI sont visibles par défaut</li>
+                <li>Cocher uniquement "Acheteur Agréé"</li>
+                <li>Vérifier que seuls les acheteurs agréés sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Seuls les points verts (🟢) représentant les acheteurs agréés doivent être visibles sur la carte.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 2: Filtre "Coopérative"</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Décocher "Acheteur Agréé"</li>
+                <li>Cocher uniquement "Coopérative"</li>
+                <li>Vérifier que seules les coopératives sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Seuls les points bleus (🔵) représentant les coopératives doivent être visibles sur la carte.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 3: Filtre "Entrepôt d'Exportation"</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Décocher "Coopérative"</li>
+                <li>Cocher uniquement "Entrepôt d'Exportation"</li>
+                <li>Vérifier que seuls les entrepôts sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Seuls les points orange (🟠) représentant les entrepôts d'exportation doivent être visibles sur la carte.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 4: Combinaison de Filtres</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Cocher "Acheteur Agréé" ET "Coopérative"</li>
+                <li>Vérifier que les acheteurs agréés ET les coopératives sont visibles</li>
+                <li>Cocher aussi "Entrepôt d'Exportation"</li>
+                <li>Vérifier que tous les POI sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Les points correspondant aux types sélectionnés doivent être visibles. Quand tous les types sont sélectionnés, tous les POI doivent être visibles.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 5: Désélection de Tous les Filtres</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Décocher tous les filtres</li>
+                <li>Vérifier que tous les POI sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Quand aucun filtre n'est sélectionné, tous les POI doivent être visibles (comportement par défaut).
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Actions de Test</h2>
+        <button class="test-button" onclick="openApp()">🚀 Ouvrir l'Application</button>
+        <button class="test-button" onclick="checkBackend()">🔍 Vérifier le Backend</button>
+        <button class="test-button" onclick="checkFrontend()">🎨 Vérifier le Frontend</button>
+        
+        <div id="status" class="status info" style="display: none;">
+            <div id="status-message"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Résultats Attendus</h2>
+        <div class="status success">
+            <strong>✅ Succès :</strong> Les filtres fonctionnent correctement - cocher une case affiche les points correspondants, décocher les masque.
+        </div>
+        
+        <div class="status error">
+            <strong>❌ Échec :</strong> Si les filtres fonctionnent encore à l'inverse, il faut vérifier la logique de filtrage dans <code>POIMapPage.tsx</code>.
+        </div>
+    </div>
+
+    <script>
+        function openApp() {
+            window.open('http://localhost:3000', '_blank');
+            showStatus('Application ouverte dans un nouvel onglet', 'info');
+        }
+
+        function checkBackend() {
+            fetch('http://localhost:8080/api/v1/poi')
+                .then(response => response.json())
+                .then(data => {
+                    showStatus(`Backend OK - ${data.length} POI trouvés`, 'success');
+                })
+                .catch(error => {
+                    showStatus(`Backend Error: ${error.message}`, 'error');
+                });
+        }
+
+        function checkFrontend() {
+            fetch('http://localhost:3000')
+                .then(response => {
+                    if (response.ok) {
+                        showStatus('Frontend OK - Serveur de développement actif', 'success');
+                    } else {
+                        showStatus(`Frontend Error: ${response.status}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    showStatus(`Frontend Error: ${error.message}`, 'error');
+                });
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            const messageDiv = document.getElementById('status-message');
+            
+            messageDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkBackend();
+                checkFrontend();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

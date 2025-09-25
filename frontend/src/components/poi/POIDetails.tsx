@@ -14,7 +14,9 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
   showCallButton = true 
 }) => {
   const { t } = useTranslation();
-  const config = POI_TYPE_CONFIG[poi.type];
+  // Normalize POI type from backend (uppercase) to frontend config keys (lowercase)
+  const poiTypeLower = poi.type.toLowerCase();
+  const config = POI_TYPE_CONFIG[poiTypeLower as keyof typeof POI_TYPE_CONFIG];
 
   const handleCallClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -160,7 +162,9 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
 // Compact POI card for lists
 export const POICard: React.FC<POIDetailsProps> = ({ poi, showCallButton = true }) => {
   const { t } = useTranslation();
-  const config = POI_TYPE_CONFIG[poi.type];
+  // Normalize POI type from backend (uppercase) to frontend config keys (lowercase)
+  const poiTypeLower = poi.type.toLowerCase();
+  const config = POI_TYPE_CONFIG[poiTypeLower as keyof typeof POI_TYPE_CONFIG];
 
   const handleCallClick = (e: React.MouseEvent) => {
     e.preventDefault();

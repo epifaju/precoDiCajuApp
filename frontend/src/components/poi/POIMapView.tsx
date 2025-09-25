@@ -4,7 +4,6 @@ import L from 'leaflet';
 import { POI, POIType, POIMapBounds, GUINEA_BISSAU_BOUNDS } from '../../types/poi';
 import { POIMarker, POIClusterMarker, POILegend } from './POIMarker';
 import { POIDetails } from './POIDetails';
-import { usePOIs } from '../../hooks/usePOI';
 
 // Fix for default markers in react-leaflet
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -22,6 +21,9 @@ L.Icon.Default.mergeOptions({
 interface POIMapViewProps {
   className?: string;
   height?: string;
+  pois?: POI[];
+  isLoading?: boolean;
+  error?: Error | null;
   selectedTypes?: POIType[];
   searchTerm?: string;
   onPOIClick?: (poi: POI) => void;
@@ -61,6 +63,9 @@ const MapEvents: React.FC<{
 export const POIMapView: React.FC<POIMapViewProps> = ({
   className = '',
   height = '500px',
+  pois = [],
+  isLoading = false,
+  error = null,
   selectedTypes = [],
   searchTerm = '',
   onPOIClick,
@@ -71,34 +76,8 @@ export const POIMapView: React.FC<POIMapViewProps> = ({
   const [mapBounds, setMapBounds] = useState<POIMapBounds>(GUINEA_BISSAU_BOUNDS);
   const [selectedPOI, setSelectedPOI] = useState<POI | null>(null);
 
-  // Build filters based on props
-  const filters = useMemo(() => {
-    const baseFilters: any = {};
-    
-    // Add type filter if specific types are selected
-    if (selectedTypes.length > 0 && selectedTypes.length < 3) {
-      // If only one type is selected, filter by that type
-      baseFilters.type = selectedTypes[0];
-    }
-    
-    // Add search filter
-    if (searchTerm.trim()) {
-      baseFilters.search = searchTerm.trim();
-    }
-    
-    return baseFilters;
-  }, [selectedTypes, searchTerm]);
-
-  // Fetch POIs with current filters
-  const { data: pois = [], isLoading, error } = usePOIs(filters);
-
-  // Filter POIs by selected types if multiple types are selected
-  const filteredPOIs = useMemo(() => {
-    if (selectedTypes.length === 0 || selectedTypes.length === 3) {
-      return pois;
-    }
-    return pois.filter(poi => selectedTypes.includes(poi.type));
-  }, [pois, selectedTypes]);
+  // Use the POIs passed as props (already filtered by parent component)
+  const filteredPOIs = pois;
 
   // Group nearby POIs for clustering
   const clusteredPOIs = useMemo(() => {

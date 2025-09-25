@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Correction Clic POI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-step {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 4px solid #10b981;
+            border-radius: 4px;
+        }
+        .expected-result {
+            background: #ecfdf5;
+            border-left-color: #10b981;
+        }
+        .test-button {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #1d4ed8;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        .status.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .status.info {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+        .code-block {
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .error-details {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test - Correction Clic POI</h1>
+    
+    <div class="test-section">
+        <h2 class="test-title">Problème Identifié</h2>
+        <p><strong>Erreur :</strong> <code>Uncaught TypeError: can't access property "icon", config is undefined</code></p>
+        
+        <div class="error-details">
+            <strong>Stack trace :</strong><br>
+            POIDetails POIDetails.tsx:69<br>
+            React 16<br>
+            onPopupOpen Popup.js:13<br>
+            fire Events.js:195<br>
+            onAdd Popup.js:141<br>
+            _layerAdd Layer.js:114<br>
+            whenReady Map.js:1477<br>
+            addLayer Layer.js:172<br>
+            openOn DivOverlay.js:63<br>
+            openOn Popup.js:131<br>
+            openPopup Popup.js:430<br>
+            _openPopup Popup.js:489<br>
+            fire Events.js:195<br>
+            _fireDOMEvent Map.js:1452<br>
+            _handleDOMEvent Map.js:1401<br>
+            handler DomEvent.js:108<br>
+            addOne DomEvent.js:135<br>
+            on DomEvent.js:34<br>
+            _initEvents Map.js:1321<br>
+            initialize Map.js:142<br>
+            NewClass Class.js:24<br>
+            mapRef MapContainer.js:30<br>
+            React 11<br>
+            workLoop scheduler.development.js:266<br>
+            flushWork scheduler.development.js:239<br>
+            performWorkUntilDeadline scheduler.development.js:533<br>
+            js scheduler.development.js:571<br>
+            js scheduler.development.js:633<br>
+            __require chunk-DC5AMYBS.js:9<br>
+            js index.js:6<br>
+            __require chunk-DC5AMYBS.js:9<br>
+            React 2<br>
+            __require chunk-DC5AMYBS.js:9<br>
+            js React<br>
+            __require chunk-DC5AMYBS.js:9<br>
+            js React<br>
+            __require chunk-DC5AMYBS.js:9<br>
+            &lt;anonymous&gt; react-dom_client.js:38
+        </div>
+        
+        <p><strong>Cause :</strong> Le même problème que les filtres - incompatibilité entre les types POI du backend (majuscules) et du frontend (minuscules).</p>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Solution Appliquée</h2>
+        <div class="test-step">
+            <h3>1. Correction dans POIDetails.tsx</h3>
+            <div class="code-block">
+                // Avant (causait l'erreur)
+                const config = POI_TYPE_CONFIG[poi.type];
+                
+                // Après (fonctionne)
+                const poiTypeLower = poi.type.toLowerCase();
+                const config = POI_TYPE_CONFIG[poiTypeLower as keyof typeof POI_TYPE_CONFIG];
+            </div>
+        </div>
+        
+        <div class="test-step">
+            <h3>2. Correction dans POIMarker.tsx</h3>
+            <div class="code-block">
+                // Correction dans getPOIIcon() et getClusterColor()
+                const poiTypeLower = poi.type.toLowerCase();
+                const config = POI_TYPE_CONFIG[poiTypeLower as keyof typeof POI_TYPE_CONFIG];
+            </div>
+        </div>
+        
+        <div class="test-step">
+            <h3>3. Correction dans POICard.tsx</h3>
+            <div class="code-block">
+                // Même correction appliquée au composant POICard
+                const poiTypeLower = poi.type.toLowerCase();
+                const config = POI_TYPE_CONFIG[poiTypeLower as keyof typeof POI_TYPE_CONFIG];
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Tests à Effectuer</h2>
+        
+        <div class="test-step">
+            <h3>Test 1: Clic sur Point Vert (Acheteur Agréé)</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Aller sur la page "Carte des Points d'Achat"</li>
+                <li>Cliquer sur un point vert (🟢) sur la carte</li>
+                <li>Vérifier qu'une popup s'ouvre avec les détails du POI</li>
+                <li>Vérifier qu'aucune erreur JavaScript n'apparaît dans la console</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> La popup doit s'ouvrir correctement avec l'icône verte et les détails du POI.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 2: Clic sur Point Bleu (Coopérative)</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Cliquer sur un point bleu (🔵) sur la carte</li>
+                <li>Vérifier qu'une popup s'ouvre avec les détails du POI</li>
+                <li>Vérifier qu'aucune erreur JavaScript n'apparaît dans la console</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> La popup doit s'ouvrir correctement avec l'icône bleue et les détails du POI.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 3: Clic sur Point Orange (Entrepôt)</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Cliquer sur un point orange (🟠) sur la carte</li>
+                <li>Vérifier qu'une popup s'ouvre avec les détails du POI</li>
+                <li>Vérifier qu'aucune erreur JavaScript n'apparaît dans la console</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> La popup doit s'ouvrir correctement avec l'icône orange et les détails du POI.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 4: Vérification Console</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Ouvrir les outils de développement (F12)</li>
+                <li>Aller dans l'onglet "Console"</li>
+                <li>Cliquer sur différents points sur la carte</li>
+                <li>Vérifier qu'aucune erreur n'apparaît</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Aucune erreur JavaScript ne doit apparaître dans la console.
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Actions de Test</h2>
+        <button class="test-button" onclick="openApp()">🚀 Ouvrir l'Application</button>
+        <button class="test-button" onclick="checkBackend()">🔍 Vérifier le Backend</button>
+        <button class="test-button" onclick="checkFrontend()">🎨 Vérifier le Frontend</button>
+        <button class="test-button" onclick="openConsole()">🔧 Ouvrir Console Dev</button>
+        
+        <div id="status" class="status info" style="display: none;">
+            <div id="status-message"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Résultats Attendus</h2>
+        <div class="status success">
+            <strong>✅ Succès :</strong> Les clics sur les points POI ouvrent maintenant des popups avec les détails corrects, sans erreurs JavaScript.
+        </div>
+        
+        <div class="status error">
+            <strong>❌ Échec :</strong> Si des erreurs persistent, vérifier la console du navigateur et s'assurer que tous les fichiers ont été rechargés.
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Instructions pour Tester</h2>
+        <div class="test-step">
+            <h3>Étapes Détaillées :</h3>
+            <ol>
+                <li>Cliquer sur "Ouvrir l'Application" pour accéder à l'app</li>
+                <li>Se connecter si nécessaire</li>
+                <li>Aller sur la page "Carte des Points d'Achat"</li>
+                <li>Ouvrir la console développeur (F12)</li>
+                <li>Cliquer sur différents points colorés sur la carte</li>
+                <li>Vérifier que les popups s'ouvrent avec les bonnes icônes et couleurs</li>
+                <li>Vérifier qu'aucune erreur n'apparaît dans la console</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function openApp() {
+            window.open('http://localhost:3002', '_blank');
+            showStatus('Application ouverte dans un nouvel onglet', 'info');
+        }
+
+        function checkBackend() {
+            fetch('http://localhost:8080/api/v1/poi')
+                .then(response => response.json())
+                .then(data => {
+                    showStatus(`Backend OK - ${data.length} POI trouvés`, 'success');
+                })
+                .catch(error => {
+                    showStatus(`Backend Error: ${error.message}`, 'error');
+                });
+        }
+
+        function checkFrontend() {
+            fetch('http://localhost:3002')
+                .then(response => {
+                    if (response.ok) {
+                        showStatus('Frontend OK - Serveur de développement actif', 'success');
+                    } else {
+                        showStatus(`Frontend Error: ${response.status}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    showStatus(`Frontend Error: ${error.message}`, 'error');
+                });
+        }
+
+        function openConsole() {
+            showStatus('Ouvrez les outils de développement (F12) et allez dans l\'onglet Console', 'info');
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            const messageDiv = document.getElementById('status-message');
+            
+            messageDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkBackend();
+                checkFrontend();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

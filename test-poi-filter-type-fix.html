@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Correction des Types POI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-step {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 4px solid #10b981;
+            border-radius: 4px;
+        }
+        .expected-result {
+            background: #ecfdf5;
+            border-left-color: #10b981;
+        }
+        .test-button {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #1d4ed8;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        .status.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .status.info {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+        .code-block {
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test - Correction des Types POI</h1>
+    
+    <div class="test-section">
+        <h2 class="test-title">Problème Identifié</h2>
+        <p><strong>Problème :</strong> Les filtres "Acheteur Agréé", "Coopérative" et "Entrepôt d'Exportation" ne fonctionnaient pas car il y avait une incompatibilité entre les types de données du backend et du frontend.</p>
+        
+        <div class="code-block">
+            <strong>Backend (Java):</strong> ACHETEUR, COOPERATIVE, ENTREPOT (majuscules)<br>
+            <strong>Frontend (TypeScript):</strong> acheteur, cooperative, entrepot (minuscules)
+        </div>
+        
+        <p><strong>Cause :</strong> La comparaison <code>selectedTypes.includes(poi.type)</code> comparait des chaînes en minuscules avec des chaînes en majuscules, ce qui ne correspondait jamais.</p>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Solution Appliquée</h2>
+        <div class="test-step">
+            <h3>Correction dans POIMapPage.tsx</h3>
+            <div class="code-block">
+                // Avant (ne fonctionnait pas)
+                return pois.filter(poi => selectedTypes.includes(poi.type));
+                
+                // Après (fonctionne)
+                return pois.filter(poi => {
+                  const poiTypeLower = poi.type.toLowerCase();
+                  return selectedTypes.includes(poiTypeLower as POIType);
+                });
+            </div>
+            <p>La correction normalise le type POI du backend en minuscules avant de le comparer avec les types sélectionnés dans le frontend.</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Tests à Effectuer</h2>
+        
+        <div class="test-step">
+            <h3>Test 1: Vérification des Types Backend</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Cliquer sur "Vérifier les Types Backend" ci-dessous</li>
+                <li>Vérifier que les types retournés sont en majuscules</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Les types doivent être "ACHETEUR", "COOPERATIVE", "ENTREPOT"
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 2: Filtre "Acheteur Agréé"</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Aller sur la page "Carte des Points d'Achat"</li>
+                <li>Cocher uniquement "Acheteur Agréé"</li>
+                <li>Vérifier que seuls les points verts (🟢) sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Seuls les acheteurs agréés doivent être visibles sur la carte.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 3: Filtre "Coopérative"</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Décocher "Acheteur Agréé"</li>
+                <li>Cocher uniquement "Coopérative"</li>
+                <li>Vérifier que seuls les points bleus (🔵) sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Seules les coopératives doivent être visibles sur la carte.
+            </div>
+        </div>
+
+        <div class="test-step">
+            <h3>Test 4: Filtre "Entrepôt d'Exportation"</h3>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Décocher "Coopérative"</li>
+                <li>Cocher uniquement "Entrepôt d'Exportation"</li>
+                <li>Vérifier que seuls les points orange (🟠) sont visibles</li>
+            </ol>
+            <div class="expected-result">
+                <strong>Résultat attendu :</strong> Seuls les entrepôts d'exportation doivent être visibles sur la carte.
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Actions de Test</h2>
+        <button class="test-button" onclick="checkBackendTypes()">🔍 Vérifier les Types Backend</button>
+        <button class="test-button" onclick="openApp()">🚀 Ouvrir l'Application</button>
+        <button class="test-button" onclick="checkBackend()">🔍 Vérifier le Backend</button>
+        <button class="test-button" onclick="checkFrontend()">🎨 Vérifier le Frontend</button>
+        
+        <div id="status" class="status info" style="display: none;">
+            <div id="status-message"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2 class="test-title">Résultats Attendus</h2>
+        <div class="status success">
+            <strong>✅ Succès :</strong> Les filtres fonctionnent maintenant correctement - cocher une case affiche les points correspondants, décocher les masque.
+        </div>
+        
+        <div class="status error">
+            <strong>❌ Échec :</strong> Si les filtres ne fonctionnent toujours pas, vérifier la console du navigateur pour des erreurs JavaScript.
+        </div>
+    </div>
+
+    <script>
+        function checkBackendTypes() {
+            fetch('http://localhost:8080/api/v1/poi')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const types = [...new Set(data.map(poi => poi.type))];
+                        showStatus(`Types backend trouvés: ${types.join(', ')}`, 'success');
+                    } else {
+                        showStatus('Aucun POI trouvé dans le backend', 'error');
+                    }
+                })
+                .catch(error => {
+                    showStatus(`Erreur backend: ${error.message}`, 'error');
+                });
+        }
+
+        function openApp() {
+            window.open('http://localhost:3000', '_blank');
+            showStatus('Application ouverte dans un nouvel onglet', 'info');
+        }
+
+        function checkBackend() {
+            fetch('http://localhost:8080/api/v1/poi')
+                .then(response => response.json())
+                .then(data => {
+                    showStatus(`Backend OK - ${data.length} POI trouvés`, 'success');
+                })
+                .catch(error => {
+                    showStatus(`Backend Error: ${error.message}`, 'error');
+                });
+        }
+
+        function checkFrontend() {
+            fetch('http://localhost:3000')
+                .then(response => {
+                    if (response.ok) {
+                        showStatus('Frontend OK - Serveur de développement actif', 'success');
+                    } else {
+                        showStatus(`Frontend Error: ${response.status}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    showStatus(`Frontend Error: ${error.message}`, 'error');
+                });
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            const messageDiv = document.getElementById('status-message');
+            
+            messageDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkBackendTypes();
+                checkBackend();
+                checkFrontend();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

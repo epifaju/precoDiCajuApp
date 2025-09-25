@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
@@ -29,9 +29,8 @@ const POIMapPage: React.FC = () => {
   const { isInitialized, lastSyncTime, isSyncing, syncError, syncPOIs, clearError } = usePOIOfflineSync();
   const { isAvailable, dataSize } = usePOIDataAvailability();
 
-  // Data queries
+  // Data queries - fetch all POIs and filter client-side for multiple types
   const { data: pois = [], isLoading, error } = usePOIsOffline({
-    type: selectedTypes.length === 1 ? selectedTypes[0] : undefined,
     search: searchTerm || undefined,
     minLat: mapBounds.south,
     maxLat: mapBounds.north,
@@ -40,6 +39,22 @@ const POIMapPage: React.FC = () => {
   });
 
   const { data: statistics } = usePOIStatisticsOffline();
+
+  // Filter POIs by selected types client-side
+  const filteredPOIs = useMemo(() => {
+    // If no types are selected or all types are selected, show all POIs
+    if (selectedTypes.length === 0 || selectedTypes.length === 3) {
+      return pois;
+    }
+    
+    // Filter POIs by selected types
+    // Note: Backend returns types in uppercase (ACHETEUR, COOPERATIVE, ENTREPOT)
+    // Frontend uses lowercase (acheteur, cooperative, entrepot)
+    return pois.filter(poi => {
+      const poiTypeLower = poi.type.toLowerCase();
+      return selectedTypes.includes(poiTypeLower as POIType);
+    });
+  }, [pois, selectedTypes]);
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
@@ -249,7 +264,7 @@ const POIMapPage: React.FC = () => {
             {isLoading ? (
               safeT('poi.loading', 'Chargement...')
             ) : (
-              `${pois.length} POI${pois.length > 1 ? 's' : ''} ${safeT('poi.found', 'trouvé(s)')}`
+              `${filteredPOIs.length} POI${filteredPOIs.length > 1 ? 's' : ''} ${safeT('poi.found', 'trouvé(s)')}`
             )}
           </div>
         </div>
@@ -288,6 +303,9 @@ const POIMapPage: React.FC = () => {
             <Card>
               <CardContent className="p-0">
                 <POIMapView
+                  pois={filteredPOIs}
+                  isLoading={isLoading}
+                  error={error}
                   selectedTypes={selectedTypes}
                   searchTerm={searchTerm}
                   onPOIClick={handlePOIClick}
