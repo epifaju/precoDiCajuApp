@@ -199,7 +199,7 @@ export class ApiClient {
   }
 
   async get<T>(endpoint: string, options: { timeout?: number; retries?: number } = {}): Promise<T> {
-    const { timeout = 10000, retries = 0 } = options; // Default 10s timeout, 0 retries
+    const { timeout = 15000, retries = 1 } = options; // Default 15s timeout, 1 retry
     const startTime = Date.now();
     
     logger.info(`Starting GET request`, {
@@ -364,7 +364,7 @@ export class ApiClient {
     data?: any,
     options: { timeout?: number; retries?: number } = {}
   ): Promise<T> {
-    const { timeout = 10000, retries = 0 } = options;
+    const { timeout = 15000, retries = 1 } = options;
     const startTime = Date.now();
     
     logger.info(`Starting ${method} request`, {

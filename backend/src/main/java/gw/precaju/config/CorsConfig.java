@@ -32,15 +32,15 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allowed origins
+        // Allowed origins - handle both localhost and 127.0.0.1
         List<String> origins = Arrays.asList(allowedOrigins.split(","));
         configuration.setAllowedOrigins(origins);
 
-        // Allowed methods
+        // Allowed methods - ensure OPTIONS is included for preflight requests
         List<String> methods = Arrays.asList(allowedMethods.split(","));
         configuration.setAllowedMethods(methods);
 
-        // Allowed headers
+        // Allowed headers - comprehensive list for better compatibility
         if ("*".equals(allowedHeaders)) {
             configuration.addAllowedHeader("*");
         } else {
@@ -58,8 +58,10 @@ public class CorsConfig {
         configuration.addExposedHeader("X-Page-Size");
         configuration.addExposedHeader("Access-Control-Allow-Origin");
         configuration.addExposedHeader("Access-Control-Allow-Credentials");
+        configuration.addExposedHeader("Content-Type");
+        configuration.addExposedHeader("X-Requested-With");
 
-        // Max age for preflight requests
+        // Max age for preflight requests (increased for better performance)
         configuration.setMaxAge(maxAge);
 
         // Register the configuration for all endpoints

@@ -20,6 +20,7 @@ export default function Header() {
     { name: t('nav.prices'), href: '/prices', current: location.pathname === '/prices' },
     { name: t('nav.poi'), href: '/poi', current: location.pathname === '/poi' },
     { name: t('nav.submit'), href: '/submit', current: location.pathname === '/submit' },
+    { name: t('nav.exporters', 'Exportateurs'), href: '/exporters', current: location.pathname === '/exporters' },
     // Lien d'administration pour les admins
     ...(user?.role === 'ADMIN' ? [{ name: t('nav.admin', 'Administration'), href: '/admin', current: location.pathname === '/admin' }] : []),
   ];

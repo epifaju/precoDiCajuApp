@@ -83,6 +83,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/prices/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/prices/stats").permitAll()
 
+                        // Exportateurs endpoints - public read access
+                        .requestMatchers(HttpMethod.GET, "/api/v1/exportateurs").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/exportateurs/**").permitAll()
+
                         // File uploads
                         .requestMatchers("/api/v1/files/upload").authenticated()
 

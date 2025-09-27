@@ -5,6 +5,7 @@
     "prices": "Preços",
     "submit": "Submeter Preço",
     "poi": "Pontos de Compra",
+    "exporters": "Exportadores",
     "admin": "Administração",
     "login": "Entrar",
     "register": "Registrar",
@@ -1164,5 +1165,78 @@
     "copiedMessage": "As informações do ponto de compra foram copiadas",
     "shareError": "Erro de compartilhamento",
     "shareErrorMessage": "Impossível compartilhar ou copiar as informações"
+  },
+  "exporters": {
+    "title": "Exportadores Agréés",
+    "subtitle": "Verifique a autenticidade dos exportadores e compradores certificados",
+    "total_exporters": "Total de exportadores",
+    "active": "Ativos",
+    "expired": "Expirados",
+    "suspended": "Suspensos",
+    "type": {
+      "exportateur": "Exportador",
+      "acheteur_local": "Comprador Local"
+    },
+    "status": {
+      "actif": "Ativo",
+      "expire": "Expirado",
+      "suspendu": "Suspenso"
+    },
+    "search_placeholder": "Pesquisar por nome ou número de agrémento...",
+    "advanced_filters": "Filtros avançados",
+    "filters": {
+      "region": "Região",
+      "type": "Tipo",
+      "status": "Status",
+      "all_regions": "Todas as regiões",
+      "all_types": "Todos os tipos",
+      "all_status": "Todos os status",
+      "active_filters": "Filtros ativos"
+    },
+    "sort_by": "Ordenar por",
+    "name": "Nome",
+    "expiration": "Expiração",
+    "showing_results": "Mostrando",
+    "no_results": "Nenhum exportador encontrado",
+    "no_results_description": "Tente modificar seus filtros de pesquisa.",
+    "scan_qr": "Escanear QR",
+    "add_exportateur": "Adicionar",
+    "view_details": "Ver detalhes",
+    "certified_on": "Certificado em",
+    "expires_on": "Expira em",
+    "qr_verified": "Verificado por QR",
+    "in_region": "em sua região",
+    "nationwide": "em todo o país",
+    "total": "Total",
+    "expiring_soon": "Expirem em breve",
+    "view_all": "Ver todos",
+    "scan": "Escanear",
+    "widget_tip": "Escaneie os QR codes para verificar instantaneamente a autenticidade dos exportadores."
+  },
+  "qr_scanner": {
+    "title": "Escanear QR Code",
+    "instructions": "Posicione o QR code do exportador no quadro",
+    "start_scanning": "Iniciar escaneamento",
+    "stop_scanning": "Parar escaneamento",
+    "scanning": "Escaneando...",
+    "simulate_scan": "Simular escaneamento (Teste)",
+    "no_camera": "Nenhuma câmera detectada",
+    "camera_access_denied": "Acesso à câmera negado",
+    "permission_denied": "Acesso à câmera negado. Por favor, autorize o acesso nas configurações do seu navegador.",
+    "retry_permission": "Tentar novamente",
+    "verification_success": "Verificação bem-sucedida",
+    "verification_failed": "Verificação falhou",
+    "verified_at": "Verificado em",
+    "not_found_message": "Nenhum exportador encontrado com este QR code.",
+    "expired_message": "Este certificado de exportador expirou.",
+    "suspended_message": "Este certificado de exportador foi suspenso.",
+    "invalid_token_message": "O QR code não é válido."
+  },
+  "common": {
+    "close": "Fechar",
+    "clear_filters": "Limpar",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Próximo"
   }
 }

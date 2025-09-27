@@ -35,7 +35,7 @@ public class JwtTokenProvider {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
         return generateAccessToken(userPrincipal.getUsername());
     }
-    
+
     public String generateAccessToken(User user) {
         return generateAccessToken(user.getEmail());
     }
@@ -80,15 +80,17 @@ public class JwtTokenProvider {
                     .parseClaimsJws(authToken);
             return true;
         } catch (SecurityException ex) {
-            logger.error("Invalid JWT signature");
+            logger.warn("Invalid JWT signature: {}", ex.getMessage());
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
+            logger.warn("Invalid JWT token: {}", ex.getMessage());
         } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
+            logger.warn("Expired JWT token - expired at: {}", ex.getClaims().getExpiration());
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            logger.warn("Unsupported JWT token: {}", ex.getMessage());
         } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+            logger.warn("JWT claims string is empty: {}", ex.getMessage());
+        } catch (Exception ex) {
+            logger.warn("Unexpected error validating JWT token: {}", ex.getMessage());
         }
         return false;
     }
@@ -114,5 +116,42 @@ public class JwtTokenProvider {
 
     public long getRefreshTokenExpirationMs() {
         return refreshTokenExpirationMs;
+    }
+
+    /**
+     * Vérifie si un token va expirer dans les prochaines minutes
+     */
+    public boolean isTokenExpiringSoon(String token, int minutesBeforeExpiration) {
+        try {
+            Date expiration = getExpirationDateFromToken(token);
+            Date now = new Date();
+            long timeUntilExpiration = expiration.getTime() - now.getTime();
+            long thresholdMs = minutesBeforeExpiration * 60 * 1000;
+
+            return timeUntilExpiration <= thresholdMs && timeUntilExpiration > 0;
+        } catch (Exception ex) {
+            logger.warn("Error checking if token is expiring soon: {}", ex.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Récupère le temps restant avant expiration en minutes
+     */
+    public long getTimeUntilExpirationMinutes(String token) {
+        try {
+            Date expiration = getExpirationDateFromToken(token);
+            Date now = new Date();
+            long timeUntilExpiration = expiration.getTime() - now.getTime();
+
+            if (timeUntilExpiration <= 0) {
+                return 0;
+            }
+
+            return timeUntilExpiration / (60 * 1000);
+        } catch (Exception ex) {
+            logger.warn("Error getting time until expiration: {}", ex.getMessage());
+            return 0;
+        }
     }
 }

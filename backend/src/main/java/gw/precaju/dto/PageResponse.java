@@ -29,6 +29,17 @@ public class PageResponse<T> {
         this.empty = page.isEmpty();
     }
 
+    public PageResponse(List<T> content, int page, int size, long totalElements, int totalPages, boolean first, boolean last) {
+        this.content = content;
+        this.page = page;
+        this.size = size;
+        this.totalElements = totalElements;
+        this.totalPages = totalPages;
+        this.first = first;
+        this.last = last;
+        this.empty = content.isEmpty();
+    }
+
     public static <T> PageResponse<T> of(Page<T> page) {
         return new PageResponse<>(page);
     }

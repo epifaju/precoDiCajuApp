@@ -32,8 +32,8 @@ export const OfflineUITest: React.FC = () => {
   const tabs = [
     { id: 'overview', label: 'Vue d\'ensemble', icon: '📊' },
     { id: 'components', label: 'Composants', icon: '🧩' },
-    { id': 'notifications', label: 'Notifications', icon: '🔔' },
-    { id': 'forms', label: 'Formulaires', icon: '📝' },
+    { id: 'notifications', label: 'Notifications', icon: '🔔' },
+    { id: 'forms', label: 'Formulaires', icon: '📝' },
   ];
 
   const testNotifications = [

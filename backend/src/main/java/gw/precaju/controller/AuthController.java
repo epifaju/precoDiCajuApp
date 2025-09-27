@@ -4,12 +4,12 @@ import gw.precaju.dto.AuthResponse;
 import gw.precaju.dto.request.LoginRequest;
 import gw.precaju.dto.request.RefreshTokenRequest;
 import gw.precaju.dto.request.RegisterRequest;
+import gw.precaju.security.JwtTokenProvider;
 import gw.precaju.service.AuthService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,11 +23,11 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthService authService;
-    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
 
-    public AuthController(AuthService authService, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthService authService, JwtTokenProvider tokenProvider) {
         this.authService = authService;
-        this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/login")
@@ -96,6 +96,48 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/token-status")
+    public ResponseEntity<Map<String, Object>> getTokenStatus(
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                response.put("valid", false);
+                response.put("message", "No token provided");
+                return ResponseEntity.ok(response);
+            }
+
+            String token = authHeader.substring(7);
+
+            if (tokenProvider.validateToken(token)) {
+                String username = tokenProvider.getUsernameFromToken(token);
+                long timeUntilExpiration = tokenProvider.getTimeUntilExpirationMinutes(token);
+                boolean expiringSoon = tokenProvider.isTokenExpiringSoon(token, 5); // 5 minutes
+
+                response.put("valid", true);
+                response.put("username", username);
+                response.put("timeUntilExpirationMinutes", timeUntilExpiration);
+                response.put("expiringSoon", expiringSoon);
+                response.put("message", "Token is valid");
+
+                logger.debug("Token status checked for user: {}, expires in {} minutes", username, timeUntilExpiration);
+            } else {
+                response.put("valid", false);
+                response.put("message", "Token is invalid or expired");
+            }
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            logger.error("Error checking token status", e);
+            response.put("valid", false);
+            response.put("message", "Error checking token status");
+            response.put("error", e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
+
     /**
      * Translate error messages to English for consistent API responses
      */
@@ -103,7 +145,7 @@ public class AuthController {
         if (e instanceof BadCredentialsException) {
             return "Bad credentials";
         }
-        
+
         String message = e.getMessage();
         if (message != null) {
             // Translate common French error messages to English
@@ -120,7 +162,7 @@ public class AuthController {
                 return "Account disabled";
             }
         }
-        
+
         return message != null ? message : "Authentication failed";
     }
 }

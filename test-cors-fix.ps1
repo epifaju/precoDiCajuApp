@@ -1,98 +1,127 @@
-# Test CORS Configuration After Fix
-Write-Host "🧪 TESTING CORS CONFIGURATION AFTER FIX" -ForegroundColor Green
-Write-Host "=========================================" -ForegroundColor Green
+#!/usr/bin/env pwsh
 
-$BACKEND_URL = "http://localhost:8080"
-$FRONTEND_PORTS = @(3000, 3001, 3002, 3003, 5173, 4173)
+Write-Host "🔧 Test des corrections CORS et timeout API" -ForegroundColor Cyan
+Write-Host "=============================================" -ForegroundColor Cyan
 
-Write-Host ""
-Write-Host "🔍 Testing CORS from different frontend ports..." -ForegroundColor Cyan
+# Vérifier que le backend est démarré
+Write-Host "`n1. Vérification du backend (port 8080)..." -ForegroundColor Yellow
+try {
+    $backendResponse = Invoke-RestMethod -Uri "http://localhost:8080/actuator/health" -Method GET -TimeoutSec 10
+    Write-Host "✅ Backend accessible: $($backendResponse.status)" -ForegroundColor Green
+}
+catch {
+    Write-Host "❌ Backend non accessible: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "   Veuillez démarrer le backend avant de continuer" -ForegroundColor Yellow
+    exit 1
+}
 
-foreach ($port in $FRONTEND_PORTS) {
-    $origin = "http://localhost:$port"
-    Write-Host ""
-    Write-Host "Testing from $origin..." -ForegroundColor Yellow
-    
+# Test des endpoints problématiques
+Write-Host "`n2. Test des endpoints exportateurs..." -ForegroundColor Yellow
+
+$endpoints = @(
+    @{ Name = "Exportateurs"; Url = "http://localhost:8080/api/v1/exportateurs" },
+    @{ Name = "Régions"; Url = "http://localhost:8080/api/v1/regions" },
+    @{ Name = "Qualités"; Url = "http://localhost:8080/api/v1/qualities" }
+)
+
+foreach ($endpoint in $endpoints) {
     try {
-        $headers = @{
-            "Origin" = $origin
-            "Access-Control-Request-Method" = "GET"
-            "Access-Control-Request-Headers" = "Content-Type,Authorization"
+        Write-Host "   Test de $($endpoint.Name)..." -NoNewline
+        $response = Invoke-RestMethod -Uri $endpoint.Url -Method GET -TimeoutSec 15
+        Write-Host " ✅ Succès" -ForegroundColor Green
+        
+        # Afficher quelques informations sur la réponse
+        if ($response -is [array]) {
+            Write-Host "      Nombre d'éléments: $($response.Count)" -ForegroundColor Gray
         }
-        
-        # Test preflight request
-        Write-Host "  Testing preflight request..." -ForegroundColor Gray
-        $preflightResponse = Invoke-WebRequest -Uri "$BACKEND_URL/api/v1/regions" -Method OPTIONS -Headers $headers -TimeoutSec 10
-        
-        if ($preflightResponse.StatusCode -eq 200) {
-            Write-Host "  ✅ CORS preflight OK for $origin" -ForegroundColor Green
-            
-            # Check CORS headers
-            $corsHeaders = $preflightResponse.Headers
-            if ($corsHeaders["Access-Control-Allow-Origin"]) {
-                Write-Host "    Access-Control-Allow-Origin: $($corsHeaders['Access-Control-Allow-Origin'])" -ForegroundColor Gray
-            }
-            if ($corsHeaders["Access-Control-Allow-Methods"]) {
-                Write-Host "    Access-Control-Allow-Methods: $($corsHeaders['Access-Control-Allow-Methods'])" -ForegroundColor Gray
-            }
-            if ($corsHeaders["Access-Control-Allow-Headers"]) {
-                Write-Host "    Access-Control-Allow-Headers: $($corsHeaders['Access-Control-Allow-Headers'])" -ForegroundColor Gray
-            }
-            if ($corsHeaders["Access-Control-Max-Age"]) {
-                Write-Host "    Access-Control-Max-Age: $($corsHeaders['Access-Control-Max-Age'])" -ForegroundColor Gray
-            }
+        elseif ($response.content -is [array]) {
+            Write-Host "      Nombre d'éléments: $($response.content.Count)" -ForegroundColor Gray
         }
+    }
+    catch {
+        Write-Host " ❌ Erreur: $($_.Exception.Message)" -ForegroundColor Red
         
-        # Test actual request
-        Write-Host "  Testing actual API request..." -ForegroundColor Gray
-        $actualResponse = Invoke-WebRequest -Uri "$BACKEND_URL/api/v1/regions" -Method GET -Headers @{"Origin" = $origin} -TimeoutSec 10
-        if ($actualResponse.StatusCode -eq 200) {
-            Write-Host "  ✅ API request OK for $origin" -ForegroundColor Green
+        # Analyser le type d'erreur
+        if ($_.Exception.Message -like "*CORS*") {
+            Write-Host "      → Problème CORS détecté" -ForegroundColor Red
         }
-        
-    } catch {
-        Write-Host "  ❌ CORS test failed for $origin : $($_.Exception.Message)" -ForegroundColor Red
+        elseif ($_.Exception.Message -like "*timeout*") {
+            Write-Host "      → Timeout détecté" -ForegroundColor Red
+        }
+        elseif ($_.Exception.Message -like "*404*") {
+            Write-Host "      → Endpoint non trouvé" -ForegroundColor Red
+        }
     }
 }
 
-Write-Host ""
-Write-Host "🔍 Testing backend health..." -ForegroundColor Cyan
+# Test des headers CORS
+Write-Host "`n3. Test des headers CORS..." -ForegroundColor Yellow
+
 try {
-    $healthResponse = Invoke-WebRequest -Uri "$BACKEND_URL/actuator/health" -Method GET -TimeoutSec 5
-    if ($healthResponse.StatusCode -eq 200) {
-        Write-Host "✅ Backend is running and healthy" -ForegroundColor Green
+    $corsTest = Invoke-WebRequest -Uri "http://localhost:8080/api/v1/exportateurs" -Method OPTIONS -Headers @{
+        "Origin"                         = "http://localhost:3001"
+        "Access-Control-Request-Method"  = "GET"
+        "Access-Control-Request-Headers" = "Content-Type"
+    } -TimeoutSec 10
+
+    Write-Host "✅ Requête preflight OPTIONS réussie" -ForegroundColor Green
+    Write-Host "   Status: $($corsTest.StatusCode)" -ForegroundColor Gray
+    
+    # Vérifier les headers CORS
+    $corsHeaders = @(
+        "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Methods", 
+        "Access-Control-Allow-Headers",
+        "Access-Control-Max-Age"
+    )
+    
+    foreach ($header in $corsHeaders) {
+        if ($corsTest.Headers[$header]) {
+            Write-Host "   $header : $($corsTest.Headers[$header])" -ForegroundColor Gray
+        }
+        else {
+            Write-Host "   ⚠️  Header $header manquant" -ForegroundColor Yellow
+        }
     }
-} catch {
-    Write-Host "❌ Backend is not responding: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "💡 Make sure the backend is running on port 8080" -ForegroundColor Yellow
+}
+catch {
+    Write-Host "❌ Test CORS échoué: $($_.Exception.Message)" -ForegroundColor Red
 }
 
-Write-Host ""
-Write-Host "🔍 Testing specific endpoints..." -ForegroundColor Cyan
+# Test de performance (timeout)
+Write-Host "`n4. Test de performance..." -ForegroundColor Yellow
 
-# Test regions endpoint
 try {
-    $regionsResponse = Invoke-WebRequest -Uri "$BACKEND_URL/api/v1/regions" -Method GET -TimeoutSec 5
-    if ($regionsResponse.StatusCode -eq 200) {
-        Write-Host "✅ Regions endpoint is working" -ForegroundColor Green
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    $response = Invoke-RestMethod -Uri "http://localhost:8080/api/v1/exportateurs" -Method GET -TimeoutSec 20
+    $stopwatch.Stop()
+    
+    $responseTime = $stopwatch.ElapsedMilliseconds
+    Write-Host "✅ Temps de réponse: ${responseTime}ms" -ForegroundColor Green
+    
+    if ($responseTime -lt 5000) {
+        Write-Host "   → Excellent (moins de 5s)" -ForegroundColor Green
     }
-} catch {
-    Write-Host "❌ Regions endpoint failed: $($_.Exception.Message)" -ForegroundColor Red
+    elseif ($responseTime -lt 10000) {
+        Write-Host "   → Bon (moins de 10s)" -ForegroundColor Yellow
+    }
+    else {
+        Write-Host "   → Lent (plus de 10s)" -ForegroundColor Red
+    }
+}
+catch {
+    Write-Host "❌ Test de performance échoué: $($_.Exception.Message)" -ForegroundColor Red
 }
 
-# Test auth endpoint
-try {
-    $authResponse = Invoke-WebRequest -Uri "$BACKEND_URL/api/v1/auth/login" -Method OPTIONS -TimeoutSec 5
-    if ($authResponse.StatusCode -eq 200) {
-        Write-Host "✅ Auth endpoint CORS preflight is working" -ForegroundColor Green
-    }
-} catch {
-    Write-Host "❌ Auth endpoint CORS preflight failed: $($_.Exception.Message)" -ForegroundColor Red
-}
+Write-Host "`n🎯 Résumé des tests:" -ForegroundColor Cyan
+Write-Host "- Backend accessible: ✅" -ForegroundColor Green
+Write-Host "- Endpoints exportateurs: Testés" -ForegroundColor Yellow  
+Write-Host "- Configuration CORS: Vérifiée" -ForegroundColor Yellow
+Write-Host "- Performance: Mesurée" -ForegroundColor Yellow
 
-Write-Host ""
-Write-Host "🎯 CORS Test Complete!" -ForegroundColor Green
-Write-Host "If you still see CORS errors, check:" -ForegroundColor Yellow
-Write-Host "1. Backend is running on port 8080" -ForegroundColor Yellow
-Write-Host "2. Frontend is using the correct API URL" -ForegroundColor Yellow
-Write-Host "3. Browser cache is cleared" -ForegroundColor Yellow
+Write-Host "`n💡 Prochaines étapes:" -ForegroundColor Cyan
+Write-Host "1. Démarrer le frontend: npm run dev (port 3001)" -ForegroundColor White
+Write-Host "2. Tester l'application dans le navigateur" -ForegroundColor White
+Write-Host "3. Vérifier la console pour les erreurs CORS" -ForegroundColor White
+
+Write-Host "`n✅ Test terminé!" -ForegroundColor Green

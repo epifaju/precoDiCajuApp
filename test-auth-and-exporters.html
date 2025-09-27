@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Authentification et Exportateurs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .code { background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 10px; border-radius: 5px; font-family: monospace; margin: 10px 0; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #0056b3; }
+        .status { padding: 10px; border-radius: 5px; margin: 10px 0; }
+        .status.success { background-color: #d4edda; color: #155724; }
+        .status.error { background-color: #f8d7da; color: #721c24; }
+        .status.loading { background-color: #fff3cd; color: #856404; }
+        .json-display { background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Test Authentification et Exportateurs</h1>
+    
+    <div class="info">
+        <h3>📋 Instructions</h3>
+        <ol>
+            <li>Assurez-vous que l'application frontend est ouverte dans un autre onglet</li>
+            <li>Connectez-vous à l'application si ce n'est pas déjà fait</li>
+            <li>Exécutez les tests ci-dessous</li>
+        </ol>
+    </div>
+
+    <h3>🧪 Tests</h3>
+    <button onclick="testAuthentication()">Tester l'Authentification</button>
+    <button onclick="testExportersEndpoint()">Tester l'Endpoint Exportateurs</button>
+    <button onclick="testWithAuth()">Tester avec Token d'Auth</button>
+    <button onclick="checkLocalStorage()">Vérifier LocalStorage</button>
+    <button onclick="openApplication()">Ouvrir l'Application</button>
+    
+    <div id="results"></div>
+
+    <div class="info">
+        <h3>🔍 Diagnostic</h3>
+        <p><strong>Problème identifié :</strong> L'endpoint <code>/api/v1/exportateurs</code> nécessite une authentification</p>
+        <p><strong>Cause possible :</strong> L'utilisateur n'est pas connecté ou le token a expiré</p>
+        <p><strong>Solution :</strong> Se connecter à l'application avant d'accéder à la page Exportadores</p>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const statusClass = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            results.innerHTML += `<div class="status ${statusClass}">${message}</div>`;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testAuthentication() {
+            clearResults();
+            log('🔐 Test de l\'authentification...', 'loading');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ Authentification OK', 'success');
+                    log(`Utilisateur: ${data.email || 'Non spécifié'}`, 'success');
+                } else {
+                    log(`❌ Authentification échouée (${response.status})`, 'error');
+                    log('Vous devez vous connecter à l\'application', 'error');
+                }
+            } catch (error) {
+                log(`❌ Erreur de connexion: ${error.message}`, 'error');
+            }
+        }
+
+        async function testExportersEndpoint() {
+            clearResults();
+            log('📊 Test de l\'endpoint exportateurs...', 'loading');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/exportateurs?page=0&size=5`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ Endpoint exportateurs accessible', 'success');
+                    log(`Nombre d'exportateurs: ${data.content?.length || 0}`, 'success');
+                } else if (response.status === 401) {
+                    log('🔐 Authentification requise (401)', 'warning');
+                    log('Vous devez être connecté pour accéder aux exportateurs', 'warning');
+                } else {
+                    log(`❌ Erreur ${response.status}: ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Erreur de connexion: ${error.message}`, 'error');
+            }
+        }
+
+        async function testWithAuth() {
+            clearResults();
+            log('🔑 Test avec token d\'authentification...', 'loading');
+            
+            // Essayer de récupérer le token depuis localStorage
+            const authData = localStorage.getItem('auth-storage');
+            if (!authData) {
+                log('❌ Aucun token trouvé dans localStorage', 'error');
+                log('Connectez-vous à l\'application d\'abord', 'error');
+                return;
+            }
+            
+            try {
+                const parsed = JSON.parse(authData);
+                const token = parsed.state?.accessToken;
+                
+                if (!token) {
+                    log('❌ Token d\'accès non trouvé', 'error');
+                    return;
+                }
+                
+                log('✅ Token trouvé, test de l\'endpoint...', 'success');
+                
+                const response = await fetch(`${API_BASE}/api/v1/exportateurs?page=0&size=5`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ Endpoint accessible avec authentification', 'success');
+                    log(`Nombre d'exportateurs: ${data.content?.length || 0}`, 'success');
+                    log(`Total: ${data.totalElements || 0}`, 'success');
+                } else {
+                    log(`❌ Erreur ${response.status}: ${response.statusText}`, 'error');
+                    const errorText = await response.text();
+                    log(`Détails: ${errorText}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Erreur: ${error.message}`, 'error');
+            }
+        }
+
+        function checkLocalStorage() {
+            clearResults();
+            log('💾 Vérification du LocalStorage...', 'loading');
+            
+            const authData = localStorage.getItem('auth-storage');
+            if (!authData) {
+                log('❌ Aucune donnée d\'authentification trouvée', 'error');
+                log('Vous devez vous connecter à l\'application', 'error');
+                return;
+            }
+            
+            try {
+                const parsed = JSON.parse(authData);
+                log('✅ Données d\'authentification trouvées', 'success');
+                
+                const state = parsed.state;
+                if (state) {
+                    log(`Utilisateur: ${state.user?.email || 'Non spécifié'}`, 'info');
+                    log(`Connecté: ${state.isAuthenticated ? 'Oui' : 'Non'}`, 'info');
+                    log(`Token présent: ${state.accessToken ? 'Oui' : 'Non'}`, 'info');
+                    
+                    if (state.accessToken) {
+                        log('🔑 Token d\'accès trouvé', 'success');
+                    } else {
+                        log('❌ Token d\'accès manquant', 'error');
+                    }
+                }
+                
+                log('<strong>Données complètes:</strong>', 'info');
+                log(`<div class="json-display">${JSON.stringify(parsed, null, 2)}</div>`, 'info');
+            } catch (error) {
+                log(`❌ Erreur de parsing: ${error.message}`, 'error');
+            }
+        }
+
+        function openApplication() {
+            window.open('http://localhost:3002', '_blank');
+        }
+
+        // Test automatique au chargement
+        window.onload = function() {
+            setTimeout(() => {
+                checkLocalStorage();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
