@@ -31,8 +31,8 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
   const handleShareClick = async () => {
     try {
       const shareData = {
-        title: `${poi.nom} - Point d'achat`,
-        text: `Découvrez ${poi.nom}, un ${config.label.toLowerCase()} situé à ${poi.adresse || `${poi.latitude.toFixed(4)}, ${poi.longitude.toFixed(4)}`}`,
+        title: `${poi.nom} - ${t('poi.pageTitle')}`,
+        text: `${t('poi.discover')} ${poi.nom}, um ${t(config.labelKey).toLowerCase()} localizado em ${poi.adresse || `${poi.latitude.toFixed(4)}, ${poi.longitude.toFixed(4)}`}`,
         url: window.location.href
       };
 
@@ -41,25 +41,25 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
         await navigator.share(shareData);
         addToast({
           type: 'success',
-          title: 'Partage réussi',
-          message: 'Le point d\'achat a été partagé avec succès'
+          title: t('poi.shareSuccess'),
+          message: t('poi.shareMessage')
         });
       } else {
         // Fallback to clipboard
-        const shareText = `${poi.nom} - ${config.label}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\nConsultez la carte des points d'achat: ${window.location.href}`;
+        const shareText = `${poi.nom} - ${t(config.labelKey)}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\n${t('poi.pageDescription')}: ${window.location.href}`;
         
         await navigator.clipboard.writeText(shareText);
         addToast({
           type: 'success',
-          title: 'Copié dans le presse-papiers',
-          message: 'Les informations du point d\'achat ont été copiées'
+          title: t('poi.copiedToClipboard'),
+          message: t('poi.copiedMessage')
         });
       }
     } catch (error) {
       console.error('Erreur lors du partage:', error);
       
       // Fallback final avec prompt
-      const shareText = `${poi.nom} - ${config.label}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\nConsultez la carte des points d'achat: ${window.location.href}`;
+      const shareText = `${poi.nom} - ${t(config.labelKey)}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\n${t('poi.pageDescription')}: ${window.location.href}`;
       
       // Create a temporary textarea to copy to clipboard
       const textarea = document.createElement('textarea');
@@ -71,14 +71,14 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
         document.execCommand('copy');
         addToast({
           type: 'success',
-          title: 'Copié dans le presse-papiers',
-          message: 'Les informations du point d\'achat ont été copiées'
+          title: t('poi.copiedToClipboard'),
+          message: t('poi.copiedMessage')
         });
       } catch (fallbackError) {
         addToast({
           type: 'error',
-          title: 'Erreur de partage',
-          message: 'Impossible de partager ou copier les informations'
+          title: t('poi.shareError'),
+          message: t('poi.shareErrorMessage')
         });
       } finally {
         document.body.removeChild(textarea);
@@ -111,7 +111,7 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
                     color: config.color 
                   }}
                 >
-                  {config.label}
+                  {t(config.labelKey)}
                 </span>
               </div>
               {poi.telephone && showCallButton && (
@@ -154,7 +154,7 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
                   className="poi-type-badge bg-white bg-opacity-20 text-white border-white border-opacity-30"
                   style={{ color: 'white' }}
                 >
-                  {config.label}
+                  {t(config.labelKey)}
                 </span>
               </div>
             </div>
@@ -171,7 +171,7 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
           <div className="poi-info-content">
-            <div className="poi-info-label">Localisation</div>
+            <div className="poi-info-label">{t('poi.location')}</div>
             <div className="poi-info-value">
               <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 {poi.latitude.toFixed(6)}, {poi.longitude.toFixed(6)}
@@ -192,7 +192,7 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
             <div className="poi-info-content">
-              <div className="poi-info-label">Téléphone</div>
+              <div className="poi-info-label">{t('poi.phone')}</div>
               <div className="poi-info-value">
                 <div className="text-sm font-medium">
                   {poi.formattedPhone || poi.telephone}
@@ -247,7 +247,7 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
             </svg>
-            Partager
+            {t('poi.share')}
           </button>
           <button 
             className="poi-action-primary"
@@ -260,7 +260,7 @@ export const POIDetails: React.FC<POIDetailsProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            Itinéraire
+            {t('poi.route')}
           </button>
         </div>
 
@@ -294,8 +294,8 @@ export const POICard: React.FC<POIDetailsProps> = ({ poi, showCallButton = true 
   const handleShareClick = async () => {
     try {
       const shareData = {
-        title: `${poi.nom} - Point d'achat`,
-        text: `Découvrez ${poi.nom}, un ${config.label.toLowerCase()} situé à ${poi.adresse || `${poi.latitude.toFixed(4)}, ${poi.longitude.toFixed(4)}`}`,
+        title: `${poi.nom} - ${t('poi.pageTitle')}`,
+        text: `${t('poi.discover')} ${poi.nom}, um ${t(config.labelKey).toLowerCase()} localizado em ${poi.adresse || `${poi.latitude.toFixed(4)}, ${poi.longitude.toFixed(4)}`}`,
         url: window.location.href
       };
 
@@ -304,25 +304,25 @@ export const POICard: React.FC<POIDetailsProps> = ({ poi, showCallButton = true 
         await navigator.share(shareData);
         addToast({
           type: 'success',
-          title: 'Partage réussi',
-          message: 'Le point d\'achat a été partagé avec succès'
+          title: t('poi.shareSuccess'),
+          message: t('poi.shareMessage')
         });
       } else {
         // Fallback to clipboard
-        const shareText = `${poi.nom} - ${config.label}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\nConsultez la carte des points d'achat: ${window.location.href}`;
+        const shareText = `${poi.nom} - ${t(config.labelKey)}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\n${t('poi.pageDescription')}: ${window.location.href}`;
         
         await navigator.clipboard.writeText(shareText);
         addToast({
           type: 'success',
-          title: 'Copié dans le presse-papiers',
-          message: 'Les informations du point d\'achat ont été copiées'
+          title: t('poi.copiedToClipboard'),
+          message: t('poi.copiedMessage')
         });
       }
     } catch (error) {
       console.error('Erreur lors du partage:', error);
       
       // Fallback final avec prompt
-      const shareText = `${poi.nom} - ${config.label}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\nConsultez la carte des points d'achat: ${window.location.href}`;
+      const shareText = `${poi.nom} - ${t(config.labelKey)}\n📍 ${poi.adresse || `${poi.latitude.toFixed(6)}, ${poi.longitude.toFixed(6)}`}\n${poi.telephone ? `📞 ${poi.telephone}\n` : ''}${poi.horaires ? `🕒 ${poi.horaires}\n` : ''}\n${t('poi.pageDescription')}: ${window.location.href}`;
       
       // Create a temporary textarea to copy to clipboard
       const textarea = document.createElement('textarea');
@@ -334,14 +334,14 @@ export const POICard: React.FC<POIDetailsProps> = ({ poi, showCallButton = true 
         document.execCommand('copy');
         addToast({
           type: 'success',
-          title: 'Copié dans le presse-papiers',
-          message: 'Les informations du point d\'achat ont été copiées'
+          title: t('poi.copiedToClipboard'),
+          message: t('poi.copiedMessage')
         });
       } catch (fallbackError) {
         addToast({
           type: 'error',
-          title: 'Erreur de partage',
-          message: 'Impossible de partager ou copier les informations'
+          title: t('poi.shareError'),
+          message: t('poi.shareErrorMessage')
         });
       } finally {
         document.body.removeChild(textarea);
@@ -365,7 +365,7 @@ export const POICard: React.FC<POIDetailsProps> = ({ poi, showCallButton = true 
                 color: config.color 
               }}
             >
-              {config.label}
+              {t(config.labelKey)}
             </span>
           </div>
         </div>
@@ -418,7 +418,7 @@ export const POICard: React.FC<POIDetailsProps> = ({ poi, showCallButton = true 
             <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
             </svg>
-            Partager
+            {t('poi.share')}
           </button>
           <button 
             onClick={() => {
@@ -431,7 +431,7 @@ export const POICard: React.FC<POIDetailsProps> = ({ poi, showCallButton = true 
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            Itinéraire
+            {t('poi.route')}
           </button>
         </div>
       </div>

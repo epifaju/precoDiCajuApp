@@ -91,6 +91,28 @@
     "syncStatusOffline": "Offline",
     "syncSuggestionOffline": "Check your internet connection and make sure the backend server is running on http://localhost:8080",
     "syncSuggestionService": "The POI service may be temporarily unavailable. Data will be synchronized automatically when the service is restored.",
-    "syncSuggestionStorage": "Check browser permissions for local storage or try clearing browser cache."
+    "syncSuggestionStorage": "Check browser permissions for local storage or try clearing browser cache.",
+    "types": {
+      "acheteur": "Authorized Buyer",
+      "cooperative": "Cooperative",
+      "entrepot": "Export Warehouse"
+    },
+    "typeDescriptions": {
+      "acheteur": "Authorized buyers for cashew",
+      "cooperative": "Agricultural cooperatives",
+      "entrepot": "Export warehouses"
+    },
+    "details": "POI Details",
+    "location": "Location",
+    "phone": "Phone",
+    "share": "Share",
+    "route": "Route",
+    "discover": "Discover",
+    "shareSuccess": "Share successful",
+    "shareMessage": "The purchase point has been shared successfully",
+    "copiedToClipboard": "Copied to clipboard",
+    "copiedMessage": "Purchase point information has been copied",
+    "shareError": "Share error",
+    "shareErrorMessage": "Unable to share or copy information"
   }
 }

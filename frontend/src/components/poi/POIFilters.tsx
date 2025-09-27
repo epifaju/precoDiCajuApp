@@ -110,10 +110,10 @@ export const POIFilters: React.FC<POIFiltersProps> = ({
                       />
                       <div className="flex-1">
                         <div className="font-medium text-gray-900 dark:text-white">
-                          {config.label}
+                          {t(config.labelKey)}
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {config.description}
+                          {t(config.descriptionKey)}
                         </div>
                       </div>
                     </div>
@@ -142,7 +142,7 @@ export const POIFilters: React.FC<POIFiltersProps> = ({
                               color: POI_TYPE_CONFIG[type].color,
                             }}
                           >
-                            {POI_TYPE_CONFIG[type].icon} {POI_TYPE_CONFIG[type].label}
+                            {POI_TYPE_CONFIG[type].icon} {t(POI_TYPE_CONFIG[type].labelKey)}
                           </span>
                         ))}
                       </div>
@@ -207,7 +207,7 @@ export const POIFiltersCompact: React.FC<POIFiltersProps> = ({
               style={isSelected ? { backgroundColor: config.color } : {}}
             >
               <span>{config.icon}</span>
-              <span>{config.label}</span>
+              <span>{t(config.labelKey)}</span>
             </button>
           );
         })}

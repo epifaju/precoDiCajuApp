@@ -72,22 +72,22 @@ export interface POIMapBounds {
 // POI Type configurations
 export const POI_TYPE_CONFIG = {
   acheteur: {
-    label: 'Acheteur Agréé',
+    labelKey: 'poi.types.acheteur',
     color: '#22c55e',
     icon: '🟢',
-    description: 'Acheteurs agréés pour le cajou'
+    descriptionKey: 'poi.typeDescriptions.acheteur'
   },
   cooperative: {
-    label: 'Coopérative',
+    labelKey: 'poi.types.cooperative',
     color: '#3b82f6',
     icon: '🔵',
-    description: 'Coopératives agricoles'
+    descriptionKey: 'poi.typeDescriptions.cooperative'
   },
   entrepot: {
-    label: 'Entrepôt d\'Exportation',
+    labelKey: 'poi.types.entrepot',
     color: '#f97316',
     icon: '🟠',
-    description: 'Entrepôts d\'exportation'
+    descriptionKey: 'poi.typeDescriptions.entrepot'
   }
 } as const;
 

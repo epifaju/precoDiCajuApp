@@ -1141,6 +1141,28 @@
     "syncStatusOffline": "Offline",
     "syncSuggestionOffline": "Verifique sua conexão com a internet e certifique-se de que o servidor backend está rodando em http://localhost:8080",
     "syncSuggestionService": "O serviço POI pode estar temporariamente indisponível. Os dados serão sincronizados automaticamente quando o serviço for restaurado.",
-    "syncSuggestionStorage": "Verifique as permissões do navegador para armazenamento local ou tente limpar o cache do navegador."
+    "syncSuggestionStorage": "Verifique as permissões do navegador para armazenamento local ou tente limpar o cache do navegador.",
+    "types": {
+      "acheteur": "Comprador Autorizado",
+      "cooperative": "Cooperativa",
+      "entrepot": "Armazém de Exportação"
+    },
+    "typeDescriptions": {
+      "acheteur": "Compradores autorizados para caju",
+      "cooperative": "Cooperativas agrícolas",
+      "entrepot": "Armazéns de exportação"
+    },
+    "details": "Detalhes do POI",
+    "location": "Localização",
+    "phone": "Telefone",
+    "share": "Compartilhar",
+    "route": "Rota",
+    "discover": "Descubra",
+    "shareSuccess": "Compartilhamento bem-sucedido",
+    "shareMessage": "O ponto de compra foi compartilhado com sucesso",
+    "copiedToClipboard": "Copiado para a área de transferência",
+    "copiedMessage": "As informações do ponto de compra foram copiadas",
+    "shareError": "Erro de compartilhamento",
+    "shareErrorMessage": "Impossível compartilhar ou copiar as informações"
   }
 }

@@ -1157,7 +1157,29 @@
     "syncStatusOffline": "Hors ligne",
     "syncSuggestionOffline": "Vérifiez votre connexion internet et assurez-vous que le serveur backend fonctionne sur http://localhost:8080",
     "syncSuggestionService": "Le service POI peut être temporairement indisponible. Les données seront synchronisées automatiquement quand le service sera restauré.",
-    "syncSuggestionStorage": "Vérifiez les permissions du navigateur pour le stockage local ou essayez de vider le cache du navigateur."
+    "syncSuggestionStorage": "Vérifiez les permissions du navigateur pour le stockage local ou essayez de vider le cache du navigateur.",
+    "types": {
+      "acheteur": "Acheteur Agréé",
+      "cooperative": "Coopérative",
+      "entrepot": "Entrepôt d'Exportation"
+    },
+    "typeDescriptions": {
+      "acheteur": "Acheteurs agréés pour le cajou",
+      "cooperative": "Coopératives agricoles",
+      "entrepot": "Entrepôts d'exportation"
+    },
+    "details": "Détails du POI",
+    "location": "Localisation",
+    "phone": "Téléphone",
+    "share": "Partager",
+    "route": "Itinéraire",
+    "discover": "Découvrez",
+    "shareSuccess": "Partage réussi",
+    "shareMessage": "Le point d'achat a été partagé avec succès",
+    "copiedToClipboard": "Copié dans le presse-papiers",
+    "copiedMessage": "Les informations du point d'achat ont été copiées",
+    "shareError": "Erreur de partage",
+    "shareErrorMessage": "Impossible de partager ou copier les informations"
   }
 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { POI, POIType, POIMapBounds, GUINEA_BISSAU_BOUNDS } from '../../types/poi';
@@ -73,6 +74,7 @@ export const POIMapView: React.FC<POIMapViewProps> = ({
   showLegend = true,
   showControls = true,
 }) => {
+  const { t } = useTranslation();
   const [mapBounds, setMapBounds] = useState<POIMapBounds>(GUINEA_BISSAU_BOUNDS);
   const [selectedPOI, setSelectedPOI] = useState<POI | null>(null);
 
@@ -246,7 +248,7 @@ export const POIMapView: React.FC<POIMapViewProps> = ({
         <div className="mt-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-start justify-between mb-3">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Détails du POI
+              {t('poi.details')}
             </h3>
             <button
               onClick={() => setSelectedPOI(null)}
