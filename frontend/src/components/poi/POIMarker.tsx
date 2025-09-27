@@ -10,24 +10,37 @@ const createCustomIcon = (color: string, icon: string) => {
     className: 'custom-poi-marker',
     html: `
       <div style="
-        background-color: ${color};
-        width: 24px;
-        height: 24px;
+        background: linear-gradient(135deg, ${color}, ${color}dd);
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
-        border: 2px solid white;
+        border: 3px solid white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1);
         cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
       ">
         ${icon}
+        <div style="
+          position: absolute;
+          top: -2px;
+          right: -2px;
+          width: 8px;
+          height: 8px;
+          background: #10b981;
+          border-radius: 50%;
+          border: 2px solid white;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        "></div>
       </div>
     `,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
-    popupAnchor: [0, -12],
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14],
   });
 };
 
@@ -80,12 +93,13 @@ export const POIMarker: React.FC<POIMarkerProps> = ({
     >
       {showPopup && (
         <Popup
-          maxWidth={300}
-          minWidth={250}
+          maxWidth={350}
+          minWidth={280}
           className="poi-popup"
           closeButton={true}
-          autoClose={false}
+          autoClose={true}
           keepInView={true}
+          offset={[0, -10]}
         >
           <POIDetails poi={poi} />
         </Popup>
@@ -127,26 +141,39 @@ export const POIClusterMarker: React.FC<POIClusterMarkerProps> = ({
     className: 'custom-cluster-marker',
     html: `
       <div style="
-        background-color: ${getClusterColor()};
-        width: 32px;
-        height: 32px;
+        background: linear-gradient(135deg, ${getClusterColor()}, ${getClusterColor()}cc);
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        border: 3px solid white;
+        border: 4px solid white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: bold;
         color: white;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
         cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
       ">
         ${pois.length}
+        <div style="
+          position: absolute;
+          top: -3px;
+          right: -3px;
+          width: 10px;
+          height: 10px;
+          background: #f59e0b;
+          border-radius: 50%;
+          border: 2px solid white;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        "></div>
       </div>
     `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-    popupAnchor: [0, -16],
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    popupAnchor: [0, -18],
   });
 
   return (
@@ -157,12 +184,15 @@ export const POIClusterMarker: React.FC<POIClusterMarkerProps> = ({
         click: handleClusterClick,
       }}
     >
-      <Popup maxWidth={400} minWidth={300}>
-        <div className="poi-cluster-popup">
-          <h3 className="font-semibold text-lg mb-3">
-            {pois.length} POI{pois.length > 1 ? 's' : ''} trouvé{pois.length > 1 ? 's' : ''}
-          </h3>
-          <div className="space-y-2 max-h-60 overflow-y-auto">
+      <Popup maxWidth={450} minWidth={350} className="poi-popup">
+        <div className="poi-cluster-popup bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-lg">
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-t-lg">
+            <h3 className="font-bold text-lg mb-1">
+              {pois.length} POI{pois.length > 1 ? 's' : ''} trouvé{pois.length > 1 ? 's' : ''}
+            </h3>
+            <p className="text-sm opacity-90">Sélectionnez un point d'intérêt</p>
+          </div>
+          <div className="p-4 space-y-3 max-h-64 overflow-y-auto">
             {pois.map((poi) => (
               <POIDetails key={poi.id} poi={poi} compact={true} />
             ))}
