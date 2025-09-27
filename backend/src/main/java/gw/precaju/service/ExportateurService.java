@@ -69,8 +69,18 @@ public class ExportateurService {
         Sort sort = Sort.by(direction, validSortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        // Test temporaire avec méthode simple sans aucun filtre
-        Page<Exportateur> exportateurPage = exportateurRepository.findAllSimple(pageable);
+        // Utiliser la méthode appropriée selon les filtres
+        Page<Exportateur> exportateurPage;
+        if (nom != null && !nom.trim().isEmpty()) {
+            // Utiliser les filtres région et nom
+            String nomPattern = "%" + nom.trim() + "%";
+            exportateurPage = exportateurRepository.findWithRegionAndNameFilters(
+                    regionCode, nom, nomPattern, pageable);
+        } else {
+            // Utiliser seulement le filtre région
+            exportateurPage = exportateurRepository.findWithBasicFilters(
+                    regionCode, pageable);
+        }
 
         List<ExportateurDTO> dtos = exportateurPage.getContent().stream()
                 .map(exportateurMapper::toDTO)

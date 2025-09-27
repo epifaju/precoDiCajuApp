@@ -114,5 +114,79 @@
     "copiedMessage": "Purchase point information has been copied",
     "shareError": "Share error",
     "shareErrorMessage": "Unable to share or copy information"
+  },
+  "exporters": {
+    "title": "Certified Exporters",
+    "subtitle": "Verify the authenticity of exporters and certified buyers",
+    "total_exporters": "Total exporters",
+    "active": "Active",
+    "expired": "Expired",
+    "suspended": "Suspended",
+    "type": {
+      "exportateur": "Exporter",
+      "acheteur_local": "Local Buyer"
+    },
+    "status": {
+      "actif": "Active",
+      "expire": "Expired",
+      "suspendu": "Suspended"
+    },
+    "search_placeholder": "Search by name or license number...",
+    "advanced_filters": "Advanced filters",
+    "filters": {
+      "region": "Region",
+      "type": "Type",
+      "status": "Status",
+      "all_regions": "All regions",
+      "all_types": "All types",
+      "all_status": "All statuses",
+      "active_filters": "Active filters"
+    },
+    "active_filters": "Active filters",
+    "sort_by": "Sort by",
+    "name": "Name",
+    "expiration": "Expiration",
+    "showing_results": "Showing",
+    "no_results": "No exporters found",
+    "no_results_description": "Try modifying your search filters.",
+    "scan_qr": "Scan QR",
+    "add_exportateur": "Add",
+    "view_details": "View details",
+    "certified_on": "Certified on",
+    "expires_on": "Expires on",
+    "qr_verified": "QR Verified",
+    "in_region": "in your region",
+    "nationwide": "nationwide",
+    "total": "Total",
+    "expiring_soon": "Expiring soon",
+    "view_all": "View all",
+    "scan": "Scan",
+    "widget_tip": "Scan QR codes to instantly verify exporter authenticity."
+  },
+  "qr_scanner": {
+    "title": "Scan QR Code",
+    "instructions": "Position the exporter's QR code in the frame",
+    "start_scanning": "Start scanning",
+    "stop_scanning": "Stop scanning",
+    "scanning": "Scanning...",
+    "simulate_scan": "Simulate scan (Test)",
+    "no_camera": "No camera detected",
+    "camera_access_denied": "Camera access denied",
+    "permission_denied": "Camera access denied. Please authorize access in your browser settings.",
+    "retry_permission": "Try again",
+    "verification_success": "Verification successful",
+    "verification_failed": "Verification failed",
+    "verified_at": "Verified at",
+    "not_found_message": "No exporter found with this QR code.",
+    "expired_message": "This exporter certificate has expired.",
+    "suspended_message": "This exporter certificate has been suspended.",
+    "invalid_token_message": "The QR code is not valid."
+  },
+  "common": {
+    "close": "Close",
+    "clear_filters": "Clear",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next"
   }
 }

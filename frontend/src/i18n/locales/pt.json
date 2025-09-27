@@ -428,20 +428,6 @@
       "lastActive": "Último acesso"
     }
   },
-  "logout": {
-    "userInitiated": "Logout realizado com sucesso",
-    "userInitiatedMessage": "Você foi desconectado com sucesso.",
-    "sessionExpired": "Sessão expirada",
-    "sessionExpiredMessage": "Sua sessão expirou. Por favor, faça login novamente.",
-    "tokenExpired": "Token expirado",
-    "tokenExpiredMessage": "Seu token de autenticação expirou.",
-    "unauthorized": "Acesso negado",
-    "unauthorizedMessage": "Você não tem as permissões necessárias.",
-    "securityBreach": "Problema de segurança",
-    "securityBreachMessage": "Sua sessão foi interrompida por motivos de segurança.",
-    "default": "Logout",
-    "defaultMessage": "Você foi desconectado."
-  },
   "common": {
     "understand": "Entendi",
     "reconnect": "Reconectar",

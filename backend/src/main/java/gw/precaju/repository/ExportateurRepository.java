@@ -67,12 +67,25 @@ public interface ExportateurRepository extends JpaRepository<Exportateur, UUID>,
     /**
      * Recherche paginée avec filtres - méthode simplifiée sans enum
      */
-    @Query("SELECT e FROM Exportateur e WHERE " +
-           "(:regionCode IS NULL OR e.region.code = :regionCode) AND " +
-           "(:nom IS NULL OR e.nom LIKE CONCAT('%', :nom, '%'))")
+    @Query(value = "SELECT * FROM exportateurs e WHERE " +
+           "(:regionCode IS NULL OR e.region_code = :regionCode)",
+           countQuery = "SELECT COUNT(*) FROM exportateurs e WHERE " +
+           "(:regionCode IS NULL OR e.region_code = :regionCode)",
+           nativeQuery = true)
     Page<Exportateur> findWithBasicFilters(
             @Param("regionCode") String regionCode,
+            Pageable pageable);
+
+    /**
+     * Recherche paginée avec filtres région et nom - version simplifiée
+     */
+    @Query("SELECT e FROM Exportateur e WHERE " +
+           "(:regionCode IS NULL OR e.region.code = :regionCode) AND " +
+           "(:nom IS NULL OR e.nom LIKE :nomPattern)")
+    Page<Exportateur> findWithRegionAndNameFilters(
+            @Param("regionCode") String regionCode,
             @Param("nom") String nom,
+            @Param("nomPattern") String nomPattern,
             Pageable pageable);
 
     /**

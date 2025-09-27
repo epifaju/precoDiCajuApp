@@ -1180,6 +1180,80 @@
     "copiedMessage": "Les informations du point d'achat ont été copiées",
     "shareError": "Erreur de partage",
     "shareErrorMessage": "Impossible de partager ou copier les informations"
+  },
+  "exporters": {
+    "title": "Exportateurs Agréés",
+    "subtitle": "Vérifiez l'authenticité des exportateurs et acheteurs certifiés",
+    "total_exporters": "Total des exportateurs",
+    "active": "Actifs",
+    "expired": "Expirés",
+    "suspended": "Suspendus",
+    "type": {
+      "exportateur": "Exportateur",
+      "acheteur_local": "Acheteur Local"
+    },
+    "status": {
+      "actif": "Actif",
+      "expire": "Expiré",
+      "suspendu": "Suspendu"
+    },
+    "search_placeholder": "Rechercher par nom ou numéro d'agrément...",
+    "advanced_filters": "Filtres avancés",
+    "filters": {
+      "region": "Région",
+      "type": "Type",
+      "status": "Statut",
+      "all_regions": "Toutes les régions",
+      "all_types": "Tous les types",
+      "all_status": "Tous les statuts",
+      "active_filters": "Filtres actifs"
+    },
+    "active_filters": "Filtres actifs",
+    "sort_by": "Trier par",
+    "name": "Nom",
+    "expiration": "Expiration",
+    "showing_results": "Affichage de",
+    "no_results": "Aucun exportateur trouvé",
+    "no_results_description": "Essayez de modifier vos filtres de recherche.",
+    "scan_qr": "Scanner QR",
+    "add_exportateur": "Ajouter",
+    "view_details": "Voir détails",
+    "certified_on": "Certifié le",
+    "expires_on": "Expire le",
+    "qr_verified": "Vérifié par QR",
+    "in_region": "dans votre région",
+    "nationwide": "dans tout le pays",
+    "total": "Total",
+    "expiring_soon": "Expirent bientôt",
+    "view_all": "Voir tous",
+    "scan": "Scanner",
+    "widget_tip": "Scannez les codes QR pour vérifier instantanément l'authenticité des exportateurs."
+  },
+  "qr_scanner": {
+    "title": "Scanner le Code QR",
+    "instructions": "Positionnez le code QR de l'exportateur dans le cadre",
+    "start_scanning": "Commencer le scan",
+    "stop_scanning": "Arrêter le scan",
+    "scanning": "Scan en cours...",
+    "simulate_scan": "Simuler le scan (Test)",
+    "no_camera": "Aucune caméra détectée",
+    "camera_access_denied": "Accès à la caméra refusé",
+    "permission_denied": "Accès à la caméra refusé. Veuillez autoriser l'accès dans les paramètres de votre navigateur.",
+    "retry_permission": "Réessayer",
+    "verification_success": "Vérification réussie",
+    "verification_failed": "Vérification échouée",
+    "verified_at": "Vérifié le",
+    "not_found_message": "Aucun exportateur trouvé avec ce code QR.",
+    "expired_message": "Ce certificat d'exportateur a expiré.",
+    "suspended_message": "Ce certificat d'exportateur a été suspendu.",
+    "invalid_token_message": "Le code QR n'est pas valide."
+  },
+  "common": {
+    "close": "Fermer",
+    "clear_filters": "Effacer",
+    "of": "de",
+    "previous": "Précédent",
+    "next": "Suivant"
   }
 }
 

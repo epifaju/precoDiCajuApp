@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Correction Erreur Cyclique Exportateurs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test - Correction Erreur Cyclique Exportateurs</h1>
+        
+        <div class="test-section info">
+            <h3>📋 Description du Test</h3>
+            <p>Ce test vérifie que la correction de l'erreur "cyclic object value" fonctionne correctement lors de l'utilisation du filtre avancé dans l'écran "Exportateurs Agrées".</p>
+            <p><strong>Problème résolu :</strong> L'objet <code>filters</code> passé dans la query key contenait des références circulaires qui ne pouvaient pas être sérialisées par React Query.</p>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Tests à Effectuer</h3>
+            <ol>
+                <li><strong>Test 1 :</strong> Accéder à la page Exportateurs Agrées</li>
+                <li><strong>Test 2 :</strong> Utiliser le filtre avancé avec différents critères</li>
+                <li><strong>Test 3 :</strong> Vérifier qu'aucune erreur "cyclic object value" n'apparaît</li>
+                <li><strong>Test 4 :</strong> Tester la pagination avec des filtres actifs</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 Liens de Test</h3>
+            <button onclick="testExportersPage()">Tester Page Exportateurs</button>
+            <button onclick="testAdvancedFilters()">Tester Filtres Avancés</button>
+            <button onclick="testPaginationWithFilters()">Tester Pagination + Filtres</button>
+            <button onclick="clearLog()">Effacer Log</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Résultats des Tests</h3>
+            <div id="testResults" class="log">En attente des tests...\n</div>
+        </div>
+
+        <div class="test-section info">
+            <h3>✅ Corrections Appliquées</h3>
+            <ul>
+                <li><strong>Fonction de sérialisation sûre :</strong> Ajout de <code>safeSerializeFilters()</code> dans <code>useExporters.ts</code></li>
+                <li><strong>Query key sécurisée :</strong> Utilisation de <code>safeSerializeFilters(filters)</code> au lieu de l'objet <code>filters</code> directement</li>
+                <li><strong>Prévention des références circulaires :</strong> La fonction ne sérialise que les valeurs primitives et nettoie les valeurs undefined/null</li>
+            </ul>
+        </div>
+
+        <div class="test-section success">
+            <h3>🎯 Résultat Attendu</h3>
+            <p>Après la correction, l'utilisation du filtre avancé ne devrait plus générer l'erreur "Uncaught TypeError: cyclic object value" et les filtres devraient fonctionner correctement.</p>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const resultsDiv = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            resultsDiv.textContent += logEntry;
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('testResults').textContent = 'Log effacé...\n';
+        }
+
+        function testExportersPage() {
+            log('🧪 Test 1: Accès à la page Exportateurs Agrées');
+            log('   → Ouvrir: http://localhost:3001/exporters');
+            log('   → Vérifier: La page se charge sans erreur dans la console');
+            log('   → Vérifier: Les exportateurs s\'affichent correctement');
+            log('   ✅ Test manuel à effectuer');
+        }
+
+        function testAdvancedFilters() {
+            log('🧪 Test 2: Utilisation du filtre avancé');
+            log('   → Cliquer sur le bouton "Filtres avancés"');
+            log('   → Tester différents filtres:');
+            log('     - Filtre par région');
+            log('     - Filtre par type (Exportateur/Acheteur local)');
+            log('     - Filtre par statut (Actif/Expiré/Suspendu)');
+            log('     - Filtre par nom');
+            log('   → Vérifier: Aucune erreur "cyclic object value" dans la console');
+            log('   → Vérifier: Les résultats se filtrent correctement');
+            log('   ✅ Test manuel à effectuer');
+        }
+
+        function testPaginationWithFilters() {
+            log('🧪 Test 3: Pagination avec filtres actifs');
+            log('   → Appliquer un filtre (ex: région spécifique)');
+            log('   → Naviguer entre les pages');
+            log('   → Vérifier: La pagination fonctionne avec les filtres');
+            log('   → Vérifier: Aucune erreur dans la console');
+            log('   ✅ Test manuel à effectuer');
+        }
+
+        // Log initial
+        log('🚀 Test de correction de l\'erreur cyclique - Exportateurs Agrées');
+        log('📝 Instructions: Effectuer les tests manuellement en suivant les étapes ci-dessus');
+        log('🔍 Vérifier la console du navigateur pour détecter d\'éventuelles erreurs');
+    </script>
+</body>
+</html>

@@ -12,6 +12,34 @@ import {
 } from '../types/exporter';
 import { useNotificationStore } from '../store/notificationStore';
 
+// Helper function to safely serialize objects for query keys
+const safeSerializeFilters = (filters: ExportateurFilters | undefined): string => {
+  if (!filters) return '';
+  
+  try {
+    // Create a completely new object to avoid any potential circular references
+    const cleanFilters: Record<string, string> = {};
+    
+    // Only process known filter properties to avoid any unexpected properties
+    const allowedKeys: (keyof ExportateurFilters)[] = ['regionCode', 'type', 'statut', 'nom'];
+    
+    for (const key of allowedKeys) {
+      const value = filters[key];
+      if (value !== undefined && value !== null && value !== '') {
+        cleanFilters[key] = String(value);
+      }
+    }
+    
+    // Create a deterministic string representation
+    const sortedKeys = Object.keys(cleanFilters).sort();
+    return sortedKeys.map(key => `${key}:${cleanFilters[key]}`).join('|');
+  } catch (error) {
+    // Fallback: return empty string if there's any issue
+    console.warn('Error serializing filters:', error);
+    return '';
+  }
+};
+
 export interface UseExportersOptions {
   page?: number;
   size?: number;
@@ -42,7 +70,7 @@ export const useExporters = (options: UseExportersOptions = {}) => {
     error,
     refetch
   } = useQuery({
-    queryKey: ['exportateurs', page, size, sortBy, sortDir, filters],
+    queryKey: ['exportateurs', page, size, sortBy, sortDir, safeSerializeFilters(filters)],
     queryFn: () => exporterApiService.getExportateurs(page, size, sortBy, sortDir, filters),
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: (failureCount, error: any) => {
