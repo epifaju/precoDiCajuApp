@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test QR Scanner - Accès Caméra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        video {
+            width: 100%;
+            border-radius: 8px;
+            background: #000;
+        }
+        .scan-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 2px dashed white;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        .scan-frame::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            border-top: 3px solid white;
+            border-left: 3px solid white;
+        }
+        .scan-frame::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            border-bottom: 3px solid white;
+            border-right: 3px solid white;
+        }
+        
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test QR Scanner - Diagnostic Caméra</h1>
+    
+    <div class="container">
+        <h2>1. Vérification des APIs Navigateur</h2>
+        <div id="api-check" class="test-section">
+            <p>Vérification des APIs nécessaires...</p>
+        </div>
+        
+        <h2>2. Test des Permissions Caméra</h2>
+        <div id="permission-check" class="test-section">
+            <p>Vérification des permissions...</p>
+        </div>
+        
+        <h2>3. Test Accès Caméra</h2>
+        <div id="camera-test" class="test-section">
+            <button onclick="testCameraAccess()">Tester l'accès caméra</button>
+            <button onclick="stopCamera()" disabled id="stop-btn">Arrêter caméra</button>
+            <div id="camera-status" class="status"></div>
+            <div class="video-container" id="video-container" style="display: none;">
+                <video id="video" autoplay playsinline></video>
+                <div class="scan-frame"></div>
+            </div>
+        </div>
+        
+        <h2>4. Test QR Code Detection</h2>
+        <div id="qr-test" class="test-section">
+            <button onclick="startQRScanning()" disabled id="qr-btn">Démarrer scan QR</button>
+            <button onclick="stopQRScanning()" disabled id="qr-stop-btn">Arrêter scan QR</button>
+            <div id="qr-status" class="status"></div>
+            <canvas id="canvas"></canvas>
+        </div>
+        
+        <h2>5. Log des Événements</h2>
+        <div class="log" id="log"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script>
+        let stream = null;
+        let video = null;
+        let canvas = null;
+        let context = null;
+        let scanning = false;
+        let scanInterval = null;
+        
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #666;">[${timestamp}]</span> ${message}`;
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+        
+        function updateStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+        
+        // 1. Vérification des APIs
+        function checkAPIs() {
+            const apiCheck = document.getElementById('api-check');
+            let html = '<h3>APIs Disponibles:</h3><ul>';
+            
+            const checks = [
+                { name: 'navigator.mediaDevices', available: !!navigator.mediaDevices },
+                { name: 'navigator.mediaDevices.getUserMedia', available: !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) },
+                { name: 'navigator.permissions', available: 'permissions' in navigator },
+                { name: 'jsQR Library', available: typeof jsQR !== 'undefined' }
+            ];
+            
+            let allGood = true;
+            checks.forEach(check => {
+                const status = check.available ? '✅' : '❌';
+                const color = check.available ? 'green' : 'red';
+                html += `<li style="color: ${color};">${status} ${check.name}</li>`;
+                if (!check.available) allGood = false;
+            });
+            
+            html += '</ul>';
+            
+            if (allGood) {
+                apiCheck.className = 'test-section success';
+                html += '<p><strong>✅ Toutes les APIs nécessaires sont disponibles</strong></p>';
+            } else {
+                apiCheck.className = 'test-section error';
+                html += '<p><strong>❌ Certaines APIs sont manquantes</strong></p>';
+            }
+            
+            apiCheck.innerHTML = html;
+            log(`APIs check completed. All good: ${allGood}`);
+        }
+        
+        // 2. Vérification des permissions
+        async function checkPermissions() {
+            const permissionCheck = document.getElementById('permission-check');
+            let html = '<h3>État des Permissions:</h3>';
+            
+            try {
+                if ('permissions' in navigator) {
+                    const permission = await navigator.permissions.query({ name: 'camera' });
+                    const status = permission.state;
+                    const color = status === 'granted' ? 'green' : status === 'denied' ? 'red' : 'orange';
+                    html += `<p style="color: ${color};">📷 Caméra: <strong>${status}</strong></p>`;
+                    log(`Camera permission: ${status}`);
+                } else {
+                    html += '<p style="color: orange;">📷 Caméra: <strong>Non vérifiable</strong> (API permissions non supportée)</p>';
+                    log('Camera permission: Not checkable (permissions API not supported)');
+                }
+                
+                // Vérifier les appareils disponibles
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const cameras = devices.filter(device => device.kind === 'videoinput');
+                html += `<p>📹 Caméras détectées: <strong>${cameras.length}</strong></p>`;
+                
+                if (cameras.length > 0) {
+                    html += '<ul>';
+                    cameras.forEach((camera, index) => {
+                        const label = camera.label || `Caméra ${index + 1}`;
+                        html += `<li>${label}</li>`;
+                    });
+                    html += '</ul>';
+                }
+                
+                permissionCheck.className = 'test-section info';
+                permissionCheck.innerHTML = html;
+                
+            } catch (error) {
+                permissionCheck.className = 'test-section error';
+                permissionCheck.innerHTML = `<p><strong>❌ Erreur lors de la vérification des permissions:</strong></p><p>${error.message}</p>`;
+                log(`Permission check error: ${error.message}`);
+            }
+        }
+        
+        // 3. Test accès caméra
+        async function testCameraAccess() {
+            const statusElement = document.getElementById('camera-status');
+            const videoContainer = document.getElementById('video-container');
+            const stopBtn = document.getElementById('stop-btn');
+            
+            try {
+                updateStatus('camera-status', 'Demande d\'accès à la caméra...', 'warning');
+                log('Requesting camera access...');
+                
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                });
+                
+                video = document.getElementById('video');
+                video.srcObject = stream;
+                
+                video.onloadedmetadata = () => {
+                    updateStatus('camera-status', '✅ Caméra accessible et fonctionnelle', 'success');
+                    videoContainer.style.display = 'block';
+                    stopBtn.disabled = false;
+                    document.getElementById('qr-btn').disabled = false;
+                    log('Camera access successful');
+                };
+                
+            } catch (error) {
+                let errorMessage = 'Erreur inconnue';
+                let errorType = 'error';
+                
+                switch (error.name) {
+                    case 'NotAllowedError':
+                        errorMessage = 'Accès à la caméra refusé. Veuillez autoriser l\'accès dans les paramètres de votre navigateur.';
+                        break;
+                    case 'NotFoundError':
+                        errorMessage = 'Aucune caméra détectée';
+                        break;
+                    case 'NotSupportedError':
+                        errorMessage = 'Votre navigateur ne supporte pas l\'accès à la caméra';
+                        break;
+                    case 'NotReadableError':
+                        errorMessage = 'La caméra est utilisée par une autre application';
+                        break;
+                    default:
+                        errorMessage = `Erreur d'accès à la caméra: ${error.message}`;
+                }
+                
+                updateStatus('camera-status', `❌ ${errorMessage}`, 'error');
+                log(`Camera access error: ${error.name} - ${error.message}`);
+            }
+        }
+        
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            
+            if (video) {
+                video.srcObject = null;
+            }
+            
+            document.getElementById('video-container').style.display = 'none';
+            document.getElementById('stop-btn').disabled = true;
+            document.getElementById('qr-btn').disabled = true;
+            updateStatus('camera-status', 'Caméra arrêtée', 'info');
+            log('Camera stopped');
+        }
+        
+        // 4. Test QR Code Detection
+        function startQRScanning() {
+            if (!video || !stream) {
+                updateStatus('qr-status', '❌ Veuillez d\'abord activer la caméra', 'error');
+                return;
+            }
+            
+            canvas = document.getElementById('canvas');
+            context = canvas.getContext('2d');
+            scanning = true;
+            
+            updateStatus('qr-status', '🔍 Scan QR en cours...', 'warning');
+            document.getElementById('qr-stop-btn').disabled = false;
+            log('QR scanning started');
+            
+            scanInterval = setInterval(() => {
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+                    
+                    if (code) {
+                        updateStatus('qr-status', `✅ QR Code détecté: ${code.data}`, 'success');
+                        log(`QR Code detected: ${code.data}`);
+                        stopQRScanning();
+                    }
+                }
+            }, 100);
+        }
+        
+        function stopQRScanning() {
+            scanning = false;
+            if (scanInterval) {
+                clearInterval(scanInterval);
+                scanInterval = null;
+            }
+            
+            updateStatus('qr-status', 'Scan QR arrêté', 'info');
+            document.getElementById('qr-stop-btn').disabled = true;
+            log('QR scanning stopped');
+        }
+        
+        // Initialisation
+        window.onload = function() {
+            log('Test page loaded');
+            checkAPIs();
+            checkPermissions();
+        };
+        
+        // Nettoyage à la fermeture
+        window.onbeforeunload = function() {
+            stopCamera();
+            stopQRScanning();
+        };
+    </script>
+</body>
+</html>

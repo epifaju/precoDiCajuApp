@@ -27,6 +27,7 @@
     "date-fns": "^2.29.0",
     "i18next": "^22.4.0",
     "i18next-browser-languagedetector": "^7.0.0",
+    "jsqr": "^1.4.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.263.0",
     "react": "^18.2.0",

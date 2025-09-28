@@ -19,7 +19,8 @@ Write-Host "  User: $DB_USER" -ForegroundColor Gray
 try {
     $psqlVersion = & psql --version 2>$null
     Write-Host "`npsql trouve: $psqlVersion" -ForegroundColor Green
-} catch {
+}
+catch {
     Write-Host "`npsql non trouve. Veuillez installer PostgreSQL ou ajouter psql au PATH." -ForegroundColor Red
     Write-Host "Alternative: Executez le script SQL directement dans pgAdmin ou un autre client PostgreSQL." -ForegroundColor Yellow
     exit 1
@@ -86,13 +87,15 @@ try {
     
     Write-Host "`n✅ Script execute avec succes!" -ForegroundColor Green
     
-} catch {
+}
+catch {
     Write-Host "`n❌ Erreur lors de l'execution: $($_.Exception.Message)" -ForegroundColor Red
     Write-Host "`nVerifiez:" -ForegroundColor Yellow
     Write-Host "  - Que PostgreSQL est demarre" -ForegroundColor Gray
     Write-Host "  - Que les parametres de connexion sont corrects" -ForegroundColor Gray
     Write-Host "  - Que l'utilisateur a les droits de modification" -ForegroundColor Gray
-} finally {
+}
+finally {
     # Nettoyer
     if (Test-Path $tempScript) {
         Remove-Item $tempScript
