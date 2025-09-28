@@ -228,7 +228,7 @@ const PricesMapPage: React.FC = () => {
                 </label>
                 <Select
                   value={filters.regionCode}
-                  onChange={(e) => updateFilter('regionCode', e.target.value)}
+                  onChange={(value) => updateFilter('regionCode', value)}
                   options={regionOptions}
                   placeholder={t('map.selectRegion', 'Select Region') || 'Select Region'}
                 />
@@ -240,7 +240,7 @@ const PricesMapPage: React.FC = () => {
                 </label>
                 <Select
                   value={filters.qualityGrade}
-                  onChange={(e) => updateFilter('qualityGrade', e.target.value)}
+                  onChange={(value) => updateFilter('qualityGrade', value)}
                   options={qualityOptions}
                   placeholder={t('map.selectQuality', 'Select Quality') || 'Select Quality'}
                 />
@@ -252,7 +252,7 @@ const PricesMapPage: React.FC = () => {
                 </label>
                 <Select
                   value={filters.verified}
-                  onChange={(e) => updateFilter('verified', e.target.value)}
+                  onChange={(value) => updateFilter('verified', value)}
                   options={verifiedOptions}
                   placeholder={t('map.selectVerified', 'Select Status') || 'Select Status'}
                 />
