@@ -31,10 +31,12 @@ export class ExporterApiService {
     });
 
     if (filters) {
-      if (filters.regionCode) params.append('regionCode', filters.regionCode);
-      if (filters.type) params.append('type', filters.type);
-      if (filters.statut) params.append('statut', filters.statut);
-      if (filters.nom) params.append('nom', filters.nom);
+      // Toujours envoyer les paramètres de filtre, même s'ils sont vides
+      // Le backend gère les valeurs vides/null correctement
+      if (filters.regionCode !== undefined) params.append('regionCode', String(filters.regionCode));
+      if (filters.type !== undefined) params.append('type', String(filters.type));
+      if (filters.statut !== undefined) params.append('statut', String(filters.statut));
+      if (filters.nom !== undefined) params.append('nom', String(filters.nom));
     }
 
     const response = await apiClient.get(`${this.baseUrl}?${params}`);

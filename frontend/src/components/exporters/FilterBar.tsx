@@ -22,17 +22,32 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const handleFilterChange = (key: keyof ExportateurFilters, value: string | undefined) => {
-    onFiltersChange({
-      ...filters,
-      [key]: value || undefined
-    });
+    const newFilters = { ...filters };
+    
+    // Gérer les valeurs undefined, null et autres types
+    if (value === undefined || value === null) {
+      // Supprimer le filtre seulement si la valeur est explicitement undefined/null
+      delete newFilters[key];
+    } else {
+      // Convertir la valeur en chaîne et vérifier si elle est vide après trim
+      const stringValue = String(value);
+      if (stringValue.trim() === '') {
+        // Pour les chaînes vides (option "Tous"), définir undefined pour ne pas envoyer le paramètre
+        delete newFilters[key];
+      } else {
+        // Valeur non vide, l'assigner
+        newFilters[key] = stringValue;
+      }
+    }
+    
+    onFiltersChange(newFilters);
   };
 
   const clearFilters = () => {
     onFiltersChange({});
   };
 
-  const hasActiveFilters = Object.values(filters).some(value => value !== undefined);
+  const hasActiveFilters = Object.values(filters).some(value => value !== undefined && value !== '' && value !== null);
 
   const regionOptions = [
     { value: '', label: t('exporters.filters.all_regions', 'Toutes les régions') },
@@ -117,7 +132,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </label>
             <Select
               value={filters.type || ''}
-              onChange={(value) => handleFilterChange('type', value as ExportateurType)}
+              onChange={(value) => handleFilterChange('type', value)}
               options={typeOptions}
             />
           </div>
@@ -129,7 +144,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </label>
             <Select
               value={filters.statut || ''}
-              onChange={(value) => handleFilterChange('statut', value as StatutType)}
+              onChange={(value) => handleFilterChange('statut', value)}
               options={statutOptions}
             />
           </div>

@@ -206,3 +206,4 @@ Write-Host "• Configurer les alertes d'expiration de token" -ForegroundColor Y
 Write-Host "• Ajouter des tests unitaires pour la sécurité" -ForegroundColor Yellow
 
 Write-Host "`n✨ Tests terminés!" -ForegroundColor Green
+

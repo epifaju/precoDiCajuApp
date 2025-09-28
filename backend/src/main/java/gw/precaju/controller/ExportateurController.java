@@ -46,31 +46,17 @@ public class ExportateurController {
             @RequestParam(required = false) String nom) {
 
         try {
-            logger.info(
-                    "Getting all exportateurs with filters - page: {}, size: {}, regionCode: {}, type: {}, statut: {}, nom: {}",
+            logger.debug(
+                    "Getting exportateurs with filters - page: {}, size: {}, regionCode: '{}', type: '{}', statut: '{}', nom: '{}'",
                     page, size, regionCode, type, statut, nom);
 
-            PageResponse<ExportateurDTO> response = exportateurService.findAll(
+            PageResponse<ExportateurDTO> response = exportateurService.findAllWithWorkingFilters(
                     page, size, sortBy, sortDir, regionCode, type, statut, nom);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Error retrieving exportateurs", e);
             return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    /**
-     * Endpoint de test simple pour déboguer
-     */
-    @GetMapping("/test-health")
-    public ResponseEntity<String> testEndpoint() {
-        try {
-            logger.info("Test endpoint called");
-            return ResponseEntity.ok("Test endpoint working");
-        } catch (Exception e) {
-            logger.error("Error in test endpoint", e);
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 

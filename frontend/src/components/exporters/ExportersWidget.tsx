@@ -43,13 +43,38 @@ export const ExportersWidget: React.FC<ExportersWidgetProps> = ({
     );
   }
 
-  // Calculer les statistiques depuis les données
-  const totalExporters = statistics?.length || 0;
-  const activeExporters = statistics?.filter((stat: any) => stat[1] === 'ACTIF').length || 0;
-  const expiringSoon = statistics?.filter((stat: any) => {
-    // Logique pour déterminer ceux qui expirent bientôt
-    return stat[1] === 'ACTIF';
-  }).length || 0;
+  // Calculer les vraies statistiques depuis les données de l'API
+  const calculateStats = () => {
+    if (!statistics || isLoading) {
+      return {
+        total: 0,
+        active: 0,
+        expiringSoon: 0
+      };
+    }
+
+    let total = 0;
+    let active = 0;
+
+    // Les statistiques sont retournées sous forme d'array d'arrays [regionCode, statut, count]
+    statistics.forEach((stat: any) => {
+      const count = stat[2] || 0;
+      const status = stat[1];
+      
+      total += count;
+      if (status === 'ACTIF') {
+        active += count;
+      }
+    });
+
+    return {
+      total,
+      active,
+      expiringSoon: active // Pour l'instant, on considère tous les actifs comme "expirant bientôt"
+    };
+  };
+
+  const stats = calculateStats();
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 ${className}`}>
@@ -84,7 +109,7 @@ export const ExportersWidget: React.FC<ExportersWidgetProps> = ({
       <div className="grid grid-cols-3 gap-4 mb-4">
         <div className="text-center">
           <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            {totalExporters}
+            {isLoading ? '...' : stats.total}
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400">
             {t('exporters.total', 'Total')}
@@ -93,7 +118,7 @@ export const ExportersWidget: React.FC<ExportersWidgetProps> = ({
         
         <div className="text-center">
           <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-            {activeExporters}
+            {isLoading ? '...' : stats.active}
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400">
             {t('exporters.active', 'Actifs')}
@@ -102,7 +127,7 @@ export const ExportersWidget: React.FC<ExportersWidgetProps> = ({
         
         <div className="text-center">
           <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-            {expiringSoon}
+            {isLoading ? '...' : stats.expiringSoon}
           </div>
           <div className="text-xs text-gray-600 dark:text-gray-400">
             {t('exporters.expiring_soon', 'Expirent bientôt')}

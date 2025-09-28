@@ -7,7 +7,7 @@ interface SelectOption {
   disabled?: boolean;
 }
 
-interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'children'> {
+interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'children' | 'onChange'> {
   label?: string;
   error?: string;
   helpText?: string;
@@ -15,6 +15,7 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
   placeholder?: string;
   leftIcon?: React.ReactNode;
   loading?: boolean;
+  onChange?: (value: string) => void;
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
@@ -28,11 +29,18 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     leftIcon,
     disabled,
     loading,
+    onChange,
     ...props 
   }, ref) => {
     const hasError = !!error;
     const hasLeftIcon = !!leftIcon;
     const isDisabled = disabled || loading;
+
+    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      if (onChange) {
+        onChange(event.target.value);
+      }
+    };
 
     const selectClasses = cn(
       'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm',
@@ -74,6 +82,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={selectClasses}
             ref={ref}
             disabled={isDisabled}
+            onChange={handleChange}
             {...props}
           >
             {placeholder && (

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Filtre Statut - Correction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .statut-test {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .statut-item {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .statut-item h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .statut-item button {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .results {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test Filtre Statut - Correction</h1>
+        <p>Ce test vérifie que le filtre Statut fonctionne correctement après correction du problème de casting.</p>
+        
+        <div class="test-section">
+            <h2>📋 Tests des Statuts</h2>
+            <p>Le problème était le casting <code>value as StatutType</code> qui n'était plus nécessaire après la correction du composant Select.</p>
+            
+            <div class="statut-test">
+                <div class="statut-item">
+                    <h3>ACTIF</h3>
+                    <button onclick="testStatut('ACTIF')">Tester ACTIF</button>
+                    <div id="result-actif" class="results"></div>
+                </div>
+                
+                <div class="statut-item">
+                    <h3>EXPIRE</h3>
+                    <button onclick="testStatut('EXPIRE')">Tester EXPIRE</button>
+                    <div id="result-expire" class="results"></div>
+                </div>
+                
+                <div class="statut-item">
+                    <h3>SUSPENDU</h3>
+                    <button onclick="testStatut('SUSPENDU')">Tester SUSPENDU</button>
+                    <div id="result-suspendu" class="results"></div>
+                </div>
+                
+                <div class="statut-item">
+                    <h3>Tous</h3>
+                    <button onclick="testStatut('')">Tester Tous</button>
+                    <div id="result-all" class="results"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 Test des URLs Générées</h2>
+            <p>Vérification que les URLs sont correctement construites pour chaque statut.</p>
+            <div id="url-tests"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Résultats des Tests</h2>
+            <div id="test-results"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔧 Corrections Apportées</h2>
+            <div class="test-result info">
+                <h3>Problème Identifié</h3>
+                <p>❌ Le casting <code>value as StatutType</code> dans FilterBar.tsx</p>
+                <p>❌ Le casting <code>value as ExportateurType</code> dans FilterBar.tsx</p>
+            </div>
+            
+            <div class="test-result success">
+                <h3>Solution Appliquée</h3>
+                <p>✅ Suppression du casting <code>value as StatutType</code></p>
+                <p>✅ Suppression du casting <code>value as ExportateurType</code></p>
+                <p>✅ Le composant Select passe maintenant directement la string</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api/v1';
+        
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            resultsDiv.appendChild(resultDiv);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function addUrlTest(message, type = 'info') {
+            const resultsDiv = document.getElementById('url-tests');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        async function testStatut(statut) {
+            try {
+                const url = `${API_BASE}/exportateurs?page=0&size=10${statut ? `&statut=${statut}` : ''}`;
+                
+                addResult(`🧪 Test: Filtre Statut ${statut || 'Tous'}`, 'info');
+                addUrlTest(`URL: <code>${url}</code>`, 'info');
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                const count = data.content ? data.content.length : 0;
+                
+                addResult(`✅ Succès: ${count} résultats trouvés pour statut ${statut || 'Tous'}`, 'success');
+                
+                if (count > 0 && data.content) {
+                    const statuts = [...new Set(data.content.map(e => e.statut))];
+                    addResult(`Statuts trouvés: ${statuts.join(', ')}`, 'info');
+                    
+                    const examples = data.content.slice(0, 2).map(e => 
+                        `${e.nom} (${e.statut})`
+                    );
+                    addResult(`Exemples: ${examples.join(', ')}`, 'info');
+                }
+                
+                // Mettre à jour l'affichage spécifique
+                const resultDiv = document.getElementById(`result-${statut.toLowerCase() || 'all'}`);
+                if (resultDiv) {
+                    resultDiv.innerHTML = `
+                        <div class="test-result success">
+                            ✅ ${count} résultats<br>
+                            URL: <code>statut=${statut || '(vide)'}</code>
+                        </div>
+                    `;
+                }
+                
+                return true;
+            } catch (error) {
+                addResult(`❌ Erreur: ${error.message}`, 'error');
+                
+                const resultDiv = document.getElementById(`result-${statut.toLowerCase() || 'all'}`);
+                if (resultDiv) {
+                    resultDiv.innerHTML = `
+                        <div class="test-result error">
+                            ❌ Erreur: ${error.message}
+                        </div>
+                    `;
+                }
+                
+                return false;
+            }
+        }
+
+        // Test automatique au chargement
+        window.onload = function() {
+            addResult('Page de test chargée - Prêt pour les tests de statut', 'info');
+            addResult('Le problème était: Casting inutile value as StatutType', 'error');
+            addResult('Solution: Suppression du casting après correction du composant Select', 'success');
+            
+            // Test automatique de tous les statuts
+            setTimeout(() => {
+                addResult('🚀 Lancement des tests automatiques...', 'info');
+                testStatut('ACTIF');
+                setTimeout(() => testStatut('EXPIRE'), 500);
+                setTimeout(() => testStatut('SUSPENDU'), 1000);
+                setTimeout(() => testStatut(''), 1500);
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

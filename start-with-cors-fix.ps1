@@ -163,3 +163,4 @@ Write-Host "3. Vérifiez l'onglet Console pour les erreurs" -ForegroundColor Whi
 Write-Host "4. Testez les fonctionnalités d'exportateurs" -ForegroundColor White
 
 Write-Host "`n✅ Prêt à utiliser!" -ForegroundColor Green
+

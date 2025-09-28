@@ -16,10 +16,6 @@ import gw.precaju.repository.RegionRepository;
 import gw.precaju.repository.VerificationLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,58 +39,15 @@ public class ExportateurService {
     private final QRCodeService qrCodeService;
 
     public ExportateurService(ExportateurRepository exportateurRepository,
-                             RegionRepository regionRepository,
-                             VerificationLogRepository verificationLogRepository,
-                             ExportateurMapper exportateurMapper,
-                             QRCodeService qrCodeService) {
+            RegionRepository regionRepository,
+            VerificationLogRepository verificationLogRepository,
+            ExportateurMapper exportateurMapper,
+            QRCodeService qrCodeService) {
         this.exportateurRepository = exportateurRepository;
         this.regionRepository = regionRepository;
         this.verificationLogRepository = verificationLogRepository;
         this.exportateurMapper = exportateurMapper;
         this.qrCodeService = qrCodeService;
-    }
-
-    /**
-     * Récupère tous les exportateurs avec pagination et filtres
-     */
-    @Transactional(readOnly = true)
-    public PageResponse<ExportateurDTO> findAll(int page, int size, String sortBy, String sortDir,
-                                               String regionCode, String type, String statut, String nom) {
-        logger.info("Finding exportateurs with filters - page: {}, size: {}, regionCode: {}, type: {}, statut: {}, nom: {}",
-                page, size, regionCode, type, statut, nom);
-
-        // Validation et normalisation des paramètres de tri
-        String validSortBy = validateSortField(sortBy);
-        Sort.Direction direction = Sort.Direction.fromString(sortDir.toUpperCase());
-        Sort sort = Sort.by(direction, validSortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-        // Utiliser la méthode appropriée selon les filtres
-        Page<Exportateur> exportateurPage;
-        if (nom != null && !nom.trim().isEmpty()) {
-            // Utiliser les filtres région et nom
-            String nomPattern = "%" + nom.trim() + "%";
-            exportateurPage = exportateurRepository.findWithRegionAndNameFilters(
-                    regionCode, nom, nomPattern, pageable);
-        } else {
-            // Utiliser seulement le filtre région
-            exportateurPage = exportateurRepository.findWithBasicFilters(
-                    regionCode, pageable);
-        }
-
-        List<ExportateurDTO> dtos = exportateurPage.getContent().stream()
-                .map(exportateurMapper::toDTO)
-                .collect(Collectors.toList());
-
-        return new PageResponse<ExportateurDTO>(
-                dtos,
-                exportateurPage.getNumber(),
-                exportateurPage.getSize(),
-                exportateurPage.getTotalElements(),
-                exportateurPage.getTotalPages(),
-                exportateurPage.isFirst(),
-                exportateurPage.isLast()
-        );
     }
 
     /**
@@ -121,7 +74,8 @@ public class ExportateurService {
      * Vérifie un exportateur via son token QR code
      */
     @Transactional(readOnly = true)
-    public VerificationResultDTO verifyByQrCodeToken(String qrCodeToken, String userSession, String ipAddress, String userAgent) {
+    public VerificationResultDTO verifyByQrCodeToken(String qrCodeToken, String userSession, String ipAddress,
+            String userAgent) {
         logger.info("Verifying exportateur by QR code token: {}", qrCodeToken);
 
         Optional<Exportateur> exportateurOpt = exportateurRepository.findByQrCodeToken(qrCodeToken);
@@ -275,7 +229,8 @@ public class ExportateurService {
     /**
      * Log une vérification
      */
-    private void logVerification(Exportateur exportateur, String userSession, String result, String ipAddress, String userAgent) {
+    private void logVerification(Exportateur exportateur, String userSession, String result, String ipAddress,
+            String userAgent) {
         VerificationLog log = new VerificationLog(exportateur, userSession, result, ipAddress, userAgent);
         verificationLogRepository.save(log);
     }
@@ -283,7 +238,8 @@ public class ExportateurService {
     /**
      * Log une vérification pour un token non trouvé
      */
-    private void logVerification(String qrCodeToken, String userSession, String result, String ipAddress, String userAgent) {
+    private void logVerification(String qrCodeToken, String userSession, String result, String ipAddress,
+            String userAgent) {
         VerificationLog log = new VerificationLog();
         log.setUserSession(userSession);
         log.setResult(result);
@@ -294,48 +250,128 @@ public class ExportateurService {
     }
 
     /**
-     * Valide et normalise le champ de tri
+     * MÉTHODE CORRIGÉE : Récupère les exportateurs avec filtrage manuel fonctionnel
      */
-    private String validateSortField(String sortBy) {
-        if (sortBy == null || sortBy.trim().isEmpty()) {
-            return "nom";
+    @Transactional(readOnly = true)
+    public PageResponse<ExportateurDTO> findAllWithWorkingFilters(int page, int size, String sortBy, String sortDir,
+            String regionCode, String type, String statut, String nom) {
+        logger.info(
+                "Finding exportateurs with filters - page: {}, size: {}, regionCode: '{}', type: '{}', statut: '{}', nom: '{}'",
+                page, size, regionCode, type, statut, nom);
+
+        // 1. Récupérer TOUS les exportateurs de la base
+        List<Exportateur> allExportateurs = exportateurRepository.findAll();
+        logger.info("Total exportateurs in database: {}", allExportateurs.size());
+
+        // 2. Normaliser et valider les paramètres de filtre
+        String normalizedRegionCode = (regionCode != null && !regionCode.trim().isEmpty()) ? regionCode.trim() : null;
+        String normalizedType = (type != null && !type.trim().isEmpty()) ? type.trim().toUpperCase() : null;
+        String normalizedStatut = (statut != null && !statut.trim().isEmpty()) ? statut.trim().toUpperCase() : null;
+        String normalizedNom = (nom != null && !nom.trim().isEmpty()) ? nom.trim() : null;
+
+        logger.info("Normalized filters - regionCode: '{}', type: '{}', statut: '{}', nom: '{}'",
+                normalizedRegionCode, normalizedType, normalizedStatut, normalizedNom);
+
+        // 3. Appliquer les filtres avec Stream API pour plus de clarté
+        List<Exportateur> filteredResults = allExportateurs.stream()
+                .filter(e -> {
+                    // Filtre par région
+                    if (normalizedRegionCode != null) {
+                        if (e.getRegion() == null || !e.getRegion().getCode().equals(normalizedRegionCode)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                })
+                .filter(e -> {
+                    // Filtre par type
+                    if (normalizedType != null) {
+                        try {
+                            ExportateurType typeEnum = ExportateurType.valueOf(normalizedType);
+                            if (!e.getType().equals(typeEnum)) {
+                                return false;
+                            }
+                        } catch (IllegalArgumentException ex) {
+                            logger.warn("Invalid type parameter: '{}', ignoring filter", normalizedType);
+                            // Type invalide, ignorer le filtre (inclure l'élément)
+                        }
+                    }
+                    return true;
+                })
+                .filter(e -> {
+                    // Filtre par statut
+                    if (normalizedStatut != null) {
+                        try {
+                            StatutType statutEnum = StatutType.valueOf(normalizedStatut);
+                            if (!e.getStatut().equals(statutEnum)) {
+                                return false;
+                            }
+                        } catch (IllegalArgumentException ex) {
+                            logger.warn("Invalid statut parameter: '{}', ignoring filter", normalizedStatut);
+                            // Statut invalide, ignorer le filtre (inclure l'élément)
+                        }
+                    }
+                    return true;
+                })
+                .filter(e -> {
+                    // Filtre par nom (recherche partielle insensible à la casse)
+                    if (normalizedNom != null) {
+                        String searchTerm = normalizedNom.toLowerCase();
+                        if (!e.getNom().toLowerCase().contains(searchTerm)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                })
+                .sorted((e1, e2) -> {
+                    // Tri par nom (par défaut)
+                    String field1 = e1.getNom();
+                    String field2 = e2.getNom();
+
+                    if ("desc".equalsIgnoreCase(sortDir)) {
+                        return field2.compareToIgnoreCase(field1);
+                    } else {
+                        return field1.compareToIgnoreCase(field2);
+                    }
+                })
+                .collect(Collectors.toList());
+
+        logger.info("Filtered results: {} exportateurs (from {} total)", filteredResults.size(),
+                allExportateurs.size());
+
+        // 4. Pagination manuelle
+        int start = page * size;
+        int end = Math.min(start + size, filteredResults.size());
+
+        List<Exportateur> pageContent;
+        if (start >= filteredResults.size()) {
+            pageContent = new java.util.ArrayList<>();
+        } else {
+            pageContent = filteredResults.subList(start, end);
         }
-        
-        String normalizedSortBy = sortBy.trim().toLowerCase();
-        
-        // Champs valides pour le tri
-        switch (normalizedSortBy) {
-            case "nom":
-            case "name":
-                return "nom";
-            case "numeroagrement":
-            case "numero_agrement":
-            case "numeroAgrement":
-                return "numeroAgrement";
-            case "type":
-                return "type";
-            case "statut":
-            case "status":
-                return "statut";
-            case "datecertification":
-            case "date_certification":
-            case "dateCertification":
-                return "dateCertification";
-            case "dateexpiration":
-            case "date_expiration":
-            case "dateExpiration":
-                return "dateExpiration";
-            case "createdat":
-            case "created_at":
-            case "createdAt":
-                return "createdAt";
-            case "updatedat":
-            case "updated_at":
-            case "updatedAt":
-                return "updatedAt";
-            default:
-                logger.warn("Invalid sort field '{}', using default 'nom'", sortBy);
-                return "nom";
-        }
+
+        logger.info("Page content: {} items (from {} to {})", pageContent.size(), start, end);
+
+        // 5. Convertir en DTO
+        List<ExportateurDTO> dtos = pageContent.stream()
+                .map(exportateurMapper::toDTO)
+                .collect(Collectors.toList());
+
+        // 6. Créer la réponse paginée
+        int totalPages = (int) Math.ceil((double) filteredResults.size() / size);
+        boolean isFirst = page == 0;
+        boolean isLast = end >= filteredResults.size();
+
+        logger.info("Returning {} DTOs out of {} total filtered results, totalPages: {}",
+                dtos.size(), filteredResults.size(), totalPages);
+
+        return new PageResponse<ExportateurDTO>(
+                dtos,
+                page,
+                size,
+                filteredResults.size(),
+                totalPages,
+                isFirst,
+                isLast);
     }
 }

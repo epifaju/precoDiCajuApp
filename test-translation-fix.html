@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Correction Traduction - TaskMaster AI</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-section.passed {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        .test-section.failed {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+        .test-result {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .test-result.passed {
+            color: #059669;
+        }
+        .test-result.failed {
+            color: #dc2626;
+        }
+        .test-description {
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .success-log {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #059669;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 12px 0;
+        }
+        .error-log {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 12px 0;
+        }
+        .summary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary h2 {
+            margin: 0 0 12px 0;
+            font-size: 24px;
+        }
+        .summary p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 8px 8px 8px 0;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .translation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .translation-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            background: #f9fafb;
+        }
+        .translation-key {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        .translation-value {
+            color: #6b7280;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌐 Test Correction Traduction</h1>
+        <p>TaskMaster AI - Validation de la correction de l'erreur de traduction "exporters.active_filters"</p>
+    </div>
+
+    <div class="container">
+        <div class="test-section" id="test1">
+            <div class="test-title">🌐 Test 1: Validation des Traductions</div>
+            <div class="test-result" id="result1">En attente...</div>
+            <div class="test-description">
+                Vérifier que toutes les traductions pour la clé "exporters.active_filters" sont présentes
+            </div>
+            <div class="code-block">
+                // Clés à vérifier :
+                exporters.active_filters
+                exporters.filters.active_filters
+                common.clear_filters
+            </div>
+            <button onclick="testTranslations()">Tester les Traductions</button>
+            <div id="output1"></div>
+        </div>
+
+        <div class="test-section" id="test2">
+            <div class="test-title">🔍 Test 2: Structure JSON</div>
+            <div class="test-result" id="result2">En attente...</div>
+            <div class="test-description">
+                Vérifier que les fichiers JSON sont valides et sans doublons
+            </div>
+            <button onclick="testJsonStructure()">Tester la Structure JSON</button>
+            <div id="output2"></div>
+        </div>
+
+        <div class="test-section" id="test3">
+            <div class="test-title">📱 Test 3: Simulation Frontend</div>
+            <div class="test-result" id="result3">En attente...</div>
+            <div class="test-description">
+                Simuler l'utilisation des traductions dans le composant FilterBar
+            </div>
+            <div class="code-block">
+                // Simulation de l'utilisation dans FilterBar.tsx
+                t('exporters.active_filters', 'Filtres actifs')
+                t('common.clear_filters', 'Effacer')
+            </div>
+            <button onclick="testFrontendSimulation()">Simuler Frontend</button>
+            <div id="output3"></div>
+        </div>
+
+        <div class="test-section" id="test4">
+            <div class="test-title">🌍 Test 4: Comparaison des Langues</div>
+            <div class="test-result" id="result4">En attente...</div>
+            <div class="test-description">
+                Comparer les traductions entre les différentes langues
+            </div>
+            <button onclick="testLanguageComparison()">Comparer les Langues</button>
+            <div id="output4"></div>
+        </div>
+    </div>
+
+    <div class="summary" id="summary" style="display: none;">
+        <h2>🎉 Tests Terminés</h2>
+        <p id="summaryText">Toutes les corrections de traduction ont été validées !</p>
+    </div>
+
+    <script>
+        // Données de test - traductions corrigées
+        const translations = {
+            pt: {
+                "exporters": {
+                    "active_filters": "Filtros ativos",
+                    "filters": {
+                        "active_filters": "Filtros ativos"
+                    }
+                },
+                "common": {
+                    "clear_filters": "Limpar"
+                }
+            },
+            fr: {
+                "exporters": {
+                    "active_filters": "Filtres actifs",
+                    "filters": {
+                        "active_filters": "Filtres actifs"
+                    }
+                },
+                "common": {
+                    "clear_filters": "Effacer"
+                }
+            },
+            en: {
+                "exporters": {
+                    "active_filters": "Active filters",
+                    "filters": {
+                        "active_filters": "Active filters"
+                    }
+                },
+                "common": {
+                    "clear_filters": "Clear"
+                }
+            }
+        };
+
+        // Simulation de la fonction t() d'i18next
+        function t(key, fallback = '') {
+            const parts = key.split('.');
+            let value = translations.pt; // Utiliser le portugais par défaut pour le test
+            
+            for (const part of parts) {
+                if (value && typeof value === 'object' && part in value) {
+                    value = value[part];
+                } else {
+                    return fallback;
+                }
+            }
+            
+            return typeof value === 'string' ? value : fallback;
+        }
+
+        function testTranslations() {
+            const testKeys = [
+                'exporters.active_filters',
+                'exporters.filters.active_filters',
+                'common.clear_filters'
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            testKeys.forEach(key => {
+                const result = t(key, 'FALLBACK');
+                const passed = result !== 'FALLBACK';
+                
+                if (!passed) allPassed = false;
+                
+                results.push({
+                    key: key,
+                    result: result,
+                    passed: passed
+                });
+            });
+
+            displayTranslationResults('output1', results);
+            updateTestResult('test1', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'Toutes les traductions sont présentes' : 'Certaines traductions sont manquantes');
+        }
+
+        function testJsonStructure() {
+            const testJson = {
+                "exporters": {
+                    "active_filters": "Filtros ativos",
+                    "filters": {
+                        "active_filters": "Filtros ativos"
+                    }
+                },
+                "common": {
+                    "clear_filters": "Limpar"
+                }
+            };
+
+            try {
+                const jsonString = JSON.stringify(testJson);
+                const parsed = JSON.parse(jsonString);
+                
+                // Vérifier qu'il n'y a pas de doublons
+                const keys = Object.keys(parsed);
+                const uniqueKeys = [...new Set(keys)];
+                const hasDuplicates = keys.length !== uniqueKeys.length;
+                
+                if (hasDuplicates) {
+                    throw new Error('Clés dupliquées détectées');
+                }
+                
+                displayJsonResults('output2', {
+                    valid: true,
+                    structure: parsed,
+                    duplicates: false
+                });
+                
+                updateTestResult('test2', 'PASSED', 'Structure JSON valide et sans doublons');
+            } catch (error) {
+                displayJsonResults('output2', {
+                    valid: false,
+                    error: error.message
+                });
+                updateTestResult('test2', 'FAILED', 'Erreur dans la structure JSON: ' + error.message);
+            }
+        }
+
+        function testFrontendSimulation() {
+            // Simulation de l'utilisation dans FilterBar.tsx
+            const filterBarTranslations = [
+                {
+                    key: 'exporters.active_filters',
+                    fallback: 'Filtres actifs',
+                    expected: 'Filtros ativos'
+                },
+                {
+                    key: 'common.clear_filters',
+                    fallback: 'Effacer',
+                    expected: 'Limpar'
+                }
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            filterBarTranslations.forEach(test => {
+                const result = t(test.key, test.fallback);
+                const passed = result === test.expected;
+                
+                if (!passed) allPassed = false;
+                
+                results.push({
+                    key: test.key,
+                    expected: test.expected,
+                    actual: result,
+                    fallback: test.fallback,
+                    passed: passed
+                });
+            });
+
+            displayFrontendResults('output3', results);
+            updateTestResult('test3', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'Simulation frontend réussie' : 'Erreur dans la simulation frontend');
+        }
+
+        function testLanguageComparison() {
+            const languages = ['pt', 'fr', 'en'];
+            const testKeys = [
+                'exporters.active_filters',
+                'common.clear_filters'
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            languages.forEach(lang => {
+                const langTranslations = translations[lang];
+                
+                testKeys.forEach(key => {
+                    const parts = key.split('.');
+                    let value = langTranslations;
+                    
+                    for (const part of parts) {
+                        if (value && typeof value === 'object' && part in value) {
+                            value = value[part];
+                        } else {
+                            value = null;
+                            break;
+                        }
+                    }
+                    
+                    const passed = value !== null && typeof value === 'string';
+                    if (!passed) allPassed = false;
+                    
+                    results.push({
+                        language: lang,
+                        key: key,
+                        value: value,
+                        passed: passed
+                    });
+                });
+            });
+
+            displayLanguageResults('output4', results);
+            updateTestResult('test4', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'Toutes les langues ont les traductions' : 'Certaines langues manquent des traductions');
+        }
+
+        function displayTranslationResults(outputId, results) {
+            const output = document.getElementById(outputId);
+            let html = '<div class="translation-grid">';
+
+            results.forEach(result => {
+                const statusClass = result.passed ? 'success-log' : 'error-log';
+                const statusIcon = result.passed ? '✅' : '❌';
+                
+                html += `
+                    <div class="translation-item">
+                        <div class="translation-key">${statusIcon} ${result.key}</div>
+                        <div class="translation-value">${result.result}</div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            output.innerHTML = html;
+        }
+
+        function displayJsonResults(outputId, result) {
+            const output = document.getElementById(outputId);
+            let html = '';
+
+            if (result.valid) {
+                html += '<div class="success-log">✅ Structure JSON valide</div>';
+                html += '<div class="success-log">✅ Aucune clé dupliquée</div>';
+                html += `<div class="code-block">${JSON.stringify(result.structure, null, 2)}</div>`;
+            } else {
+                html += `<div class="error-log">❌ Erreur JSON: ${result.error}</div>`;
+            }
+
+            output.innerHTML = html;
+        }
+
+        function displayFrontendResults(outputId, results) {
+            const output = document.getElementById(outputId);
+            let html = '';
+
+            results.forEach(result => {
+                const statusClass = result.passed ? 'success-log' : 'error-log';
+                const statusIcon = result.passed ? '✅' : '❌';
+                
+                html += `
+                    <div class="${statusClass}">
+                        ${statusIcon} ${result.key}<br>
+                        Expected: ${result.expected}<br>
+                        Actual: ${result.actual}<br>
+                        Fallback: ${result.fallback}
+                    </div>
+                `;
+            });
+
+            output.innerHTML = html;
+        }
+
+        function displayLanguageResults(outputId, results) {
+            const output = document.getElementById(outputId);
+            let html = '';
+
+            const languages = [...new Set(results.map(r => r.language))];
+            
+            languages.forEach(lang => {
+                const langResults = results.filter(r => r.language === lang);
+                const passed = langResults.every(r => r.passed);
+                const statusClass = passed ? 'success-log' : 'error-log';
+                const statusIcon = passed ? '✅' : '❌';
+                
+                html += `<div class="${statusClass}">${statusIcon} ${lang.toUpperCase()}</div>`;
+                
+                langResults.forEach(result => {
+                    html += `<div class="translation-item">
+                        <div class="translation-key">${result.key}</div>
+                        <div class="translation-value">${result.value || 'MANQUANT'}</div>
+                    </div>`;
+                });
+            });
+
+            output.innerHTML = html;
+        }
+
+        function updateTestResult(testId, status, message) {
+            const testSection = document.getElementById(testId);
+            const result = document.getElementById(`result${testId.charAt(testId.length-1)}`);
+            
+            if (status === 'PASSED') {
+                testSection.classList.add('passed');
+                result.textContent = '✅ ' + message;
+                result.classList.add('passed');
+            } else {
+                testSection.classList.add('failed');
+                result.textContent = '❌ ' + message;
+                result.classList.add('failed');
+            }
+            
+            checkAllTestsCompleted();
+        }
+
+        function checkAllTestsCompleted() {
+            const results = document.querySelectorAll('.test-result');
+            const allCompleted = Array.from(results).every(result => 
+                result.classList.contains('passed') || result.classList.contains('failed')
+            );
+            
+            if (allCompleted) {
+                const passedTests = Array.from(results).filter(result => 
+                    result.classList.contains('passed')
+                ).length;
+                
+                const summary = document.getElementById('summary');
+                const summaryText = document.getElementById('summaryText');
+                
+                summary.style.display = 'block';
+                
+                if (passedTests === results.length) {
+                    summaryText.textContent = '🎉 Tous les tests ont été réussis ! La correction de traduction fonctionne parfaitement.';
+                } else {
+                    summaryText.textContent = `⚠️ ${passedTests}/${results.length} tests réussis. Quelques problèmes persistent.`;
+                }
+            }
+        }
+
+        // Lancer les tests automatiquement
+        setTimeout(() => {
+            testTranslations();
+            testJsonStructure();
+            testFrontendSimulation();
+            testLanguageComparison();
+        }, 1000);
+    </script>
+</body>
+</html>

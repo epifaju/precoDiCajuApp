@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse du Problème des Statuts Expirés</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .problem-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .exportateur-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-actif {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-expire {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-suspendu {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Analyse du Problème des Statuts Expirés</h1>
+        <p>Ce test analyse pourquoi tous les exportateurs sont marqués comme "Expiré" avec un triangle d'attention.</p>
+        
+        <div class="problem-section">
+            <h2>📋 Problème Identifié</h2>
+            <div class="test-result error">
+                <h3>❌ Symptôme</h3>
+                <p>Tous les exportateurs sont affichés comme "Expiré" avec un triangle d'attention, même ceux qui devraient être actifs.</p>
+            </div>
+            
+            <div class="test-result warning">
+                <h3>🔍 Cause Racine</h3>
+                <p><strong>Dates d'expiration dans le passé :</strong></p>
+                <ul>
+                    <li>Date actuelle : <strong>28 septembre 2025</strong></li>
+                    <li>Dates d'expiration des exportateurs : <strong>janvier-février 2025</strong></li>
+                    <li>Toutes les certifications sont donc <strong>expirées</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="problem-section">
+            <h2>🧪 Test des Données</h2>
+            <button onclick="loadExportateurs()">Charger les Exportateurs</button>
+            <div id="exportateurs-list"></div>
+        </div>
+
+        <div class="problem-section">
+            <h2>🔧 Logique de Calcul du Statut</h2>
+            <div class="test-result info">
+                <h3>Backend - Méthodes de l'entité Exportateur</h3>
+                <pre><code>public boolean isActif() {
+    return StatutType.ACTIF.equals(this.statut) && 
+           !LocalDate.now().isAfter(this.dateExpiration);
+}
+
+public boolean isExpire() {
+    return LocalDate.now().isAfter(this.dateExpiration);
+}
+
+public boolean isSuspendu() {
+    return StatutType.SUSPENDU.equals(this.statut);
+}</code></pre>
+            </div>
+            
+            <div class="test-result warning">
+                <h3>Analyse de la Logique</h3>
+                <p>✅ <strong>La logique est correcte :</strong></p>
+                <ul>
+                    <li><code>isActif()</code> retourne <code>true</code> seulement si le statut est ACTIF ET que la date d'expiration n'est pas dépassée</li>
+                    <li><code>isExpire()</code> retourne <code>true</code> si la date d'expiration est dépassée</li>
+                    <li><code>isSuspendu()</code> retourne <code>true</code> si le statut est SUSPENDU</li>
+                </ul>
+                <p>❌ <strong>Le problème :</strong> Les dates d'expiration sont dans le passé</p>
+            </div>
+        </div>
+
+        <div class="problem-section">
+            <h2>✅ Solutions Proposées</h2>
+            
+            <div class="test-result success">
+                <h3>Solution 1 : Mise à jour des dates d'expiration</h3>
+                <p>Mettre à jour toutes les dates d'expiration pour qu'elles soient dans le futur (2026) :</p>
+                <pre><code>UPDATE exportateurs 
+SET date_expiration = '2026-01-15' 
+WHERE date_expiration < CURRENT_DATE;</code></pre>
+            </div>
+            
+            <div class="test-result success">
+                <h3>Solution 2 : Création de nouveaux exportateurs</h3>
+                <p>Créer de nouveaux exportateurs avec des dates d'expiration futures pour les tests.</p>
+            </div>
+            
+            <div class="test-result info">
+                <h3>Solution 3 : Modification temporaire de la logique</h3>
+                <p>Pour les tests, modifier temporairement la logique pour ignorer les dates d'expiration :</p>
+                <pre><code>public boolean isActif() {
+    return StatutType.ACTIF.equals(this.statut);
+    // Ignorer la date d'expiration pour les tests
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="problem-section">
+            <h2>📊 Résultats Attendus</h2>
+            <div class="test-result success">
+                <h3>Après correction, les exportateurs devraient avoir :</h3>
+                <ul>
+                    <li><span class="status-badge status-actif">Actif: true</span></li>
+                    <li><span class="status-badge status-expire">Expire: false</span></li>
+                    <li><span class="status-badge status-suspendu">Suspendu: false</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="problem-section">
+            <h2>📝 Conclusion</h2>
+            <div class="test-result info">
+                <p><strong>Le problème n'est pas dans le code, mais dans les données de test.</strong></p>
+                <p>Les dates d'expiration sont dans le passé, ce qui est correctement détecté par la logique métier.</p>
+                <p><strong>Solution recommandée :</strong> Mettre à jour les dates d'expiration dans la base de données.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api/v1';
+        
+        async function loadExportateurs() {
+            try {
+                const response = await fetch(`${API_BASE}/exportateurs?size=10`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                const exportateurs = data.content || [];
+                
+                const listDiv = document.getElementById('exportateurs-list');
+                listDiv.innerHTML = '<h3>Données des Exportateurs :</h3>';
+                
+                exportateurs.forEach(exportateur => {
+                    const statusClass = exportateur.actif ? 'status-actif' : 
+                                      exportateur.expire ? 'status-expire' : 
+                                      exportateur.suspendu ? 'status-suspendu' : 'status-expire';
+                    
+                    const statusText = exportateur.actif ? 'Actif' : 
+                                     exportateur.expire ? 'Expiré' : 
+                                     exportateur.suspendu ? 'Suspendu' : 'Inconnu';
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'exportateur-item';
+                    itemDiv.innerHTML = `
+                        <strong>${exportateur.nom}</strong><br>
+                        Statut: <span class="status-badge ${statusClass}">${exportateur.statut}</span><br>
+                        Date d'expiration: <strong>${exportateur.dateExpiration}</strong><br>
+                        Calculé: <span class="status-badge ${statusClass}">${statusText}</span><br>
+                        Actif: ${exportateur.actif}, Expiré: ${exportateur.expire}, Suspendu: ${exportateur.suspendu}
+                    `;
+                    listDiv.appendChild(itemDiv);
+                });
+                
+            } catch (error) {
+                document.getElementById('exportateurs-list').innerHTML = 
+                    `<div class="test-result error">Erreur: ${error.message}</div>`;
+            }
+        }
+        
+        // Charger automatiquement au démarrage
+        window.onload = function() {
+            loadExportateurs();
+        };
+    </script>
+</body>
+</html>

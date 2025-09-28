@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Filtres Avancés - Exportateurs Agréés</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            color: #2563eb;
+            margin-top: 0;
+        }
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .filter-group label {
+            font-weight: bold;
+            min-width: 100px;
+        }
+        .filter-group select, .filter-group input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            min-width: 150px;
+        }
+        .results {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .result-item {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border-left: 4px solid #2563eb;
+        }
+        .result-item h4 {
+            margin: 0 0 5px 0;
+            color: #1f2937;
+        }
+        .result-item p {
+            margin: 2px 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.ACTIF { background: #dcfce7; color: #166534; }
+        .status.EXPIRE { background: #fef3c7; color: #92400e; }
+        .status.SUSPENDU { background: #fee2e2; color: #991b1b; }
+        .type {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Test des Filtres Avancés - Exportateurs Agréés</h1>
+        <p>Cette page teste la fonctionnalité des filtres avancés pour les Exportateurs Agréés.</p>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCount">-</div>
+                <div class="stat-label">Total Exportateurs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeCount">-</div>
+                <div class="stat-label">Actifs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="expiredCount">-</div>
+                <div class="stat-label">Expirés</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="suspendedCount">-</div>
+                <div class="stat-label">Suspendus</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🎯 Tests de Filtres</h2>
+        
+        <div class="test-section">
+            <h3>Test 1: Tous les exportateurs (sans filtres)</h3>
+            <button onclick="testAllExporters()">Charger tous les exportateurs</button>
+            <div id="test1-results" class="results" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 2: Filtre par région</h3>
+            <div class="filter-group">
+                <label>Région:</label>
+                <select id="regionFilter">
+                    <option value="">Toutes les régions</option>
+                    <option value="BI">Bissau</option>
+                    <option value="CA">Cacheu</option>
+                    <option value="OI">Oio</option>
+                    <option value="BA">Bafatá</option>
+                    <option value="GA">Gabú</option>
+                    <option value="TO">Tombali</option>
+                    <option value="QU">Quinara</option>
+                    <option value="BO">Bolama</option>
+                </select>
+                <button onclick="testRegionFilter()">Tester filtre région</button>
+            </div>
+            <div id="test2-results" class="results" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 3: Filtre par type</h3>
+            <div class="filter-group">
+                <label>Type:</label>
+                <select id="typeFilter">
+                    <option value="">Tous les types</option>
+                    <option value="EXPORTATEUR">Exportateur</option>
+                    <option value="ACHETEUR_LOCAL">Acheteur Local</option>
+                </select>
+                <button onclick="testTypeFilter()">Tester filtre type</button>
+            </div>
+            <div id="test3-results" class="results" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 4: Filtre par statut</h3>
+            <div class="filter-group">
+                <label>Statut:</label>
+                <select id="statutFilter">
+                    <option value="">Tous les statuts</option>
+                    <option value="ACTIF">Actif</option>
+                    <option value="EXPIRE">Expiré</option>
+                    <option value="SUSPENDU">Suspendu</option>
+                </select>
+                <button onclick="testStatutFilter()">Tester filtre statut</button>
+            </div>
+            <div id="test4-results" class="results" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 5: Filtre par nom (recherche)</h3>
+            <div class="filter-group">
+                <label>Nom:</label>
+                <input type="text" id="nomFilter" placeholder="Entrez un nom à rechercher">
+                <button onclick="testNomFilter()">Tester filtre nom</button>
+            </div>
+            <div id="test5-results" class="results" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 6: Filtres combinés</h3>
+            <div class="filter-group">
+                <label>Région:</label>
+                <select id="combinedRegion">
+                    <option value="">Toutes</option>
+                    <option value="BI">Bissau</option>
+                    <option value="CA">Cacheu</option>
+                    <option value="OI">Oio</option>
+                </select>
+                <label>Type:</label>
+                <select id="combinedType">
+                    <option value="">Tous</option>
+                    <option value="EXPORTATEUR">Exportateur</option>
+                    <option value="ACHETEUR_LOCAL">Acheteur Local</option>
+                </select>
+                <label>Statut:</label>
+                <select id="combinedStatut">
+                    <option value="">Tous</option>
+                    <option value="ACTIF">Actif</option>
+                    <option value="EXPIRE">Expiré</option>
+                    <option value="SUSPENDU">Suspendu</option>
+                </select>
+                <button onclick="testCombinedFilters()">Tester filtres combinés</button>
+            </div>
+            <div id="test6-results" class="results" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api/v1/exportateurs';
+
+        // Fonction pour faire une requête API
+        async function fetchExportateurs(params = {}) {
+            const url = new URL(API_BASE_URL);
+            
+            // Ajouter les paramètres
+            Object.keys(params).forEach(key => {
+                if (params[key] !== '' && params[key] !== null && params[key] !== undefined) {
+                    url.searchParams.append(key, params[key]);
+                }
+            });
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Erreur API:', error);
+                throw error;
+            }
+        }
+
+        // Fonction pour afficher les résultats
+        function displayResults(containerId, data, description) {
+            const container = document.getElementById(containerId);
+            container.style.display = 'block';
+            
+            if (data.error) {
+                container.innerHTML = `<div class="error">❌ Erreur: ${data.error}</div>`;
+                return;
+            }
+
+            const results = data.content || [];
+            const totalElements = data.totalElements || 0;
+            
+            let html = `
+                <div class="success">✅ ${description}</div>
+                <p><strong>Résultats trouvés:</strong> ${results.length} sur ${totalElements} total</p>
+            `;
+
+            if (results.length === 0) {
+                html += '<p>Aucun exportateur trouvé avec ces critères.</p>';
+            } else {
+                results.forEach(exp => {
+                    html += `
+                        <div class="result-item">
+                            <h4>${exp.nom}</h4>
+                            <p><strong>Numéro d'agrément:</strong> ${exp.numeroAgrement}</p>
+                            <p><strong>Type:</strong> <span class="type">${exp.type}</span></p>
+                            <p><strong>Statut:</strong> <span class="status ${exp.statut}">${exp.statut}</span></p>
+                            <p><strong>Région:</strong> ${exp.regionCode}</p>
+                            <p><strong>Téléphone:</strong> ${exp.telephone || 'N/A'}</p>
+                            <p><strong>Email:</strong> ${exp.email || 'N/A'}</p>
+                            <p><strong>Date d'expiration:</strong> ${exp.dateExpiration}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Fonction pour mettre à jour les statistiques
+        async function updateStats() {
+            try {
+                const data = await fetchExportateurs();
+                const exporters = data.content || [];
+                
+                document.getElementById('totalCount').textContent = data.totalElements || 0;
+                document.getElementById('activeCount').textContent = exporters.filter(e => e.statut === 'ACTIF').length;
+                document.getElementById('expiredCount').textContent = exporters.filter(e => e.statut === 'EXPIRE').length;
+                document.getElementById('suspendedCount').textContent = exporters.filter(e => e.statut === 'SUSPENDU').length;
+            } catch (error) {
+                console.error('Erreur lors du chargement des statistiques:', error);
+            }
+        }
+
+        // Tests individuels
+        async function testAllExporters() {
+            try {
+                const data = await fetchExportateurs();
+                displayResults('test1-results', data, 'Tous les exportateurs chargés avec succès');
+            } catch (error) {
+                displayResults('test1-results', { error: error.message }, 'Erreur lors du chargement');
+            }
+        }
+
+        async function testRegionFilter() {
+            const region = document.getElementById('regionFilter').value;
+            try {
+                const data = await fetchExportateurs({ regionCode: region });
+                displayResults('test2-results', data, `Filtre par région "${region}" appliqué avec succès`);
+            } catch (error) {
+                displayResults('test2-results', { error: error.message }, 'Erreur lors du filtrage par région');
+            }
+        }
+
+        async function testTypeFilter() {
+            const type = document.getElementById('typeFilter').value;
+            try {
+                const data = await fetchExportateurs({ type: type });
+                displayResults('test3-results', data, `Filtre par type "${type}" appliqué avec succès`);
+            } catch (error) {
+                displayResults('test3-results', { error: error.message }, 'Erreur lors du filtrage par type');
+            }
+        }
+
+        async function testStatutFilter() {
+            const statut = document.getElementById('statutFilter').value;
+            try {
+                const data = await fetchExportateurs({ statut: statut });
+                displayResults('test4-results', data, `Filtre par statut "${statut}" appliqué avec succès`);
+            } catch (error) {
+                displayResults('test4-results', { error: error.message }, 'Erreur lors du filtrage par statut');
+            }
+        }
+
+        async function testNomFilter() {
+            const nom = document.getElementById('nomFilter').value;
+            try {
+                const data = await fetchExportateurs({ nom: nom });
+                displayResults('test5-results', data, `Filtre par nom "${nom}" appliqué avec succès`);
+            } catch (error) {
+                displayResults('test5-results', { error: error.message }, 'Erreur lors du filtrage par nom');
+            }
+        }
+
+        async function testCombinedFilters() {
+            const region = document.getElementById('combinedRegion').value;
+            const type = document.getElementById('combinedType').value;
+            const statut = document.getElementById('combinedStatut').value;
+            
+            const params = {};
+            if (region) params.regionCode = region;
+            if (type) params.type = type;
+            if (statut) params.statut = statut;
+            
+            try {
+                const data = await fetchExportateurs(params);
+                const filterDesc = Object.keys(params).map(key => `${key}=${params[key]}`).join(', ');
+                displayResults('test6-results', data, `Filtres combinés (${filterDesc}) appliqués avec succès`);
+            } catch (error) {
+                displayResults('test6-results', { error: error.message }, 'Erreur lors du filtrage combiné');
+            }
+        }
+
+        // Charger les statistiques au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+        });
+    </script>
+</body>
+</html>

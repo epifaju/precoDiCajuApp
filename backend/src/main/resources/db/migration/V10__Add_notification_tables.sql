@@ -136,3 +136,4 @@ COMMENT ON FUNCTION notify_price_change() IS 'Trigger qui détecte les variation
 
 
 
+

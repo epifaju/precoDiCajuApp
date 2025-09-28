@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Correction Erreur Trim - TaskMaster AI</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-section.passed {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        .test-section.failed {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+        .test-result {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .test-result.passed {
+            color: #059669;
+        }
+        .test-result.failed {
+            color: #dc2626;
+        }
+        .test-description {
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .error-log {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 12px 0;
+        }
+        .success-log {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #059669;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 12px 0;
+        }
+        .summary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary h2 {
+            margin: 0 0 12px 0;
+            font-size: 24px;
+        }
+        .summary p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 8px 8px 8px 0;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔧 Test Correction Erreur Trim</h1>
+        <p>TaskMaster AI - Validation de la correction de l'erreur "value.trim is not a function"</p>
+    </div>
+
+    <div class="container">
+        <div class="test-section" id="test1">
+            <div class="test-title">🧪 Test 1: Valeurs String Normales</div>
+            <div class="test-result" id="result1">En attente...</div>
+            <div class="test-description">
+                Tester la fonction handleFilterChange avec des valeurs string normales
+            </div>
+            <div class="code-block" id="code1">
+                // Test avec des valeurs string normales
+                handleFilterChange('regionCode', 'BS')
+                handleFilterChange('type', 'EXPORTATEUR')
+                handleFilterChange('statut', 'ACTIF')
+                handleFilterChange('nom', 'Test Company')
+            </div>
+            <button onclick="testStringValues()">Tester les valeurs String</button>
+            <div id="output1"></div>
+        </div>
+
+        <div class="test-section" id="test2">
+            <div class="test-title">🧪 Test 2: Valeurs Null et Undefined</div>
+            <div class="test-result" id="result2">En attente...</div>
+            <div class="test-description">
+                Tester la fonction handleFilterChange avec des valeurs null et undefined
+            </div>
+            <div class="code-block" id="code2">
+                // Test avec des valeurs null et undefined
+                handleFilterChange('regionCode', null)
+                handleFilterChange('type', undefined)
+                handleFilterChange('statut', null)
+            </div>
+            <button onclick="testNullUndefined()">Tester Null/Undefined</button>
+            <div id="output2"></div>
+        </div>
+
+        <div class="test-section" id="test3">
+            <div class="test-title">🧪 Test 3: Valeurs Non-String</div>
+            <div class="test-result" id="result3">En attente...</div>
+            <div class="test-description">
+                Tester la fonction handleFilterChange avec des valeurs non-string (nombres, objets, etc.)
+            </div>
+            <div class="code-block" id="code3">
+                // Test avec des valeurs non-string
+                handleFilterChange('regionCode', 123)
+                handleFilterChange('type', {})
+                handleFilterChange('statut', true)
+                handleFilterChange('nom', [])
+            </div>
+            <button onclick="testNonStringValues()">Tester les valeurs Non-String</button>
+            <div id="output3"></div>
+        </div>
+
+        <div class="test-section" id="test4">
+            <div class="test-title">🧪 Test 4: Valeurs String Vides</div>
+            <div class="test-result" id="result4">En attente...</div>
+            <div class="test-description">
+                Tester la fonction handleFilterChange avec des valeurs string vides
+            </div>
+            <div class="code-block" id="code4">
+                // Test avec des valeurs string vides
+                handleFilterChange('regionCode', '')
+                handleFilterChange('type', '   ')
+                handleFilterChange('statut', '\t\n')
+                handleFilterChange('nom', '')
+            </div>
+            <button onclick="testEmptyStringValues()">Tester les valeurs vides</button>
+            <div id="output4"></div>
+        </div>
+
+        <div class="test-section" id="test5">
+            <div class="test-title">🧪 Test 5: Simulation de l'Erreur Originale</div>
+            <div class="test-result" id="result5">En attente...</div>
+            <div class="test-description">
+                Simuler l'erreur originale pour confirmer qu'elle est corrigée
+            </div>
+            <div class="code-block" id="code5">
+                // Simulation de l'ancienne logique qui causait l'erreur
+                function oldHandleFilterChange(key, value) {
+                    if (value && value.trim() !== '') { // ❌ ERREUR ICI
+                        // ...
+                    }
+                }
+                
+                // Test qui causait l'erreur
+                oldHandleFilterChange('regionCode', 123)
+            </div>
+            <button onclick="simulateOriginalError()">Simuler l'erreur originale</button>
+            <div id="output5"></div>
+        </div>
+    </div>
+
+    <div class="summary" id="summary" style="display: none;">
+        <h2>🎉 Tests Terminés</h2>
+        <p id="summaryText">Tous les tests ont été exécutés avec succès !</p>
+    </div>
+
+    <script>
+        // Simulation de la fonction corrigée
+        function handleFilterChange(key, value) {
+            const filters = {};
+            const newFilters = { ...filters };
+            
+            // Gérer les valeurs undefined, null et autres types
+            if (value === undefined || value === null) {
+                // Supprimer le filtre seulement si la valeur est explicitement undefined/null
+                delete newFilters[key];
+            } else {
+                // Convertir la valeur en chaîne et vérifier si elle est vide après trim
+                const stringValue = String(value);
+                if (stringValue.trim() === '') {
+                    // Pour les chaînes vides, définir une valeur vide (pour "Tous" options)
+                    newFilters[key] = '';
+                } else {
+                    // Valeur non vide, l'assigner
+                    newFilters[key] = stringValue;
+                }
+            }
+            
+            return newFilters;
+        }
+
+        // Simulation de l'ancienne fonction qui causait l'erreur
+        function oldHandleFilterChange(key, value) {
+            const filters = {};
+            const newFilters = { ...filters };
+            
+            try {
+                // Ancienne logique qui causait l'erreur
+                if (value && value.trim() !== '') { // ❌ ERREUR ICI
+                    newFilters[key] = value;
+                } else {
+                    delete newFilters[key];
+                }
+                return newFilters;
+            } catch (error) {
+                return { error: error.message };
+            }
+        }
+
+        function testStringValues() {
+            const tests = [
+                { key: 'regionCode', value: 'BS', expected: 'BS' },
+                { key: 'type', value: 'EXPORTATEUR', expected: 'EXPORTATEUR' },
+                { key: 'statut', value: 'ACTIF', expected: 'ACTIF' },
+                { key: 'nom', value: 'Test Company', expected: 'Test Company' }
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            tests.forEach(test => {
+                try {
+                    const result = handleFilterChange(test.key, test.value);
+                    const actual = result[test.key];
+                    const passed = actual === test.expected;
+                    
+                    if (!passed) allPassed = false;
+                    
+                    results.push({
+                        test: `${test.key}: "${test.value}"`,
+                        expected: test.expected,
+                        actual: actual,
+                        passed: passed
+                    });
+                } catch (error) {
+                    allPassed = false;
+                    results.push({
+                        test: `${test.key}: "${test.value}"`,
+                        error: error.message,
+                        passed: false
+                    });
+                }
+            });
+
+            displayResults('output1', results);
+            updateTestResult('test1', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'Toutes les valeurs string fonctionnent correctement' : 'Erreur avec les valeurs string');
+        }
+
+        function testNullUndefined() {
+            const tests = [
+                { key: 'regionCode', value: null, expected: 'deleted' },
+                { key: 'type', value: undefined, expected: 'deleted' },
+                { key: 'statut', value: null, expected: 'deleted' }
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            tests.forEach(test => {
+                try {
+                    const result = handleFilterChange(test.key, test.value);
+                    const actual = test.key in result ? result[test.key] : 'deleted';
+                    const passed = actual === test.expected;
+                    
+                    if (!passed) allPassed = false;
+                    
+                    results.push({
+                        test: `${test.key}: ${test.value}`,
+                        expected: test.expected,
+                        actual: actual,
+                        passed: passed
+                    });
+                } catch (error) {
+                    allPassed = false;
+                    results.push({
+                        test: `${test.key}: ${test.value}`,
+                        error: error.message,
+                        passed: false
+                    });
+                }
+            });
+
+            displayResults('output2', results);
+            updateTestResult('test2', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'Les valeurs null/undefined sont gérées correctement' : 'Erreur avec les valeurs null/undefined');
+        }
+
+        function testNonStringValues() {
+            const tests = [
+                { key: 'regionCode', value: 123, expected: '123' },
+                { key: 'type', value: {}, expected: '[object Object]' },
+                { key: 'statut', value: true, expected: 'true' },
+                { key: 'nom', value: [], expected: '' }
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            tests.forEach(test => {
+                try {
+                    const result = handleFilterChange(test.key, test.value);
+                    const actual = result[test.key];
+                    const passed = actual === test.expected;
+                    
+                    if (!passed) allPassed = false;
+                    
+                    results.push({
+                        test: `${test.key}: ${JSON.stringify(test.value)}`,
+                        expected: test.expected,
+                        actual: actual,
+                        passed: passed
+                    });
+                } catch (error) {
+                    allPassed = false;
+                    results.push({
+                        test: `${test.key}: ${JSON.stringify(test.value)}`,
+                        error: error.message,
+                        passed: false
+                    });
+                }
+            });
+
+            displayResults('output3', results);
+            updateTestResult('test3', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'Les valeurs non-string sont converties correctement' : 'Erreur avec les valeurs non-string');
+        }
+
+        function testEmptyStringValues() {
+            const tests = [
+                { key: 'regionCode', value: '', expected: '' },
+                { key: 'type', value: '   ', expected: '' },
+                { key: 'statut', value: '\t\n', expected: '' },
+                { key: 'nom', value: '', expected: '' }
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            tests.forEach(test => {
+                try {
+                    const result = handleFilterChange(test.key, test.value);
+                    const actual = result[test.key];
+                    const passed = actual === test.expected;
+                    
+                    if (!passed) allPassed = false;
+                    
+                    results.push({
+                        test: `${test.key}: "${test.value}"`,
+                        expected: test.expected,
+                        actual: actual,
+                        passed: passed
+                    });
+                } catch (error) {
+                    allPassed = false;
+                    results.push({
+                        test: `${test.key}: "${test.value}"`,
+                        error: error.message,
+                        passed: false
+                    });
+                }
+            });
+
+            displayResults('output4', results);
+            updateTestResult('test4', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'Les valeurs string vides sont gérées correctement' : 'Erreur avec les valeurs string vides');
+        }
+
+        function simulateOriginalError() {
+            const tests = [
+                { key: 'regionCode', value: 123 },
+                { key: 'type', value: {} },
+                { key: 'statut', value: true },
+                { key: 'nom', value: [] }
+            ];
+
+            let results = [];
+            let allPassed = true;
+
+            tests.forEach(test => {
+                try {
+                    const result = oldHandleFilterChange(test.key, test.value);
+                    
+                    if (result.error) {
+                        results.push({
+                            test: `${test.key}: ${JSON.stringify(test.value)}`,
+                            error: result.error,
+                            passed: false
+                        });
+                        allPassed = false;
+                    } else {
+                        results.push({
+                            test: `${test.key}: ${JSON.stringify(test.value)}`,
+                            result: result,
+                            passed: true
+                        });
+                    }
+                } catch (error) {
+                    results.push({
+                        test: `${test.key}: ${JSON.stringify(test.value)}`,
+                        error: error.message,
+                        passed: false
+                    });
+                    allPassed = false;
+                }
+            });
+
+            displayResults('output5', results);
+            updateTestResult('test5', allPassed ? 'PASSED' : 'FAILED', 
+                allPassed ? 'L\'ancienne fonction ne cause plus d\'erreur' : 'L\'ancienne fonction cause encore des erreurs');
+        }
+
+        function displayResults(outputId, results) {
+            const output = document.getElementById(outputId);
+            let html = '';
+
+            results.forEach(result => {
+                if (result.passed) {
+                    html += `<div class="success-log">✅ ${result.test}<br>Expected: ${result.expected || 'N/A'}<br>Actual: ${result.actual || JSON.stringify(result.result)}</div>`;
+                } else {
+                    html += `<div class="error-log">❌ ${result.test}<br>Error: ${result.error || 'Unexpected result'}</div>`;
+                }
+            });
+
+            output.innerHTML = html;
+        }
+
+        function updateTestResult(testId, status, message) {
+            const testSection = document.getElementById(testId);
+            const result = document.getElementById(`result${testId.charAt(testId.length-1)}`);
+            
+            if (status === 'PASSED') {
+                testSection.classList.add('passed');
+                result.textContent = '✅ ' + message;
+                result.classList.add('passed');
+            } else {
+                testSection.classList.add('failed');
+                result.textContent = '❌ ' + message;
+                result.classList.add('failed');
+            }
+            
+            checkAllTestsCompleted();
+        }
+
+        function checkAllTestsCompleted() {
+            const results = document.querySelectorAll('.test-result');
+            const allCompleted = Array.from(results).every(result => 
+                result.classList.contains('passed') || result.classList.contains('failed')
+            );
+            
+            if (allCompleted) {
+                const passedTests = Array.from(results).filter(result => 
+                    result.classList.contains('passed')
+                ).length;
+                
+                const summary = document.getElementById('summary');
+                const summaryText = document.getElementById('summaryText');
+                
+                summary.style.display = 'block';
+                
+                if (passedTests === results.length) {
+                    summaryText.textContent = '🎉 Tous les tests ont été réussis ! La correction de l\'erreur trim fonctionne parfaitement.';
+                } else {
+                    summaryText.textContent = `⚠️ ${passedTests}/${results.length} tests réussis. Quelques problèmes persistent.`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

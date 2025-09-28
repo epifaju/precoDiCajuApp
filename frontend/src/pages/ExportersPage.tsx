@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useExporters } from '../hooks/useExporters';
+import { useExporters, useExporterStats } from '../hooks/useExporters';
 import { useRegions } from '../hooks/useApi';
 import { Exportateur, ExportateurFilters } from '../types/exporter';
 import { ExporterCard } from '../components/exporters/ExporterCard';
@@ -38,6 +38,7 @@ const ExportersPage: React.FC = () => {
 
   // Hooks
   const { data: regionsData } = useRegions();
+  const { statistics: exporterStats, isLoading: statsLoading } = useExporterStats();
   const {
     exportateurs,
     totalElements,
@@ -57,6 +58,49 @@ const ExportersPage: React.FC = () => {
     code: region.code,
     name: region.namePt
   })) || [];
+
+  // Calculer les vraies statistiques à partir des données de l'API
+  const calculateStats = () => {
+    if (!exporterStats || statsLoading) {
+      return {
+        total: totalElements,
+        active: 0,
+        expired: 0,
+        suspended: 0
+      };
+    }
+
+    let active = 0;
+    let expired = 0;
+    let suspended = 0;
+
+    // Les statistiques sont retournées sous forme d'array d'arrays [regionCode, statut, count]
+    exporterStats.forEach((stat: any) => {
+      const count = stat[2] || 0;
+      const status = stat[1];
+      
+      switch (status) {
+        case 'ACTIF':
+          active += count;
+          break;
+        case 'EXPIRE':
+          expired += count;
+          break;
+        case 'SUSPENDU':
+          suspended += count;
+          break;
+      }
+    });
+
+    return {
+      total: totalElements,
+      active,
+      expired,
+      suspended
+    };
+  };
+
+  const stats = calculateStats();
 
   const handleExporterClick = (exportateur: Exportateur) => {
     navigate(`/exporters/${exportateur.id}`);
@@ -135,7 +179,7 @@ const ExportersPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-              {totalElements}
+              {statsLoading ? '...' : stats.total}
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">
               {t('exporters.total_exporters', 'Exportateurs total')}
@@ -143,7 +187,7 @@ const ExportersPage: React.FC = () => {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {exportateurs.filter(e => e.actif).length}
+              {statsLoading ? '...' : stats.active}
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">
               {t('exporters.active', 'Actifs')}
@@ -151,7 +195,7 @@ const ExportersPage: React.FC = () => {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-              {exportateurs.filter(e => e.expire).length}
+              {statsLoading ? '...' : stats.expired}
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">
               {t('exporters.expired', 'Expirés')}
@@ -159,7 +203,7 @@ const ExportersPage: React.FC = () => {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-red-600 dark:text-red-400">
-              {exportateurs.filter(e => e.suspendu).length}
+              {statsLoading ? '...' : stats.suspended}
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">
               {t('exporters.suspended', 'Suspendus')}

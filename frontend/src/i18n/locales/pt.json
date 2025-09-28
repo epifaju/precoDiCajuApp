@@ -466,7 +466,8 @@
     "prices": "preços",
     "notAvailable": "Não informado",
     "noRegionsSelected": "Nenhuma região selecionada",
-    "tryAgain": "Tentar novamente"
+    "tryAgain": "Tentar novamente",
+    "clear_filters": "Limpar"
   },
   "dashboard": {
     "goodMorning": "Bom dia",
@@ -1197,7 +1198,8 @@
     "expiring_soon": "Expirem em breve",
     "view_all": "Ver todos",
     "scan": "Escanear",
-    "widget_tip": "Escaneie os QR codes para verificar instantaneamente a autenticidade dos exportadores."
+    "widget_tip": "Escaneie os QR codes para verificar instantaneamente a autenticidade dos exportadores.",
+    "active_filters": "Filtros ativos"
   },
   "qr_scanner": {
     "title": "Escanear QR Code",
@@ -1217,12 +1219,5 @@
     "expired_message": "Este certificado de exportador expirou.",
     "suspended_message": "Este certificado de exportador foi suspenso.",
     "invalid_token_message": "O QR code não é válido."
-  },
-  "common": {
-    "close": "Fechar",
-    "clear_filters": "Limpar",
-    "of": "de",
-    "previous": "Anterior",
-    "next": "Próximo"
   }
 }

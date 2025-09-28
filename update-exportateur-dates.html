@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise à jour des dates d'expiration</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .exportateur { border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px; }
+        .actif { background-color: #d4edda; border-color: #c3e6cb; }
+        .expire { background-color: #f8d7da; border-color: #f5c6cb; }
+        .suspendu { background-color: #fff3cd; border-color: #ffeaa7; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #0056b3; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .info { color: blue; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Mise à jour des dates d'expiration</h1>
+        
+        <div id="status"></div>
+        
+        <button onclick="loadExportateurs()">📋 Charger les exportateurs</button>
+        <button onclick="updateAllDates()">🔄 Mettre à jour toutes les dates</button>
+        <button onclick="verifyResults()">✅ Vérifier les résultats</button>
+        
+        <div id="exportateurs"></div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api/v1/exportateurs';
+        let exportateurs = [];
+
+        async function loadExportateurs() {
+            try {
+                showStatus('Chargement des exportateurs...', 'info');
+                
+                const response = await fetch(`${API_BASE}?size=100`);
+                const data = await response.json();
+                exportateurs = data.content;
+                
+                showStatus(`✅ ${exportateurs.length} exportateurs chargés`, 'success');
+                displayExportateurs();
+                
+            } catch (error) {
+                showStatus(`❌ Erreur: ${error.message}`, 'error');
+            }
+        }
+
+        function displayExportateurs() {
+            const container = document.getElementById('exportateurs');
+            container.innerHTML = '<h2>📋 Exportateurs actuels</h2>';
+            
+            exportateurs.forEach(exportateur => {
+                const statusClass = exportateur.actif ? 'actif' : 
+                                  exportateur.expire ? 'expire' : 
+                                  exportateur.suspendu ? 'suspendu' : '';
+                
+                const statusText = exportateur.actif ? '✅ Actif' : 
+                                 exportateur.expire ? '⚠️ Expiré' : 
+                                 exportateur.suspendu ? '🚫 Suspendu' : '❓ Inconnu';
+                
+                container.innerHTML += `
+                    <div class="exportateur ${statusClass}">
+                        <strong>${exportateur.nom}</strong><br>
+                        Statut: ${statusText}<br>
+                        Date d'expiration: ${exportateur.dateExpiration}<br>
+                        Type: ${exportateur.type}<br>
+                        Région: ${exportateur.regionName}
+                    </div>
+                `;
+            });
+        }
+
+        async function updateAllDates() {
+            if (exportateurs.length === 0) {
+                showStatus('❌ Veuillez d\'abord charger les exportateurs', 'error');
+                return;
+            }
+
+            showStatus('Mise à jour en cours...', 'info');
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const exportateur of exportateurs) {
+                try {
+                    const updateData = {
+                        dateExpiration: '2026-01-15'
+                    };
+
+                    const response = await fetch(`${API_BASE}/${exportateur.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updateData)
+                    });
+
+                    if (response.ok) {
+                        successCount++;
+                        console.log(`✅ Mis à jour: ${exportateur.nom}`);
+                    } else {
+                        failCount++;
+                        console.error(`❌ Erreur pour: ${exportateur.nom}`);
+                    }
+
+                    // Pause pour éviter de surcharger l'API
+                    await new Promise(resolve => setTimeout(resolve, 200));
+
+                } catch (error) {
+                    failCount++;
+                    console.error(`❌ Erreur pour ${exportateur.nom}:`, error);
+                }
+            }
+
+            showStatus(`✅ Mise à jour terminée: ${successCount} succès, ${failCount} échecs`, 'success');
+            
+            // Recharger les données
+            setTimeout(() => {
+                loadExportateurs();
+            }, 1000);
+        }
+
+        async function verifyResults() {
+            try {
+                showStatus('Vérification des résultats...', 'info');
+                
+                const response = await fetch(`${API_BASE}?size=10`);
+                const data = await response.json();
+                
+                let actifCount = 0;
+                let expireCount = 0;
+                let suspenduCount = 0;
+                
+                data.content.forEach(exportateur => {
+                    if (exportateur.actif) actifCount++;
+                    else if (exportateur.expire) expireCount++;
+                    else if (exportateur.suspendu) suspenduCount++;
+                });
+                
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = `
+                    <h2>📊 Résultats de la vérification</h2>
+                    <div class="exportateur">
+                        <strong>Statistiques:</strong><br>
+                        ✅ Actifs: ${actifCount}<br>
+                        ⚠️ Expirés: ${expireCount}<br>
+                        🚫 Suspendus: ${suspenduCount}<br>
+                        📊 Total: ${data.content.length}
+                    </div>
+                `;
+                
+                showStatus('✅ Vérification terminée', 'success');
+                
+            } catch (error) {
+                showStatus(`❌ Erreur lors de la vérification: ${error.message}`, 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+
+        // Charger automatiquement au démarrage
+        window.onload = function() {
+            showStatus('Prêt à mettre à jour les dates d\'expiration', 'info');
+        };
+    </script>
+</body>
+</html>

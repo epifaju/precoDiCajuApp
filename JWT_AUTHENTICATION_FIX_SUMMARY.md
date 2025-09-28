@@ -206,3 +206,4 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 2. **Le token JWT expire toujours après 15 minutes** - le frontend doit implémenter le refresh automatique
 3. **L'endpoint `/auth/token-status`** permet au frontend de vérifier l'état du token avant chaque requête
 4. **Les logs sont maintenant plus détaillés** pour faciliter le debugging des problèmes d'authentification
+
