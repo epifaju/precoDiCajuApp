@@ -111,7 +111,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <Select
               options={regionOptions}
               value={filters.regionCode}
-              onChange={(e) => onFilterChange('regionCode', e.target.value)}
+              onChange={(value) => onFilterChange('regionCode', value)}
               placeholder={t('prices.selectRegion', 'Select region')}
               className="h-11"
             />
@@ -122,7 +122,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <Select
               options={qualityOptions}
               value={filters.qualityGrade}
-              onChange={(e) => onFilterChange('qualityGrade', e.target.value)}
+              onChange={(value) => onFilterChange('qualityGrade', value)}
               placeholder={t('prices.selectQuality', 'Select quality')}
               className="h-11"
             />
@@ -133,7 +133,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <Select
               options={verifiedOptions}
               value={filters.verified}
-              onChange={(e) => onFilterChange('verified', e.target.value)}
+              onChange={(value) => onFilterChange('verified', value)}
               className="h-11"
             />
           </div>
@@ -167,7 +167,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <Select
               options={sortOptions}
               value={filters.sortBy}
-              onChange={(e) => onFilterChange('sortBy', e.target.value as any)}
+              onChange={(value) => onFilterChange('sortBy', value as any)}
               className="h-11"
             />
           </div>
@@ -175,7 +175,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <Select
               options={sortDirOptions}
               value={filters.sortDir}
-              onChange={(e) => onFilterChange('sortDir', e.target.value as any)}
+              onChange={(value) => onFilterChange('sortDir', value as any)}
               className="h-11"
             />
           </div>
