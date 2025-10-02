@@ -83,17 +83,17 @@ export const RevenueSimulatorForm: React.FC<RevenueSimulatorFormProps> = ({
   };
 
   return (
-    <Card className="p-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+    <Card className="p-4 sm:p-6">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
           {t('simulation.form.title', 'Simulador de Receitas')}
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
           {t('simulation.form.description', 'Insira os dados para calcular seus receitas potenciais')}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:mb-6">
         {/* Quantidade */}
         <Input
           label={t('simulation.form.quantity', 'Quantidade (kg)')}
@@ -147,32 +147,36 @@ export const RevenueSimulatorForm: React.FC<RevenueSimulatorFormProps> = ({
         />
       </div>
 
-      {/* Action buttons */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {/* Action buttons - Mobile Optimized */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
         <Button
           onClick={handleSave}
           disabled={!isValid || isLoading}
           loading={isLoading}
-          className="flex-1"
+          className="flex-1 order-1"
         >
           {t('simulation.form.save', 'Salvar Simulação')}
         </Button>
         
-        <Button
-          variant="outline"
-          onClick={handleReset}
-          disabled={isLoading}
-        >
-          {t('simulation.form.reset', 'Limpar')}
-        </Button>
-        
-        <Button
-          variant="ghost"
-          onClick={handleFillSampleData}
-          disabled={isLoading}
-        >
-          {t('simulation.form.sampleData', 'Dados de Exemplo')}
-        </Button>
+        <div className="flex gap-2 sm:gap-3 order-2">
+          <Button
+            variant="outline"
+            onClick={handleReset}
+            disabled={isLoading}
+            className="flex-1 sm:flex-none"
+          >
+            {t('simulation.form.reset', 'Limpar')}
+          </Button>
+          
+          <Button
+            variant="ghost"
+            onClick={handleFillSampleData}
+            disabled={isLoading}
+            className="flex-1 sm:flex-none"
+          >
+            {t('simulation.form.sampleData', 'Exemplo')}
+          </Button>
+        </div>
       </div>
 
       {/* Form validation summary */}

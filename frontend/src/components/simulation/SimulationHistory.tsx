@@ -92,13 +92,13 @@ export const SimulationHistory: React.FC<SimulationHistoryProps> = ({
   }
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
+    <Card className="p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+        <div className="mb-3 sm:mb-0">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {t('simulation.history.title', 'Histórico de Simulações')}
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
             {t('simulation.history.description', 'Suas simulações salvas localmente')}
           </p>
         </div>
@@ -108,7 +108,7 @@ export const SimulationHistory: React.FC<SimulationHistoryProps> = ({
             variant="outline"
             size="sm"
             onClick={handleClearAll}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 self-start sm:self-auto"
           >
             {t('simulation.history.clearAll', 'Limpar Tudo')}
           </Button>
@@ -117,11 +117,11 @@ export const SimulationHistory: React.FC<SimulationHistoryProps> = ({
 
       {/* Storage Stats */}
       {storageStats && (
-        <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
             {t('simulation.history.storageStats', 'Estatísticas de Armazenamento')}
           </h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs">
             <div>
               <p className="text-blue-600 dark:text-blue-400">
                 {t('simulation.history.total', 'Total')}
