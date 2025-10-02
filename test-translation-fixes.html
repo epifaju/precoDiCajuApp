@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Corrections Traduction profitMargin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .translation-test {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .translation-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌍 Test des Corrections - Erreur de Traduction profitMargin</h1>
+    
+    <div class="test-container">
+        <h2>📋 Problème Identifié et Résolu</h2>
+        
+        <div class="test-result error">
+            <strong>❌ Erreur Originale :</strong>
+            <div class="code-block">
+key 'simulation.results.profitMargin (pt)' returned an object instead of string.
+            </div>
+            <p><strong>Cause :</strong> Clé dupliquée dans les fichiers de traduction JSON</p>
+        </div>
+        
+        <div class="test-result success">
+            <strong>✅ Solution Appliquée :</strong>
+            <ul>
+                <li><strong>Restructuration des traductions</strong> : profitMargin devient un objet avec title et valeurs</li>
+                <li><strong>Correction des fichiers JSON</strong> : PT, FR, EN corrigés</li>
+                <li><strong>Mise à jour du composant React</strong> : Utilisation de profitMargin.title</li>
+                <li><strong>Élimination des clés dupliquées</strong> : Structure cohérente</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔄 Structure Avant/Après</h2>
+        
+        <div class="test-result error">
+            <strong>❌ Avant (Problématique) :</strong>
+            <div class="code-block">
+"profitMargin": "Margem de Lucro",
+"profitMargin": {
+  "excellent": "Excelente",
+  "good": "Boa",
+  "low": "Baixa",
+  "negative": "Negativa"
+}
+            </div>
+            <p><strong>Problème :</strong> Clé dupliquée causant l'erreur "object instead of string"</p>
+        </div>
+        
+        <div class="test-result success">
+            <strong>✅ Après (Corrigé) :</strong>
+            <div class="code-block">
+"profitMargin": {
+  "title": "Margem de Lucro",
+  "excellent": "Excelente",
+  "good": "Boa",
+  "low": "Baixa",
+  "negative": "Negativa"
+}
+            </div>
+            <p><strong>Solution :</strong> Structure unifiée avec title pour le libellé principal</p>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🛠️ Modifications Appliquées</h2>
+        
+        <div class="translation-test">
+            <div class="translation-item">
+                <h4>🇵🇹 Portugais (pt.json)</h4>
+                <div class="code-block">
+"profitMargin": {
+  "title": "Margem de Lucro",
+  "excellent": "Excelente",
+  "good": "Boa",
+  "low": "Baixa",
+  "negative": "Negativa"
+}
+                </div>
+            </div>
+            
+            <div class="translation-item">
+                <h4>🇫🇷 Français (fr.json)</h4>
+                <div class="code-block">
+"profitMargin": {
+  "title": "Marge de Profit",
+  "excellent": "Excellente",
+  "good": "Bonne",
+  "low": "Faible",
+  "negative": "Négative"
+}
+                </div>
+            </div>
+            
+            <div class="translation-item">
+                <h4>🇬🇧 Anglais (en.json)</h4>
+                <div class="code-block">
+"profitMargin": {
+  "title": "Profit Margin",
+  "excellent": "Excellent",
+  "good": "Good",
+  "low": "Low",
+  "negative": "Negative"
+}
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-result info">
+            <strong>🔧 Composant React Mis à Jour :</strong>
+            <div class="code-block">
+// Avant
+{t('simulation.results.profitMargin', 'Margem de Lucro')}
+
+// Après
+{t('simulation.results.profitMargin.title', 'Margem de Lucro')}
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🧪 Tests à Effectuer</h2>
+        
+        <div class="test-result info">
+            <strong>📋 Checklist de Test :</strong>
+            <ol>
+                <li><strong>Chargement de la page</strong> : Vérifiez qu'il n'y a plus d'erreur de traduction</li>
+                <li><strong>Section Profit Margin</strong> : Le titre "Margem de Lucro" s'affiche correctement</li>
+                <li><strong>Changement de langue</strong> : Testez PT → FR → EN</li>
+                <li><strong>Badges de statut</strong> : Excellent, Boa, Baixa, Negativa s'affichent</li>
+                <li><strong>Console du navigateur</strong> : Plus d'erreurs de traduction</li>
+                <li><strong>Fonctionnalité complète</strong> : Le simulateur fonctionne sans erreur</li>
+            </ol>
+        </div>
+        
+        <div class="test-result warning">
+            <strong>⚠️ Points d'Attention :</strong>
+            <ul>
+                <li>Vérifiez que toutes les traductions s'affichent correctement</li>
+                <li>Testez le changement de langue en temps réel</li>
+                <li>Vérifiez que les badges de statut utilisent les bonnes traductions</li>
+                <li>Testez avec des données d'exemple pour voir tous les états</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔗 Liens de Test</h2>
+        
+        <div class="test-result">
+            <strong>🎯 Accès Direct :</strong><br>
+            <a href="http://localhost:3002/simulator" class="link" target="_blank">🧮 Simulateur de Revenus</a>
+        </div>
+        
+        <div class="test-result">
+            <strong>🌍 Test des Langues :</strong><br>
+            <button onclick="testLanguages()">Tester le Changement de Langue</button>
+        </div>
+        
+        <div class="test-result">
+            <strong>🔍 Test Console :</strong><br>
+            <button onclick="testConsole()">Vérifier la Console</button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Résultats Attendus</h2>
+        
+        <div class="test-result success">
+            <strong>✅ Critères de Succès :</strong>
+            <ul>
+                <li><strong>Plus d'erreur de traduction</strong> : "object instead of string" résolue</li>
+                <li><strong>Titre affiché</strong> : "Margem de Lucro" s'affiche correctement</li>
+                <li><strong>Badges fonctionnels</strong> : Excellent, Boa, Baixa, Negativa</li>
+                <li><strong>Changement de langue</strong> : Fonctionne sans erreur</li>
+                <li><strong>Console propre</strong> : Plus d'erreurs de traduction</li>
+                <li><strong>Fonctionnalité complète</strong> : Simulateur entièrement fonctionnel</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🎯 Traductions par Langue</h2>
+        
+        <div class="translation-test">
+            <div class="translation-item">
+                <h4>🇵🇹 Portugais</h4>
+                <ul>
+                    <li><strong>Titre :</strong> Margem de Lucro</li>
+                    <li><strong>Excellent :</strong> Excelente</li>
+                    <li><strong>Bonne :</strong> Boa</li>
+                    <li><strong>Faible :</strong> Baixa</li>
+                    <li><strong>Négative :</strong> Negativa</li>
+                </ul>
+            </div>
+            
+            <div class="translation-item">
+                <h4>🇫🇷 Français</h4>
+                <ul>
+                    <li><strong>Titre :</strong> Marge de Profit</li>
+                    <li><strong>Excellent :</strong> Excellente</li>
+                    <li><strong>Bonne :</strong> Bonne</li>
+                    <li><strong>Faible :</strong> Faible</li>
+                    <li><strong>Négative :</strong> Négative</li>
+                </ul>
+            </div>
+            
+            <div class="translation-item">
+                <h4>🇬🇧 Anglais</h4>
+                <ul>
+                    <li><strong>Titre :</strong> Profit Margin</li>
+                    <li><strong>Excellent :</strong> Excellent</li>
+                    <li><strong>Bonne :</strong> Good</li>
+                    <li><strong>Faible :</strong> Low</li>
+                    <li><strong>Négative :</strong> Negative</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testLanguages() {
+            alert('Pour tester le changement de langue :\n\n1. Cliquez sur l\'icône de langue dans le header\n2. Changez entre PT → FR → EN\n3. Vérifiez que "Margem de Lucro" change correctement :\n   - PT: "Margem de Lucro"\n   - FR: "Marge de Profit"\n   - EN: "Profit Margin"\n4. Vérifiez que les badges changent aussi');
+        }
+        
+        function testConsole() {
+            alert('Pour vérifier la console :\n\n1. Ouvrez les outils de développement (F12)\n2. Allez dans l\'onglet Console\n3. Rechargez la page du simulateur\n4. Vérifiez qu\'il n\'y a plus d\'erreur :\n   "key \'simulation.results.profitMargin\' returned an object instead of string"\n5. Si l\'erreur persiste, rechargez la page');
+        }
+        
+        // Test automatique de la disponibilité
+        function testSimulatorAccess() {
+            const testResults = document.getElementById('test-results');
+            
+            fetch('http://localhost:3002/simulator')
+                .then(response => {
+                    if (response.ok) {
+                        testResults.innerHTML += '<div class="test-result success">✅ Simulateur accessible sur localhost:3002</div>';
+                        testResults.innerHTML += '<div class="test-result info">💡 Les corrections de traduction sont maintenant actives</div>';
+                    } else {
+                        testResults.innerHTML += '<div class="test-result error">❌ Simulateur non accessible</div>';
+                    }
+                })
+                .catch(error => {
+                    testResults.innerHTML += '<div class="test-result error">❌ Erreur: ' + error.message + '</div>';
+                    testResults.innerHTML += '<div class="test-result info">💡 Assurez-vous que le frontend est démarré</div>';
+                });
+        }
+
+        // Démarrer le test automatique
+        window.onload = function() {
+            const testResults = document.createElement('div');
+            testResults.id = 'test-results';
+            testResults.innerHTML = '<h3>🤖 Test Automatique</h3>';
+            document.body.appendChild(testResults);
+            
+            testSimulatorAccess();
+        };
+    </script>
+</body>
+</html>

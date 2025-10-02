@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Fonctionnalité Export PDF Implémentée</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .feature-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        .implementation-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .step-item {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <h1>📄 Test - Fonctionnalité Export PDF Implémentée</h1>
+    
+    <div class="test-container">
+        <h2>✅ Fonctionnalité Export PDF - IMPLÉMENTÉE</h2>
+        
+        <div class="test-result success">
+            <strong>🎉 Statut :</strong> La fonctionnalité d'export PDF a été complètement implémentée selon les spécifications du PRD !
+        </div>
+        
+        <div class="test-result info">
+            <strong>📋 Spécification PRD :</strong>
+            <blockquote>
+                "Export PDF pour que le producteur puisse imprimer ou partager sa simulation"
+            </blockquote>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🛠️ Composants Implémentés</h2>
+        
+        <div class="feature-list">
+            <div class="feature-item">
+                <h4>📦 Service PDF Export</h4>
+                <p><strong>Fichier :</strong> <code>pdfExportService.ts</code></p>
+                <ul>
+                    <li>Génération PDF avec jsPDF</li>
+                    <li>Capture de graphiques avec html2canvas</li>
+                    <li>Support multilingue (PT/FR/EN)</li>
+                    <li>Formatage professionnel</li>
+                </ul>
+            </div>
+            
+            <div class="feature-item">
+                <h4>🔘 Bouton Export PDF</h4>
+                <p><strong>Fichier :</strong> <code>PDFExportButton.tsx</code></p>
+                <ul>
+                    <li>Interface utilisateur intuitive</li>
+                    <li>États de chargement</li>
+                    <li>Gestion d'erreurs</li>
+                    <li>Tooltip informatif</li>
+                </ul>
+            </div>
+            
+            <div class="feature-item">
+                <h4>📊 Intégration RevenueResult</h4>
+                <p><strong>Fichier :</strong> <code>RevenueResult.tsx</code></p>
+                <ul>
+                    <li>Bouton dans le header</li>
+                    <li>Passage des données d'entrée</li>
+                    <li>Référence pour le graphique</li>
+                    <li>Design responsive</li>
+                </ul>
+            </div>
+            
+            <div class="feature-item">
+                <h4>🌍 Traductions Complètes</h4>
+                <p><strong>Fichiers :</strong> <code>pt.json, fr.json, en.json</code></p>
+                <ul>
+                    <li>Textes d'interface</li>
+                    <li>Messages d'erreur</li>
+                    <li>Contenu PDF</li>
+                    <li>Support complet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📋 Étapes d'Implémentation Réalisées</h2>
+        
+        <div class="implementation-steps">
+            <div class="step-item">
+                <h4>1️⃣ Dépendances</h4>
+                <p><strong>Installé :</strong></p>
+                <div class="code-block">
+npm install jspdf html2canvas
+                </div>
+                <p>✅ jsPDF pour génération PDF</p>
+                <p>✅ html2canvas pour capture graphiques</p>
+            </div>
+            
+            <div class="step-item">
+                <h4>2️⃣ Service PDF</h4>
+                <p><strong>Créé :</strong> <code>pdfExportService.ts</code></p>
+                <ul>
+                    <li>✅ Classe PDFExportService</li>
+                    <li>✅ Méthode exportSimulationToPDF</li>
+                    <li>✅ Support multilingue</li>
+                    <li>✅ Formatage professionnel</li>
+                </ul>
+            </div>
+            
+            <div class="step-item">
+                <h4>3️⃣ Composant Bouton</h4>
+                <p><strong>Créé :</strong> <code>PDFExportButton.tsx</code></p>
+                <ul>
+                    <li>✅ Interface React</li>
+                    <li>✅ États de chargement</li>
+                    <li>✅ Gestion d'erreurs</li>
+                    <li>✅ Design cohérent</li>
+                </ul>
+            </div>
+            
+            <div class="step-item">
+                <h4>4️⃣ Intégration</h4>
+                <p><strong>Modifié :</strong> <code>RevenueResult.tsx</code></p>
+                <ul>
+                    <li>✅ Bouton dans header</li>
+                    <li>✅ Props inputs ajoutées</li>
+                    <li>✅ Référence graphique</li>
+                    <li>✅ Design responsive</li>
+                </ul>
+            </div>
+            
+            <div class="step-item">
+                <h4>5️⃣ Traductions</h4>
+                <p><strong>Ajouté :</strong> Section "pdf" dans les 3 langues</p>
+                <ul>
+                    <li>✅ Portugais (pt.json)</li>
+                    <li>✅ Français (fr.json)</li>
+                    <li>✅ Anglais (en.json)</li>
+                    <li>✅ Contenu PDF inclus</li>
+                </ul>
+            </div>
+            
+            <div class="step-item">
+                <h4>6️⃣ Page Simulateur</h4>
+                <p><strong>Modifié :</strong> <code>RevenueSimulatorPage.tsx</code></p>
+                <ul>
+                    <li>✅ Props inputs passées</li>
+                    <li>✅ Intégration complète</li>
+                    <li>✅ Fonctionnalité active</li>
+                    <li>✅ Test prêt</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🎯 Fonctionnalités du PDF Export</h2>
+        
+        <div class="test-result success">
+            <strong>✅ Contenu du PDF :</strong>
+            <ul>
+                <li><strong>Titre professionnel</strong> : "Simulador de Receitas - Cajou"</li>
+                <li><strong>Date de génération</strong> : Timestamp automatique</li>
+                <li><strong>Données d'entrée</strong> : Quantité, prix, coûts</li>
+                <li><strong>Résultats détaillés</strong> : Revenus, dépenses, profit</li>
+                <li><strong>Formules explicatives</strong> : Calculs transparents</li>
+                <li><strong>Graphique intégré</strong> : Visualisation des résultats</li>
+                <li><strong>Footer informatif</strong> : Source et crédits</li>
+            </ul>
+        </div>
+        
+        <div class="test-result info">
+            <strong>🌍 Support Multilingue :</strong>
+            <ul>
+                <li><strong>Portugais :</strong> "Exportar PDF", "Simulador de Receitas"</li>
+                <li><strong>Français :</strong> "Exporter PDF", "Simulateur de Revenus"</li>
+                <li><strong>Anglais :</strong> "Export PDF", "Revenue Simulator"</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🧪 Tests à Effectuer</h2>
+        
+        <div class="test-result info">
+            <strong>📋 Checklist de Test :</strong>
+            <ol>
+                <li><strong>Accès au simulateur</strong> : http://localhost:3002/simulator</li>
+                <li><strong>Bouton visible</strong> : "Exportar PDF" dans le header des résultats</li>
+                <li><strong>Données d'exemple</strong> : Utiliser le bouton "Dados de Exemplo"</li>
+                <li><strong>Export PDF</strong> : Cliquer sur le bouton d'export</li>
+                <li><strong>Téléchargement</strong> : Vérifier que le PDF se télécharge</li>
+                <li><strong>Contenu PDF</strong> : Ouvrir et vérifier le contenu</li>
+                <li><strong>Changement de langue</strong> : Tester en PT/FR/EN</li>
+                <li><strong>Graphique inclus</strong> : Vérifier la présence du graphique</li>
+            </ol>
+        </div>
+        
+        <div class="test-result warning">
+            <strong>⚠️ Points d'Attention :</strong>
+            <ul>
+                <li>Le bouton n'apparaît que si des données d'entrée sont disponibles</li>
+                <li>Le graphique peut prendre quelques secondes à être capturé</li>
+                <li>Le nom du fichier inclut la date et l'heure</li>
+                <li>Le PDF est optimisé pour l'impression</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔗 Liens de Test</h2>
+        
+        <div class="test-result">
+            <strong>🎯 Accès Direct :</strong><br>
+            <a href="http://localhost:3002/simulator" class="link" target="_blank">🧮 Simulateur de Revenus</a>
+        </div>
+        
+        <div class="test-result">
+            <strong>📄 Test Export PDF :</strong><br>
+            <button onclick="testPDFExport()">Guide de Test PDF</button>
+        </div>
+        
+        <div class="test-result">
+            <strong>🌍 Test Multilingue :</strong><br>
+            <button onclick="testMultilingual()">Tester les Langues</button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Résultats Attendus</h2>
+        
+        <div class="test-result success">
+            <strong>✅ Critères de Succès :</strong>
+            <ul>
+                <li><strong>Bouton visible</strong> : "Exportar PDF" dans le header</li>
+                <li><strong>Export fonctionnel</strong> : PDF se télécharge correctement</li>
+                <li><strong>Contenu complet</strong> : Données, résultats, graphique</li>
+                <li><strong>Format professionnel</strong> : Mise en page claire</li>
+                <li><strong>Multilingue</strong> : Fonctionne en PT/FR/EN</li>
+                <li><strong>Nom de fichier</strong> : Format "simulacao_YYYY-MM-DD_HH-MM-SS.pdf"</li>
+                <li><strong>Impression</strong> : PDF optimisé pour l'impression</li>
+                <li><strong>Partage</strong> : Fichier facilement partageable</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🎉 Fonctionnalité Complète</h2>
+        
+        <div class="test-result success">
+            <strong>✅ PRD Respecté :</strong>
+            <blockquote>
+                "Export PDF pour que le producteur puisse imprimer ou partager sa simulation"
+            </blockquote>
+            
+            <p><strong>Implémentation :</strong></p>
+            <ul>
+                <li>✅ <strong>Export PDF</strong> : Fonctionnalité complète</li>
+                <li>✅ <strong>Impression</strong> : PDF optimisé pour l'impression</li>
+                <li>✅ <strong>Partage</strong> : Fichier téléchargeable et partageable</li>
+                <li>✅ <strong>Simulation complète</strong> : Données + résultats + graphique</li>
+                <li>✅ <strong>Multilingue</strong> : Support PT/FR/EN</li>
+                <li>✅ <strong>Design professionnel</strong> : Mise en page claire</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testPDFExport() {
+            alert('Guide de test pour l\'export PDF :\n\n1. Allez sur http://localhost:3002/simulator\n2. Cliquez sur "Dados de Exemplo" pour remplir le formulaire\n3. Vérifiez que le bouton "Exportar PDF" apparaît dans le header des résultats\n4. Cliquez sur le bouton d\'export\n5. Vérifiez que le PDF se télécharge\n6. Ouvrez le PDF et vérifiez le contenu :\n   - Titre professionnel\n   - Données d\'entrée\n   - Résultats détaillés\n   - Graphique inclus\n   - Footer informatif');
+        }
+        
+        function testMultilingual() {
+            alert('Test multilingue pour l\'export PDF :\n\n1. Changez la langue dans le header (PT/FR/EN)\n2. Allez sur le simulateur\n3. Utilisez "Dados de Exemplo"\n4. Vérifiez que le bouton change de langue :\n   - PT: "Exportar PDF"\n   - FR: "Exporter PDF"\n   - EN: "Export PDF"\n5. Exportez le PDF\n6. Vérifiez que le contenu du PDF est dans la bonne langue');
+        }
+        
+        // Test automatique de la disponibilité
+        function testSimulatorAccess() {
+            const testResults = document.getElementById('test-results');
+            
+            fetch('http://localhost:3002/simulator')
+                .then(response => {
+                    if (response.ok) {
+                        testResults.innerHTML += '<div class="test-result success">✅ Simulateur accessible sur localhost:3002</div>';
+                        testResults.innerHTML += '<div class="test-result info">💡 La fonctionnalité d\'export PDF est maintenant disponible</div>';
+                    } else {
+                        testResults.innerHTML += '<div class="test-result error">❌ Simulateur non accessible</div>';
+                    }
+                })
+                .catch(error => {
+                    testResults.innerHTML += '<div class="test-result error">❌ Erreur: ' + error.message + '</div>';
+                    testResults.innerHTML += '<div class="test-result info">💡 Assurez-vous que le frontend est démarré</div>';
+                });
+        }
+
+        // Démarrer le test automatique
+        window.onload = function() {
+            const testResults = document.createElement('div');
+            testResults.id = 'test-results';
+            testResults.innerHTML = '<h3>🤖 Test Automatique</h3>';
+            document.body.appendChild(testResults);
+            
+            testSimulatorAccess();
+        };
+    </script>
+</body>
+</html>

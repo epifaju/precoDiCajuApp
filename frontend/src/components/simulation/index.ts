@@ -3,3 +3,4 @@ export { RevenueSimulatorForm } from './RevenueSimulatorForm';
 export { RevenueResult } from './RevenueResult';
 export { SimulationHistory } from './SimulationHistory';
 export { RevenueChart } from './RevenueChart';
+export { PDFExportButton } from './PDFExportButton';

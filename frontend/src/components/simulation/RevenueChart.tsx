@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../ui/Card';
 import { SimulationResult } from '../../types/simulation';
@@ -8,10 +8,10 @@ interface RevenueChartProps {
   className?: string;
 }
 
-export const RevenueChart: React.FC<RevenueChartProps> = ({
+export const RevenueChart = forwardRef<HTMLDivElement, RevenueChartProps>(({
   results,
   className = '',
-}) => {
+}, ref) => {
   const { t } = useTranslation();
 
   // Prepare data for the chart
@@ -42,7 +42,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
   const maxValue = Math.max(...chartData.map(item => Math.abs(item.value)));
 
   return (
-    <Card className={`p-6 ${className}`}>
+    <Card ref={ref} className={`p-6 ${className}`}>
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           {t('simulation.chart.title', 'Visualização dos Resultados')}
@@ -132,5 +132,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({
       </div>
     </Card>
   );
-};
+});
+
+RevenueChart.displayName = 'RevenueChart';
 

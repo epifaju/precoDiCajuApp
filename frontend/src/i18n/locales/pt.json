@@ -1268,8 +1268,8 @@
       "totalExpensesFormula": "Transporte + Outros custos",
       "netRevenue": "Receita Líquida",
       "netRevenueFormula": "Receita Bruta - Despesas Totais",
-      "profitMargin": "Margem de Lucro",
       "profitMargin": {
+        "title": "Margem de Lucro",
         "excellent": "Excelente",
         "good": "Boa",
         "low": "Baixa",
@@ -1278,6 +1278,17 @@
       "positiveMessage": "Parabéns! Sua simulação mostra um lucro positivo. Esta é uma boa oportunidade de negócio.",
       "negativeMessage": "Atenção: Sua simulação mostra uma perda. Considere revisar os custos ou negociar um preço melhor.",
       "neutralMessage": "Sua simulação mostra equilíbrio entre receitas e despesas. Considere otimizar os custos para aumentar o lucro."
+    },
+    "pdf": {
+      "export": "Exportar PDF",
+      "exporting": "Exportando...",
+      "error": "Erro ao exportar PDF",
+      "info": "Inclui dados, resultados e gráfico",
+      "title": "Simulador de Receitas - Cajou",
+      "subtitle": "Simulação générée em",
+      "dataTitle": "Dados da Simulação",
+      "resultsTitle": "Resultados da Simulação",
+      "footer": "Généré par Preço di Cajú - Plateforme collaborative pour les prix du cajou en Guinée-Bissau"
     },
     "chart": {
       "title": "Visualização dos Resultados",

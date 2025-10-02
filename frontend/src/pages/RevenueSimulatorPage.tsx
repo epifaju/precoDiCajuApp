@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RevenueSimulatorForm } from '../components/simulation/RevenueSimulatorForm';
 import { RevenueResult } from '../components/simulation/RevenueResult';
@@ -19,6 +19,7 @@ const RevenueSimulatorPage: React.FC = () => {
   const [currentResults, setCurrentResults] = useState<SimulationResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const chartRef = useRef<HTMLDivElement>(null);
 
   // Initialize IndexedDB and load simulations
   useEffect(() => {
@@ -173,13 +174,16 @@ const RevenueSimulatorPage: React.FC = () => {
             {currentResults && (
               <RevenueResult
                 results={currentResults}
+                inputs={currentInputs || undefined}
                 isLoading={isLoading}
+                chartRef={chartRef}
               />
             )}
 
             {/* Chart */}
             {currentResults && (
               <RevenueChart
+                ref={chartRef}
                 results={currentResults}
               />
             )}

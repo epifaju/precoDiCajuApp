@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../ui/Card';
 import { SimulationResult } from '../../types/simulation';
+import { PDFExportButton } from './PDFExportButton';
 import { 
   formatCurrency, 
   getNetRevenueColorClass, 
@@ -12,12 +13,21 @@ import {
 
 interface RevenueResultProps {
   results: SimulationResult;
+  inputs?: {
+    quantity: number;
+    pricePerKg: number;
+    transportCosts: number;
+    otherCosts: number;
+  };
   isLoading?: boolean;
+  chartRef?: React.RefObject<HTMLDivElement>;
 }
 
 export const RevenueResult: React.FC<RevenueResultProps> = ({
   results,
+  inputs,
   isLoading = false,
+  chartRef,
 }) => {
   const { t } = useTranslation();
   const profitMargin = calculateProfitMargin(results.grossRevenue, results.netRevenue);
@@ -39,23 +49,33 @@ export const RevenueResult: React.FC<RevenueResultProps> = ({
 
   return (
     <Card className="p-6 overflow-hidden">
-      {/* Header avec animation d'entrée */}
-      <div className="mb-8 animate-fadeIn">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {t('simulation.results.title', 'Resultados da Simulação')}
-          </h3>
-          <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {t('simulation.results.live', 'Tempo Real')}
-            </span>
-          </div>
-        </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          {t('simulation.results.description', 'Cálculo automático baseado nos dados inseridos')}
-        </p>
-      </div>
+            {/* Header avec animation d'entrée */}
+            <div className="mb-8 animate-fadeIn">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {t('simulation.results.title', 'Resultados da Simulação')}
+                </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {t('simulation.results.live', 'Tempo Real')}
+                    </span>
+                  </div>
+                  {inputs && (
+                    <PDFExportButton
+                      inputs={inputs}
+                      results={results}
+                      chartRef={chartRef}
+                      className="ml-4"
+                    />
+                  )}
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {t('simulation.results.description', 'Cálculo automático baseado nos dados inseridos')}
+              </p>
+            </div>
 
       {/* Grille principale des résultats */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
@@ -205,7 +225,7 @@ export const RevenueResult: React.FC<RevenueResultProps> = ({
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                  {t('simulation.results.profitMargin', 'Margem de Lucro')}
+                  {t('simulation.results.profitMargin.title', 'Margem de Lucro')}
                 </p>
                 <p className={`text-2xl font-bold ${getProfitMarginColorClass(profitMargin)}`}>
                   {profitMargin.toFixed(1)}%
@@ -302,9 +322,9 @@ export const RevenueResult: React.FC<RevenueResultProps> = ({
               )}
             </p>
           </div>
-        </div>
-      </div>
-    </Card>
-  );
-};
+               </div>
+             </div>
+           </Card>
+         );
+       };
 

@@ -1304,8 +1304,8 @@
       "totalExpensesFormula": "Transport + Autres coûts",
       "netRevenue": "Revenu Net",
       "netRevenueFormula": "Revenu Brut - Dépenses Totales",
-      "profitMargin": "Marge de Profit",
       "profitMargin": {
+        "title": "Marge de Profit",
         "excellent": "Excellente",
         "good": "Bonne",
         "low": "Faible",
@@ -1314,6 +1314,17 @@
       "positiveMessage": "Félicitations ! Votre simulation montre un profit positif. C'est une bonne opportunité d'affaires.",
       "negativeMessage": "Attention : Votre simulation montre une perte. Considérez réviser les coûts ou négocier un meilleur prix.",
       "neutralMessage": "Votre simulation montre un équilibre entre revenus et dépenses. Considérez optimiser les coûts pour augmenter le profit."
+    },
+    "pdf": {
+      "export": "Exporter PDF",
+      "exporting": "Exportation...",
+      "error": "Erreur lors de l'export PDF",
+      "info": "Inclut données, résultats et graphique",
+      "title": "Simulateur de Revenus - Cajou",
+      "subtitle": "Simulation générée le",
+      "dataTitle": "Données de la Simulation",
+      "resultsTitle": "Résultats de la Simulation",
+      "footer": "Généré par Preço di Cajú - Plateforme collaborative pour les prix du cajou en Guinée-Bissau"
     },
     "chart": {
       "title": "Visualisation des Résultats",
