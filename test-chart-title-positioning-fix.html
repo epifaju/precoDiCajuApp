@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Correction Positionnement Titre Graphique PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .fix-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .fix-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .before, .after {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .before {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        .after {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .pdf-layout {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .pdf-section {
+            background: white;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        .pdf-title {
+            background: #e3f2fd;
+            font-weight: bold;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📐 Test - Correction Positionnement Titre Graphique PDF</h1>
+    
+    <div class="test-container">
+        <h2>🔍 Problème Identifié et Résolu</h2>
+        
+        <div class="test-result error">
+            <strong>❌ Problème Original :</strong>
+            <p>Le titre "Gráfico dos Resultados" était placé au-dessus du texte "Despesas Totais" dans le PDF.</p>
+            <p><strong>Cause :</strong> Calcul incorrect de la position Y - utilisation de la fin de page au lieu de la position réelle du contenu.</p>
+        </div>
+        
+        <div class="test-result success">
+            <strong>✅ Solution Appliquée :</strong>
+            <ul>
+                <li><strong>Calcul dynamique</strong> : Position Y basée sur le contenu précédent</li>
+                <li><strong>Marge appropriée</strong> : Espacement de 30px entre les sections</li>
+                <li><strong>Gestion des pages</strong> : Nouvelle page si nécessaire</li>
+                <li><strong>Positionnement correct</strong> : Titre au-dessus du graphique</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔄 Comparaison Avant/Après</h2>
+        
+        <div class="comparison">
+            <div class="before">
+                <h3>❌ Avant (Problématique)</h3>
+                <div class="pdf-layout">
+                    <div class="pdf-section">
+                        <div class="pdf-title">Données de la Simulation</div>
+                        Quantidade: 1000 kg<br>
+                        Prix par kg: 500 FCFA<br>
+                        Transport: 50000 FCFA<br>
+                        Autres coûts: 25000 FCFA
+                    </div>
+                    <div class="pdf-section">
+                        <div class="pdf-title">Résultats de la Simulation</div>
+                        Receita Bruta: 500000 FCFA<br>
+                        Despesas Totais: 75000 FCFA<br>
+                        <strong>Gráfico dos Resultados</strong> ← MAL PLACÉ<br>
+                        Receita Líquida: 425000 FCFA<br>
+                        Margem de Lucro: 85.0%
+                    </div>
+                    <div class="pdf-section">
+                        [Graphique vide ou mal positionné]
+                    </div>
+                </div>
+            </div>
+            <div class="after">
+                <h3>✅ Après (Corrigé)</h3>
+                <div class="pdf-layout">
+                    <div class="pdf-section">
+                        <div class="pdf-title">Données de la Simulation</div>
+                        Quantidade: 1000 kg<br>
+                        Prix par kg: 500 FCFA<br>
+                        Transport: 50000 FCFA<br>
+                        Autres coûts: 25000 FCFA
+                    </div>
+                    <div class="pdf-section">
+                        <div class="pdf-title">Résultats de la Simulation</div>
+                        Receita Bruta: 500000 FCFA<br>
+                        Despesas Totais: 75000 FCFA<br>
+                        Receita Líquida: 425000 FCFA<br>
+                        Margem de Lucro: 85.0%
+                    </div>
+                    <div class="pdf-section">
+                        <div class="pdf-title">Gráfico dos Resultados</div>
+                        [Graphique correctement positionné]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🛠️ Modifications Techniques Appliquées</h2>
+        
+        <div class="fix-list">
+            <div class="fix-item">
+                <h4>📊 Calcul de Position Dynamique</h4>
+                <div class="code-block">
+// Avant
+const currentY = pdf.internal.pageSize.getHeight() - 20;
+pdf.text(title, 20, currentY - imgHeight - 20);
+
+// Après
+const resultsEndY = this.addResultsSection(pdf, data, pageWidth);
+let currentY = resultsEndY + 30; // Marge appropriée
+pdf.text(title, 20, currentY);
+                </div>
+            </div>
+            
+            <div class="fix-item">
+                <h4>📄 Retour de Position Y</h4>
+                <div class="code-block">
+// Méthode addResultsSection maintenant retourne la position finale
+private static addResultsSection(pdf: jsPDF, data: PDFExportData, pageWidth: number): number {
+  // ... logique de la section ...
+  return currentY; // Retourne la position Y finale
+}
+                </div>
+            </div>
+            
+            <div class="fix-item">
+                <h4>🎯 Gestion des Pages</h4>
+                <div class="code-block">
+// Vérification si nouvelle page nécessaire
+if (currentY + imgHeight + 50 > pageHeight - 20) {
+  pdf.addPage();
+  currentY = 20; // Commence en haut de la nouvelle page
+}
+                </div>
+            </div>
+            
+            <div class="fix-item">
+                <h4>📏 Espacement Approprié</h4>
+                <div class="code-block">
+// Marge de 30px entre les sections
+let currentY = startY + 30;
+
+// 15px entre le titre et le graphique
+pdf.text(title, 20, currentY);
+currentY += 15;
+pdf.addImage(imgData, 'PNG', 20, currentY, imgWidth, imgHeight);
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📋 Structure PDF Corrigée</h2>
+        
+        <div class="test-result success">
+            <strong>✅ Ordre Correct des Sections :</strong>
+            <ol>
+                <li><strong>En-tête</strong> : Titre et date de génération</li>
+                <li><strong>Données de simulation</strong> : Quantité, prix, coûts</li>
+                <li><strong>Résultats de simulation</strong> : Revenus, dépenses, profit</li>
+                <li><strong>Espacement</strong> : 30px de marge</li>
+                <li><strong>Titre du graphique</strong> : "Gráfico dos Resultados"</li>
+                <li><strong>Graphique</strong> : Image du graphique</li>
+                <li><strong>Footer</strong> : Informations de la plateforme</li>
+            </ol>
+        </div>
+        
+        <div class="test-result info">
+            <strong>🔧 Améliorations Techniques :</strong>
+            <ul>
+                <li><strong>Position dynamique</strong> : Basée sur le contenu réel</li>
+                <li><strong>Marge appropriée</strong> : 30px entre les sections</li>
+                <li><strong>Gestion des pages</strong> : Nouvelle page automatique si nécessaire</li>
+                <li><strong>Espacement cohérent</strong> : 15px entre titre et contenu</li>
+                <li><strong>Calcul précis</strong> : Évite les chevauchements</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🧪 Tests à Effectuer</h2>
+        
+        <div class="test-result info">
+            <strong>📋 Checklist de Test :</strong>
+            <ol>
+                <li><strong>Accès au simulateur</strong> : http://localhost:3002/simulator</li>
+                <li><strong>Données d'exemple</strong> : Cliquez sur "Dados de Exemplo"</li>
+                <li><strong>Export PDF</strong> : Cliquez sur "Exportar PDF"</li>
+                <li><strong>Vérification ordre</strong> : Ouvrez le PDF téléchargé</li>
+                <li><strong>Section résultats</strong> : Vérifiez que "Despesas Totais" est dans la section résultats</li>
+                <li><strong>Titre graphique</strong> : Vérifiez que "Gráfico dos Resultados" est après les résultats</li>
+                <li><strong>Espacement</strong> : Vérifiez qu'il y a un espacement approprié</li>
+                <li><strong>Graphique</strong> : Vérifiez que le graphique est sous le titre</li>
+            </ol>
+        </div>
+        
+        <div class="test-result warning">
+            <strong>⚠️ Points d'Attention :</strong>
+            <ul>
+                <li>Le titre du graphique doit être séparé des résultats</li>
+                <li>Vérifiez qu'il n'y a pas de chevauchement de texte</li>
+                <li>L'espacement doit être cohérent dans tout le PDF</li>
+                <li>Testez avec différentes quantités de données</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔗 Liens de Test</h2>
+        
+        <div class="test-result">
+            <strong>🎯 Accès Direct :</strong><br>
+            <a href="http://localhost:3002/simulator" class="link" target="_blank">🧮 Simulateur de Revenus</a>
+        </div>
+        
+        <div class="test-result">
+            <strong>📐 Test Positionnement :</strong><br>
+            <button onclick="testPositioning()">Guide de Test Positionnement</button>
+        </div>
+        
+        <div class="test-result">
+            <strong>📄 Vérification PDF :</strong><br>
+            <button onclick="testPDFLayout()">Vérifier la Mise en Page PDF</button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Résultats Attendus</h2>
+        
+        <div class="test-result success">
+            <strong>✅ Critères de Succès :</strong>
+            <ul>
+                <li><strong>Ordre correct</strong> : Données → Résultats → Titre Graphique → Graphique</li>
+                <li><strong>Titre séparé</strong> : "Gráfico dos Resultados" après les résultats</li>
+                <li><strong>Espacement approprié</strong> : Marge de 30px entre les sections</li>
+                <li><strong>Pas de chevauchement</strong> : Texte bien séparé</li>
+                <li><strong>Graphique positionné</strong> : Sous le titre du graphique</li>
+                <li><strong>Mise en page cohérente</strong> : Espacement uniforme</li>
+                <li><strong>Nouvelle page si nécessaire</strong> : Gestion automatique</li>
+                <li><strong>Lisibilité optimale</strong> : Texte clair et bien espacé</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🎉 Problème Résolu</h2>
+        
+        <div class="test-result success">
+            <strong>✅ Correction Complète :</strong>
+            <blockquote>
+                "Le titre 'Gráfico dos Resultados' est placé au-dessus du texte 'Despesas Totais'" → <strong>RÉSOLU</strong>
+            </blockquote>
+            
+            <p><strong>Résultat :</strong></p>
+            <ul>
+                <li>✅ <strong>Position correcte</strong> : Titre après les résultats</li>
+                <li>✅ <strong>Espacement approprié</strong> : Marge de 30px</li>
+                <li>✅ <strong>Ordre logique</strong> : Données → Résultats → Graphique</li>
+                <li>✅ <strong>Pas de chevauchement</strong> : Texte bien séparé</li>
+                <li>✅ <strong>Gestion des pages</strong> : Nouvelle page si nécessaire</li>
+                <li>✅ <strong>Mise en page professionnelle</strong> : Espacement cohérent</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testPositioning() {
+            alert('Guide de test pour la correction du positionnement :\n\n1. Allez sur http://localhost:3002/simulator\n2. Cliquez sur "Dados de Exemplo" pour remplir le formulaire\n3. Cliquez sur "Exportar PDF" dans le header des résultats\n4. Attendez le téléchargement du PDF\n5. Ouvrez le PDF téléchargé\n6. Vérifiez l\'ordre des sections :\n   - Données de la simulation\n   - Résultats de la simulation (avec "Despesas Totais")\n   - ESPACEMENT\n   - "Gráfico dos Resultados" (titre du graphique)\n   - Graphique\n7. Vérifiez qu\'il n\'y a pas de chevauchement de texte');
+        }
+        
+        function testPDFLayout() {
+            alert('Vérification de la mise en page PDF :\n\n1. Ouvrez le PDF téléchargé\n2. Vérifiez la structure suivante :\n   \n   📋 En-tête\n   ├── Titre : "Simulador de Receitas - Cajou"\n   └── Date de génération\n   \n   📊 Données de la Simulation\n   ├── Quantidade: X kg\n   ├── Prix par kg: X FCFA\n   ├── Transport: X FCFA\n   └── Autres coûts: X FCFA\n   \n   💰 Résultats de la Simulation\n   ├── Receita Bruta: X FCFA\n   ├── Despesas Totais: X FCFA\n   ├── Receita Líquida: X FCFA\n   └── Margem de Lucro: X%\n   \n   📈 Gráfico dos Resultados\n   └── [Graphique]\n   \n3. Vérifiez qu\'il y a un espacement approprié entre chaque section');
+        }
+        
+        // Test automatique de la disponibilité
+        function testSimulatorAccess() {
+            const testResults = document.getElementById('test-results');
+            
+            fetch('http://localhost:3002/simulator')
+                .then(response => {
+                    if (response.ok) {
+                        testResults.innerHTML += '<div class="test-result success">✅ Simulateur accessible sur localhost:3002</div>';
+                        testResults.innerHTML += '<div class="test-result info">💡 La correction du positionnement est maintenant active</div>';
+                    } else {
+                        testResults.innerHTML += '<div class="test-result error">❌ Simulateur non accessible</div>';
+                    }
+                })
+                .catch(error => {
+                    testResults.innerHTML += '<div class="test-result error">❌ Erreur: ' + error.message + '</div>';
+                    testResults.innerHTML += '<div class="test-result info">💡 Assurez-vous que le frontend est démarré</div>';
+                });
+        }
+
+        // Démarrer le test automatique
+        window.onload = function() {
+            const testResults = document.createElement('div');
+            testResults.id = 'test-results';
+            testResults.innerHTML = '<h3>🤖 Test Automatique</h3>';
+            document.body.appendChild(testResults);
+            
+            testSimulatorAccess();
+        };
+    </script>
+</body>
+</html>

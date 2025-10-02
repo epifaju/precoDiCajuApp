@@ -38,11 +38,11 @@ export class PDFExportService {
       this.addSimulationData(pdf, data, pageWidth);
       
       // Add results section
-      this.addResultsSection(pdf, data, pageWidth);
+      const resultsEndY = this.addResultsSection(pdf, data, pageWidth);
       
       // Add chart if element is provided
       if (elementRef) {
-        await this.addChartToPDF(pdf, elementRef, pageWidth, pageHeight, data.language);
+        await this.addChartToPDF(pdf, elementRef, pageWidth, pageHeight, data.language, resultsEndY);
       }
       
       // Add footer
@@ -94,7 +94,7 @@ export class PDFExportService {
   /**
    * Add results section to PDF
    */
-  private static addResultsSection(pdf: jsPDF, data: PDFExportData, pageWidth: number): void {
+  private static addResultsSection(pdf: jsPDF, data: PDFExportData, pageWidth: number): number {
     const startY = 120;
     let currentY = startY;
     
@@ -161,6 +161,8 @@ export class PDFExportService {
       pdf.setFontSize(11);
       currentY += 8;
     });
+    
+    return currentY; // Return the final Y position
   }
   
   /**
@@ -171,7 +173,8 @@ export class PDFExportService {
     elementRef: HTMLElement | null, 
     pageWidth: number, 
     pageHeight: number,
-    language: string
+    language: string,
+    startY: number
   ): Promise<void> {
     if (!elementRef) {
       console.warn('No chart element provided for PDF export');
@@ -201,19 +204,23 @@ export class PDFExportService {
       const imgWidth = pageWidth - 40;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
-      // Check if we need a new page
-      const currentY = pdf.internal.pageSize.getHeight() - 20;
-      if (currentY - imgHeight < 50) {
+      // Calculate the current Y position (where the last content ended)
+      let currentY = startY + 30; // Start after the results section with proper margin
+      
+      // Check if we need a new page for the chart
+      if (currentY + imgHeight + 50 > pageHeight - 20) {
         pdf.addPage();
+        currentY = 20; // Start at top of new page
       }
       
       // Add chart title
       pdf.setFontSize(12);
       pdf.setFont('helvetica', 'bold');
-      pdf.text(this.getChartTitle(language), 20, currentY - imgHeight - 20);
+      pdf.text(this.getChartTitle(language), 20, currentY);
+      currentY += 15; // Move down after title
       
       // Add image
-      pdf.addImage(imgData, 'PNG', 20, currentY - imgHeight - 10, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'PNG', 20, currentY, imgWidth, imgHeight);
       
     } catch (error) {
       console.warn('Could not add chart to PDF:', error);
