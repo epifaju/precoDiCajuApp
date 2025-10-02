@@ -58,76 +58,84 @@ export const RevenueResult: React.FC<RevenueResultProps> = ({
       </div>
 
       {/* Grille principale des résultats */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
         {/* Receita Bruta - Carte améliorée */}
-        <div className="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-2">
+        <div className="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 min-h-[180px]">
+          <div className="flex flex-col h-full">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <p className="text-sm font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">
                   {t('simulation.results.grossRevenue', 'Receita Bruta')}
                 </p>
               </div>
-              <p className="text-3xl font-bold text-blue-900 dark:text-blue-100 mb-2">
+              <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+              </div>
+            </div>
+            
+            <div className="flex-1 flex flex-col justify-between">
+              <p className="text-2xl font-bold text-blue-900 dark:text-blue-100 mb-3 break-words">
                 {formatCurrency(results.grossRevenue)}
               </p>
-              <div className="bg-blue-200 dark:bg-blue-800 rounded-lg px-3 py-2">
-                <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+              
+              <div className="bg-blue-200 dark:bg-blue-800 rounded-lg px-2 py-2">
+                <p className="text-xs text-blue-700 dark:text-blue-300 font-medium leading-tight">
                   {t('simulation.results.grossRevenueFormula', 'Quantidade × Preço por kg')}
                 </p>
               </div>
-            </div>
-            <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-              </svg>
             </div>
           </div>
         </div>
 
         {/* Despesas Totais - Carte améliorée */}
-        <div className="group bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-2">
+        <div className="group bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 min-h-[180px]">
+          <div className="flex flex-col h-full">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                <p className="text-sm font-semibold text-orange-700 dark:text-orange-300 uppercase tracking-wide">
+                <p className="text-xs font-semibold text-orange-700 dark:text-orange-300 uppercase tracking-wide">
                   {t('simulation.results.totalExpenses', 'Despesas Totais')}
                 </p>
               </div>
-              <p className="text-3xl font-bold text-orange-900 dark:text-orange-100 mb-2">
+              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+            </div>
+            
+            <div className="flex-1 flex flex-col justify-between">
+              <p className="text-2xl font-bold text-orange-900 dark:text-orange-100 mb-3 break-words">
                 {formatCurrency(results.totalExpenses)}
               </p>
-              <div className="bg-orange-200 dark:bg-orange-800 rounded-lg px-3 py-2">
-                <p className="text-xs text-orange-700 dark:text-orange-300 font-medium">
+              
+              <div className="bg-orange-200 dark:bg-orange-800 rounded-lg px-2 py-2">
+                <p className="text-xs text-orange-700 dark:text-orange-300 font-medium leading-tight">
                   {t('simulation.results.totalExpensesFormula', 'Transporte + Outros custos')}
                 </p>
               </div>
-            </div>
-            <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
             </div>
           </div>
         </div>
 
         {/* Receita Líquida - Carte mise en évidence */}
-        <div className={`group ${getNetRevenueBgClass(results.netRevenue)} rounded-xl p-6 hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 ${
+        <div className={`group ${getNetRevenueBgClass(results.netRevenue)} rounded-xl p-4 hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 min-h-[180px] ${
           results.netRevenue > 0 
             ? 'border-green-300 dark:border-green-600' 
             : results.netRevenue < 0 
             ? 'border-red-300 dark:border-red-600'
             : 'border-gray-300 dark:border-gray-600'
         }`}>
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-2">
+          <div className="flex flex-col h-full">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2 flex-wrap">
                 <div className={`w-3 h-3 rounded-full ${
                   results.netRevenue > 0 ? 'bg-green-500' : results.netRevenue < 0 ? 'bg-red-500' : 'bg-gray-500'
                 } animate-pulse`}></div>
-                <p className={`text-sm font-bold ${getNetRevenueColorClass(results.netRevenue)} uppercase tracking-wide`}>
+                <p className={`text-xs font-bold ${getNetRevenueColorClass(results.netRevenue)} uppercase tracking-wide`}>
                   {t('simulation.results.netRevenue', 'Receita Líquida')}
                 </p>
                 {/* Badge de statut */}
@@ -141,41 +149,45 @@ export const RevenueResult: React.FC<RevenueResultProps> = ({
                   {results.netRevenue > 0 ? 'LUCRO' : results.netRevenue < 0 ? 'PERDA' : 'EQUILÍBRIO'}
                 </div>
               </div>
-              <p className={`text-4xl font-black ${getNetRevenueColorClass(results.netRevenue)} mb-2`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300 ${
+                results.netRevenue > 0 
+                  ? 'bg-green-500' 
+                  : results.netRevenue < 0 
+                  ? 'bg-red-500'
+                  : 'bg-gray-500'
+              }`}>
+                {results.netRevenue > 0 ? (
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                ) : results.netRevenue < 0 ? (
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex-1 flex flex-col justify-between">
+              <p className={`text-3xl font-black ${getNetRevenueColorClass(results.netRevenue)} mb-3 break-words`}>
                 {formatCurrency(results.netRevenue)}
               </p>
-              <div className={`rounded-lg px-3 py-2 ${
+              
+              <div className={`rounded-lg px-2 py-2 ${
                 results.netRevenue > 0 
                   ? 'bg-green-200 dark:bg-green-800' 
                   : results.netRevenue < 0 
                   ? 'bg-red-200 dark:bg-red-800'
                   : 'bg-gray-200 dark:bg-gray-800'
               }`}>
-                <p className={`text-xs font-medium ${getNetRevenueColorClass(results.netRevenue)}`}>
+                <p className={`text-xs font-medium ${getNetRevenueColorClass(results.netRevenue)} leading-tight`}>
                   {t('simulation.results.netRevenueFormula', 'Receita Bruta - Despesas Totais')}
                 </p>
               </div>
-            </div>
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300 ${
-              results.netRevenue > 0 
-                ? 'bg-green-500' 
-                : results.netRevenue < 0 
-                ? 'bg-red-500'
-                : 'bg-gray-500'
-            }`}>
-              {results.netRevenue > 0 ? (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-              ) : results.netRevenue < 0 ? (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-                </svg>
-              ) : (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                </svg>
-              )}
             </div>
           </div>
         </div>
