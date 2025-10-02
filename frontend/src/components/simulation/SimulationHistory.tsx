@@ -178,76 +178,80 @@ export const SimulationHistory: React.FC<SimulationHistoryProps> = ({
           {simulations.map((simulation) => (
             <div
               key={simulation.id}
-              className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
-                          {formatNumber(simulation.inputs.quantity, 1)} kg × {formatCurrency(simulation.inputs.pricePerKg)}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {formatDate(simulation.createdAt)}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="text-right">
-                      <p className={`text-lg font-bold ${getNetRevenueColorClass(simulation.results.netRevenue)}`}>
-                        {formatCurrency(simulation.results.netRevenue)}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {t('simulation.history.netRevenue', 'Receita Líquida')}
-                      </p>
-                    </div>
+              <div className="space-y-3">
+                {/* Header avec quantité et revenu net */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <div className="mb-2 sm:mb-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {formatNumber(simulation.inputs.quantity, 1)} kg × {formatCurrency(simulation.inputs.pricePerKg)}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {formatDate(simulation.createdAt)}
+                    </p>
                   </div>
                   
-                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                    <div className="flex space-x-4">
-                      <span>
-                        {t('simulation.history.grossRevenue', 'Bruta')}: {formatCurrency(simulation.results.grossRevenue)}
-                      </span>
-                      <span>
-                        {t('simulation.history.expenses', 'Despesas')}: {formatCurrency(simulation.results.totalExpenses)}
-                      </span>
-                    </div>
-                    
-                    {simulation.isOffline && (
-                      <span className="flex items-center text-yellow-600 dark:text-yellow-400">
-                        <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                        {t('simulation.history.offline', 'Offline')}
-                      </span>
-                    )}
+                  <div className="text-left sm:text-right">
+                    <p className={`text-base sm:text-lg font-bold ${getNetRevenueColorClass(simulation.results.netRevenue)}`}>
+                      {formatCurrency(simulation.results.netRevenue)}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {t('simulation.history.netRevenue', 'Receita Líquida')}
+                    </p>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-2 ml-4">
-                  {onSimulationSelect && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onSimulationSelect(simulation)}
-                    >
-                      {t('simulation.history.select', 'Selecionar')}
-                    </Button>
-                  )}
+                {/* Détails financiers */}
+                <div className="flex flex-wrap gap-2 sm:gap-4 text-xs text-gray-500 dark:text-gray-400">
+                  <span>
+                    {t('simulation.history.grossRevenue', 'Bruta')}: {formatCurrency(simulation.results.grossRevenue)}
+                  </span>
+                  <span>
+                    {t('simulation.history.expenses', 'Despesas')}: {formatCurrency(simulation.results.totalExpenses)}
+                  </span>
+                </div>
+                
+                {/* Status et actions */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+                  {/* Status indicator */}
+                  <div className="flex items-center space-x-1">
+                    {simulation.isOffline ? (
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full" title={t('simulation.history.offline', 'Offline')}></div>
+                    ) : (
+                      <div className="w-2 h-2 bg-green-500 rounded-full" title={t('simulation.history.online', 'Online')}></div>
+                    )}
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {simulation.isOffline ? t('simulation.history.offline', 'Offline') : t('simulation.history.online', 'Online')}
+                    </span>
+                  </div>
                   
-                  {onSimulationDelete && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteSimulation(simulation.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </Button>
-                  )}
+                  {/* Action buttons */}
+                  <div className="flex items-center justify-end space-x-2">
+                    {onSimulationSelect && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onSimulationSelect(simulation)}
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20"
+                      >
+                        {t('simulation.history.select', 'Usar')}
+                      </Button>
+                    )}
+                    
+                    {onSimulationDelete && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteSimulation(simulation.id)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
