@@ -20,6 +20,7 @@ const SubmitPricePage = lazy(() => import('@/pages/SubmitPricePage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const AdminPage = lazy(() => import('@/pages/AdminPage'));
 const ExportersPage = lazy(() => import('@/pages/ExportersPage'));
+const RevenueSimulatorPage = lazy(() => import('@/pages/RevenueSimulatorPage'));
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
@@ -129,6 +130,14 @@ function App() {
               element={
                 <Suspense fallback={<LoadingSpinner />}>
                   <ExportersPage />
+                </Suspense>
+              } 
+            />
+            <Route 
+              path="simulator" 
+              element={
+                <Suspense fallback={<LoadingSpinner />}>
+                  <RevenueSimulatorPage />
                 </Suspense>
               } 
             />

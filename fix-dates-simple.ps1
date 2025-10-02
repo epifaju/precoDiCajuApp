@@ -52,3 +52,6 @@ try {
 }
 
 Write-Host "Script termine!" -ForegroundColor Green
+
+
+

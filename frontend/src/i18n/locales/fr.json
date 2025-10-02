@@ -5,6 +5,8 @@
     "prices": "Prix",
     "submit": "Soumettre",
     "poi": "Points d'Achat",
+    "simulator": "Simulateur",
+    "exporters": "Exportateurs",
     "profile": "Profil",
     "admin": "Administration",
     "login": "Se connecter",
@@ -1266,6 +1268,88 @@
     "of": "de",
     "previous": "Précédent",
     "next": "Suivant"
+  },
+  "simulation": {
+    "page": {
+      "title": "Simulateur de Revenus",
+      "description": "Calculez vos revenus potentiels basés sur les prix actuels du marché",
+      "online": "En ligne",
+      "offline": "Hors ligne - utilisation des données locales",
+      "offlineMode": "Mode Hors ligne",
+      "offlineMessage": "Vous êtes hors ligne. Les simulations seront sauvegardées localement et synchronisées lorsque la connexion sera rétablie."
+    },
+    "form": {
+      "title": "Simulateur de Revenus",
+      "description": "Entrez les données pour calculer vos revenus potentiels",
+      "quantity": "Quantité (kg)",
+      "quantityHelp": "Quantité de cajou en kilogrammes",
+      "pricePerKg": "Prix par kg (FCFA)",
+      "pricePerKgHelp": "Prix actuel du marché par kilogramme",
+      "transportCosts": "Coûts de Transport (FCFA)",
+      "transportCostsHelp": "Coûts de transport pour amener le cajou au marché",
+      "otherCosts": "Autres Coûts (FCFA)",
+      "otherCostsHelp": "Sacs, main-d'œuvre, emballage, etc.",
+      "save": "Sauvegarder Simulation",
+      "reset": "Effacer",
+      "sampleData": "Données d'Exemple",
+      "validationErrors": "Veuillez corriger les erreurs suivantes :"
+    },
+    "results": {
+      "title": "Résultats de la Simulation",
+      "description": "Calcul automatique basé sur les données saisies",
+      "live": "Temps Réel",
+      "grossRevenue": "Revenu Brut",
+      "grossRevenueFormula": "Quantité × Prix par kg",
+      "totalExpenses": "Dépenses Totales",
+      "totalExpensesFormula": "Transport + Autres coûts",
+      "netRevenue": "Revenu Net",
+      "netRevenueFormula": "Revenu Brut - Dépenses Totales",
+      "profitMargin": "Marge de Profit",
+      "profitMargin": {
+        "excellent": "Excellente",
+        "good": "Bonne",
+        "low": "Faible",
+        "negative": "Négative"
+      },
+      "positiveMessage": "Félicitations ! Votre simulation montre un profit positif. C'est une bonne opportunité d'affaires.",
+      "negativeMessage": "Attention : Votre simulation montre une perte. Considérez réviser les coûts ou négocier un meilleur prix.",
+      "neutralMessage": "Votre simulation montre un équilibre entre revenus et dépenses. Considérez optimiser les coûts pour augmenter le profit."
+    },
+    "chart": {
+      "title": "Visualisation des Résultats",
+      "description": "Comparaison visuelle entre revenus et dépenses",
+      "grossRevenue": "Revenu Brut",
+      "totalExpenses": "Dépenses Totales",
+      "netRevenue": "Revenu Net",
+      "profitMargin": "Marge de Profit",
+      "legend": {
+        "grossRevenue": "Revenu Brut",
+        "expenses": "Dépenses",
+        "netRevenue": "Revenu Net"
+      }
+    },
+    "history": {
+      "title": "Historique des Simulations",
+      "description": "Vos simulations sauvegardées localement",
+      "storageStats": "Statistiques de Stockage",
+      "total": "Total",
+      "synced": "Synchronisées",
+      "pending": "En attente",
+      "size": "Taille",
+      "empty": "Aucune simulation trouvée",
+      "emptyDescription": "Créez votre première simulation en utilisant le formulaire ci-dessus",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette simulation ?",
+      "deleteError": "Erreur lors de la suppression de la simulation",
+      "clearAll": "Tout Effacer",
+      "clearAllConfirm": "Êtes-vous sûr de vouloir supprimer toutes les simulations ?",
+      "clearAllError": "Erreur lors de l'effacement des simulations",
+      "select": "Sélectionner",
+      "netRevenue": "Revenu Net",
+      "grossRevenue": "Brut",
+      "expenses": "Dépenses",
+      "offline": "Hors ligne"
+    },
+    "saveError": "Erreur lors de la sauvegarde de la simulation"
   }
 }
 

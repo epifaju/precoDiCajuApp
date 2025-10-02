@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import App from './App';
 import './index.css';
+import './styles/simulator-animations.css';
 import './i18n';
 
 // Import Leaflet CSS

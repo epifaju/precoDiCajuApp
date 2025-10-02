@@ -37,7 +37,7 @@ export default function Footer() {
                   <ExternalLink className="footer-icon w-5 h-5 mr-3 text-green-600 dark:text-green-400" />
                   {t('footer.quickLinks', 'Liens Rapides')}
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <a 
                     href="/" 
                     className="footer-link flex items-center justify-center sm:justify-start text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200 group p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20"
@@ -51,6 +51,13 @@ export default function Footer() {
                   >
                     <span className="w-2 h-2 bg-green-400 rounded-full mr-3 group-hover:bg-green-600 transition-colors duration-200"></span>
                     {t('nav.prices', 'Prix')}
+                  </a>
+                  <a 
+                    href="/simulator" 
+                    className="footer-link flex items-center justify-center sm:justify-start text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors duration-200 group p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20"
+                  >
+                    <span className="w-2 h-2 bg-green-400 rounded-full mr-3 group-hover:bg-green-600 transition-colors duration-200"></span>
+                    {t('nav.simulator', 'Simulateur')}
                   </a>
                   <a 
                     href="/submit" 

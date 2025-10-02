@@ -174,3 +174,6 @@ La correction était **ciblée et efficace** :
 - ✅ **Filtres par nom** : Fonctionnels
 - ✅ **Filtres combinés** : Fonctionnels
 - ✅ **Expérience utilisateur** : Restaurée
+
+
+

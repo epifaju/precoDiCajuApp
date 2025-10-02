@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simulateur de Revenus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧮 Test d'Accès au Simulateur de Revenus</h1>
+    
+    <div class="test-container">
+        <h2>📋 Instructions de Test</h2>
+        <p>Ce test vérifie que la fonctionnalité de simulation de revenus est maintenant accessible dans l'application.</p>
+        
+        <div class="test-result info">
+            <strong>✅ Modifications apportées :</strong>
+            <ul>
+                <li>Ajout du lien "Simulateur" dans la navigation principale (Header)</li>
+                <li>Ajout du lien "Simulateur" dans le footer</li>
+                <li>Ajout des traductions complètes en français, anglais et portugais</li>
+                <li>La route /simulator est déjà configurée dans App.tsx</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔗 Liens de Test</h2>
+        <p>Cliquez sur les liens suivants pour tester l'accès au simulateur :</p>
+        
+        <div class="test-result">
+            <strong>Navigation principale :</strong><br>
+            <a href="http://localhost:3000" class="link" target="_blank">🏠 Accueil</a> → 
+            <a href="http://localhost:3000/simulator" class="link" target="_blank">🧮 Simulateur</a>
+        </div>
+        
+        <div class="test-result">
+            <strong>Accès direct :</strong><br>
+            <a href="http://localhost:3000/simulator" class="link" target="_blank">🧮 Simulateur de Revenus</a>
+        </div>
+        
+        <div class="test-result">
+            <strong>Footer :</strong><br>
+            <a href="http://localhost:3000" class="link" target="_blank">🏠 Accueil</a> → 
+            Scroll vers le bas → 
+            <a href="http://localhost:3000/simulator" class="link" target="_blank">🧮 Simulateur</a>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🧪 Tests à Effectuer</h2>
+        <ol>
+            <li><strong>Navigation Header :</strong> Vérifiez que le lien "Simulateur" apparaît dans le menu de navigation</li>
+            <li><strong>Navigation Footer :</strong> Vérifiez que le lien "Simulateur" apparaît dans les liens rapides du footer</li>
+            <li><strong>Fonctionnalité :</strong> Testez le formulaire de simulation avec des données d'exemple</li>
+            <li><strong>Traductions :</strong> Changez la langue et vérifiez que les traductions fonctionnent</li>
+            <li><strong>Mode Offline :</strong> Testez la fonctionnalité hors ligne</li>
+        </ol>
+    </div>
+
+    <div class="test-container">
+        <h2>📱 Fonctionnalités du Simulateur</h2>
+        <div class="test-result success">
+            <strong>✅ Fonctionnalités disponibles :</strong>
+            <ul>
+                <li>Formulaire de saisie (quantité, prix, coûts)</li>
+                <li>Calcul automatique des revenus</li>
+                <li>Affichage des résultats en temps réel</li>
+                <li>Graphique de visualisation</li>
+                <li>Historique des simulations</li>
+                <li>Mode hors ligne avec IndexedDB</li>
+                <li>Synchronisation avec le backend</li>
+                <li>Traductions multilingues</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🎯 Résultat Attendu</h2>
+        <div class="test-result success">
+            <strong>✅ Le simulateur devrait maintenant être visible et accessible via :</strong>
+            <ul>
+                <li>Menu de navigation principal</li>
+                <li>Footer de l'application</li>
+                <li>URL directe : /simulator</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Test automatique de la disponibilité du simulateur
+        function testSimulatorAccess() {
+            const testResults = document.getElementById('test-results');
+            
+            // Test 1: Vérifier si le frontend est accessible
+            fetch('http://localhost:3000')
+                .then(response => {
+                    if (response.ok) {
+                        testResults.innerHTML += '<div class="test-result success">✅ Frontend accessible sur localhost:3000</div>';
+                        
+                        // Test 2: Vérifier si la route simulateur est accessible
+                        return fetch('http://localhost:3000/simulator');
+                    } else {
+                        throw new Error('Frontend non accessible');
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        testResults.innerHTML += '<div class="test-result success">✅ Route /simulator accessible</div>';
+                    } else {
+                        testResults.innerHTML += '<div class="test-result error">❌ Route /simulator non accessible</div>';
+                    }
+                })
+                .catch(error => {
+                    testResults.innerHTML += '<div class="test-result error">❌ Erreur: ' + error.message + '</div>';
+                    testResults.innerHTML += '<div class="test-result info">💡 Assurez-vous que le frontend est démarré avec "npm run dev"</div>';
+                });
+        }
+
+        // Démarrer le test automatique
+        window.onload = function() {
+            const testResults = document.createElement('div');
+            testResults.id = 'test-results';
+            testResults.innerHTML = '<h3>🤖 Test Automatique</h3>';
+            document.body.appendChild(testResults);
+            
+            testSimulatorAccess();
+        };
+    </script>
+</body>
+</html>

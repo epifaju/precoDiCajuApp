@@ -107,3 +107,6 @@ finally {
 }
 
 Write-Host "`nScript termine!" -ForegroundColor Green
+
+
+

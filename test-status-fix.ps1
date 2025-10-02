@@ -29,3 +29,6 @@ Write-Host "- Resultat: Toutes les certifications sont expirees" -ForegroundColo
 Write-Host "`nLa solution:" -ForegroundColor Green
 Write-Host "- Mettre a jour les dates d'expiration pour 2026" -ForegroundColor Gray
 Write-Host "- Les statuts seront alors correctement calcules" -ForegroundColor Gray
+
+
+

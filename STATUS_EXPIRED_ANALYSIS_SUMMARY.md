@@ -179,3 +179,6 @@ curl "http://localhost:8080/api/v1/exportateurs?size=5"
 3. **Monitoring** : Ajouter des alertes pour les certifications proches de l'expiration
 
 **Le problème des statuts expirés est résolu par la mise à jour des données, pas par une modification du code.** 🎯
+
+
+

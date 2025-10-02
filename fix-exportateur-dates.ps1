@@ -99,3 +99,6 @@ Write-Host "- Les dates d'expiration étaient en janvier-février 2025" -Foregro
 Write-Host "- Nous sommes maintenant en septembre 2025" -ForegroundColor Gray
 Write-Host "- Toutes les certifications étaient donc expirées" -ForegroundColor Gray
 Write-Host "- Solution: Mise à jour des dates pour 2026" -ForegroundColor Gray
+
+
+

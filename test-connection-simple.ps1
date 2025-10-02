@@ -24,3 +24,6 @@ try {
 
 Write-Host "`nPour mettre a jour les dates, executez le script SQL:" -ForegroundColor Cyan
 Write-Host "UPDATE exportateurs SET date_expiration = '2026-01-15' WHERE date_expiration < CURRENT_DATE;" -ForegroundColor White
+
+
+

@@ -102,3 +102,6 @@ Write-Host "`n✅ Maintenant:" -ForegroundColor Green
 Write-Host "- Les filtres Statut fonctionnent correctement" -ForegroundColor Gray
 Write-Host "- Les filtres Type fonctionnent aussi mieux" -ForegroundColor Gray
 Write-Host "- Pas de problème de casting" -ForegroundColor Gray
+
+
+

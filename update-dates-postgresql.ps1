@@ -64,3 +64,6 @@ try {
 }
 
 Write-Host "`nScript termine!" -ForegroundColor Green
+
+
+

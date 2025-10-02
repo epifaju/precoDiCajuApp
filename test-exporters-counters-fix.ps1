@@ -143,3 +143,6 @@ Write-Host "   - Expirés: $($apiStats.Expired)" -ForegroundColor White
 Write-Host "   - Suspendus: $($apiStats.Suspended)" -ForegroundColor White
 
 Write-Host "`n✅ Test terminé !" -ForegroundColor Green
+
+
+

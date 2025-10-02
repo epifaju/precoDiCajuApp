@@ -145,3 +145,6 @@ La correction était **simple mais importante** :
 1. **Première correction** : Problème d'URL avec `[object Object]` → Composant Select corrigé
 2. **Deuxième correction** : Castings inutiles → Suppression des castings
 3. **Résultat final** : Tous les filtres fonctionnent parfaitement
+
+
+

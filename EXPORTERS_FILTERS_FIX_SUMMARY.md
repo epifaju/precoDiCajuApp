@@ -150,3 +150,6 @@ Le backend était déjà correctement implémenté dans `ExportateurService.find
 La correction était **simple mais cruciale** : s'assurer que les paramètres de filtre sont toujours envoyés au backend, même s'ils sont vides. Le backend gère correctement ces valeurs vides pour ignorer les filtres correspondants.
 
 **Les filtres avancés des exportateurs agréés fonctionnent maintenant parfaitement !** 🎉
+
+
+

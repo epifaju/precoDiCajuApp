@@ -7,6 +7,7 @@
     "poi": "Pontos de Compra",
     "exporters": "Exportadores",
     "admin": "Administração",
+    "simulator": "Simulador",
     "login": "Entrar",
     "register": "Registrar",
     "menu": "Menu"
@@ -1231,5 +1232,87 @@
     "suspended_message": "Este certificado de exportador foi suspenso.",
     "invalid_token_message": "Token de código QR inválido.",
     "verified_at": "Verificado em"
+  },
+  "simulation": {
+    "page": {
+      "title": "Simulador de Receitas",
+      "description": "Calcule seus receitas potenciais com base nos preços atuais do mercado",
+      "online": "Online",
+      "offline": "Offline - usando dados locais",
+      "offlineMode": "Modo Offline",
+      "offlineMessage": "Você está offline. As simulações serão salvas localmente e sincronizadas quando a conexão for restaurada."
+    },
+    "form": {
+      "title": "Simulador de Receitas",
+      "description": "Insira os dados para calcular seus receitas potenciais",
+      "quantity": "Quantidade (kg)",
+      "quantityHelp": "Quantidade de cajou em quilogramas",
+      "pricePerKg": "Preço por kg (FCFA)",
+      "pricePerKgHelp": "Preço atual do mercado por quilograma",
+      "transportCosts": "Custos de Transporte (FCFA)",
+      "transportCostsHelp": "Custos de transporte para levar o cajou ao mercado",
+      "otherCosts": "Outros Custos (FCFA)",
+      "otherCostsHelp": "Sacos, mão de obra, embalagem, etc.",
+      "save": "Salvar Simulação",
+      "reset": "Limpar",
+      "sampleData": "Dados de Exemplo",
+      "validationErrors": "Por favor, corrija os seguintes erros:"
+    },
+    "results": {
+      "title": "Resultados da Simulação",
+      "description": "Cálculo automático baseado nos dados inseridos",
+      "live": "Tempo Real",
+      "grossRevenue": "Receita Bruta",
+      "grossRevenueFormula": "Quantidade × Preço por kg",
+      "totalExpenses": "Despesas Totais",
+      "totalExpensesFormula": "Transporte + Outros custos",
+      "netRevenue": "Receita Líquida",
+      "netRevenueFormula": "Receita Bruta - Despesas Totais",
+      "profitMargin": "Margem de Lucro",
+      "profitMargin": {
+        "excellent": "Excelente",
+        "good": "Boa",
+        "low": "Baixa",
+        "negative": "Negativa"
+      },
+      "positiveMessage": "Parabéns! Sua simulação mostra um lucro positivo. Esta é uma boa oportunidade de negócio.",
+      "negativeMessage": "Atenção: Sua simulação mostra uma perda. Considere revisar os custos ou negociar um preço melhor.",
+      "neutralMessage": "Sua simulação mostra equilíbrio entre receitas e despesas. Considere otimizar os custos para aumentar o lucro."
+    },
+    "chart": {
+      "title": "Visualização dos Resultados",
+      "description": "Comparação visual entre receitas e despesas",
+      "grossRevenue": "Receita Bruta",
+      "totalExpenses": "Despesas Totais",
+      "netRevenue": "Receita Líquida",
+      "profitMargin": "Margem de Lucro",
+      "legend": {
+        "grossRevenue": "Receita Bruta",
+        "expenses": "Despesas",
+        "netRevenue": "Receita Líquida"
+      }
+    },
+    "history": {
+      "title": "Histórico de Simulações",
+      "description": "Suas simulações salvas localmente",
+      "storageStats": "Estatísticas de Armazenamento",
+      "total": "Total",
+      "synced": "Sincronizadas",
+      "pending": "Pendentes",
+      "size": "Tamanho",
+      "empty": "Nenhuma simulação encontrada",
+      "emptyDescription": "Crie sua primeira simulação usando o formulário acima",
+      "deleteConfirm": "Tem certeza que deseja excluir esta simulação?",
+      "deleteError": "Erro ao excluir simulação",
+      "clearAll": "Limpar Tudo",
+      "clearAllConfirm": "Tem certeza que deseja excluir todas as simulações?",
+      "clearAllError": "Erro ao limpar simulações",
+      "select": "Selecionar",
+      "netRevenue": "Receita Líquida",
+      "grossRevenue": "Bruta",
+      "expenses": "Despesas",
+      "offline": "Offline"
+    },
+    "saveError": "Erro ao salvar simulação"
   }
 }

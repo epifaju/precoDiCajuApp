@@ -53,3 +53,6 @@ try {
 } catch {
     Write-Host "Erreur lors de la verification: $($_.Exception.Message)" -ForegroundColor Red
 }
+
+
+
